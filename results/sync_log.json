@@ -1,0 +1,333 @@
+{
+ "timestamp": "2026-11-21T19:20:45",
+ "table": "papers_100",
+ "abstract_updated": [
+  "0905.4950",
+  "1106.2680",
+  "1803.03407",
+  "1810.11531",
+  "2003.00545"
+ ],
+ "title_updated": [
+  "2003.08087",
+  "2007.09437",
+  "2111.11963"
+ ],
+ "deleted": [
+  "2205.05011",
+  "2207.10931",
+  "2212.01951",
+  "2311.08532",
+  "2401.09007"
+ ],
+ "mismatch_before_sync": true,
+ "consistent_after_sync": true,
+ "restored_after_revert": true,
+ "sync_result": {
+  "upserted": [
+   "0905.4950",
+   "1106.2680",
+   "1803.03407",
+   "1810.11531",
+   "2003.00545",
+   "2003.08087",
+   "2007.09437",
+   "2111.11963"
+  ],
+  "deleted": [
+   "2205.05011",
+   "2207.10931",
+   "2212.01951",
+   "2311.08532",
+   "2401.09007"
+  ]
+ },
+ "log": [
+  {
+   "time": "2026-11-21T19:20:43",
+   "event": "setup",
+   "detail": "triggery + tabele śledzące gotowe"
+  },
+  {
+   "time": "2026-11-21T19:20:43",
+   "event": "revert",
+   "detail": "rekordy demo przywrócone do stanu z pliku JSONL"
+  },
+  {
+   "time": "2026-11-21T19:20:43",
+   "event": "sync",
+   "upserted": 13,
+   "deleted": 0,
+   "upserted_ids": [
+    "0905.4950",
+    "1106.2680",
+    "1803.03407",
+    "1810.11531",
+    "2003.00545",
+    "2003.08087",
+    "2007.09437",
+    "2111.11963",
+    "2205.05011",
+    "2207.10931",
+    "2212.01951",
+    "2311.08532",
+    "2401.09007"
+   ],
+   "deleted_ids": []
+  },
+  {
+   "time": "2026-11-21T19:20:44",
+   "event": "verify:baseline",
+   "ok": true,
+   "total_count": true,
+   "marker_abstract": true,
+   "marker_title": true,
+   "changed_docs_identical": true,
+   "detail": {
+    "total_count": {
+     "pg": 1000000,
+     "solr": 1000000,
+     "equal": true
+    },
+    "marker_abstract": {
+     "pg_ids": [],
+     "solr_ids": [],
+     "equal": true
+    },
+    "marker_title": {
+     "pg_ids": [],
+     "solr_ids": [],
+     "equal": true
+    },
+    "changed_docs_identical": {
+     "checked": 13,
+     "mismatches": [],
+     "ok": true
+    }
+   }
+  },
+  {
+   "time": "2026-11-21T19:20:44",
+   "event": "modify_in_postgres",
+   "abstract_updated": [
+    "0905.4950",
+    "1106.2680",
+    "1803.03407",
+    "1810.11531",
+    "2003.00545"
+   ],
+   "title_updated": [
+    "2003.08087",
+    "2007.09437",
+    "2111.11963"
+   ],
+   "deleted": [
+    "2205.05011",
+    "2207.10931",
+    "2212.01951",
+    "2311.08532",
+    "2401.09007"
+   ]
+  },
+  {
+   "time": "2026-11-21T19:20:44",
+   "event": "verify:before_sync",
+   "ok": false,
+   "total_count": false,
+   "marker_abstract": false,
+   "marker_title": false,
+   "deleted_absent": false,
+   "changed_docs_identical": false,
+   "detail": {
+    "total_count": {
+     "pg": 999995,
+     "solr": 1000000,
+     "equal": false
+    },
+    "marker_abstract": {
+     "pg_ids": [
+      "0905.4950",
+      "1106.2680",
+      "1803.03407",
+      "1810.11531",
+      "2003.00545"
+     ],
+     "solr_ids": [],
+     "equal": false
+    },
+    "marker_title": {
+     "pg_ids": [
+      "2003.08087",
+      "2007.09437",
+      "2111.11963"
+     ],
+     "solr_ids": [],
+     "equal": false
+    },
+    "deleted_absent": {
+     "pg_left": [],
+     "solr_left": [
+      "2205.05011",
+      "2207.10931",
+      "2212.01951",
+      "2311.08532",
+      "2401.09007"
+     ],
+     "ok": false
+    },
+    "changed_docs_identical": {
+     "checked": 8,
+     "mismatches": [
+      "0905.4950",
+      "1106.2680",
+      "1803.03407",
+      "1810.11531",
+      "2003.00545",
+      "2003.08087",
+      "2007.09437",
+      "2111.11963"
+     ],
+     "ok": false
+    }
+   }
+  },
+  {
+   "time": "2026-11-21T19:20:44",
+   "event": "sync",
+   "upserted": 8,
+   "deleted": 5,
+   "upserted_ids": [
+    "0905.4950",
+    "1106.2680",
+    "1803.03407",
+    "1810.11531",
+    "2003.00545",
+    "2003.08087",
+    "2007.09437",
+    "2111.11963"
+   ],
+   "deleted_ids": [
+    "2205.05011",
+    "2207.10931",
+    "2212.01951",
+    "2311.08532",
+    "2401.09007"
+   ]
+  },
+  {
+   "time": "2026-11-21T19:20:44",
+   "event": "verify:after_sync",
+   "ok": true,
+   "total_count": true,
+   "marker_abstract": true,
+   "marker_title": true,
+   "deleted_absent": true,
+   "changed_docs_identical": true,
+   "detail": {
+    "total_count": {
+     "pg": 999995,
+     "solr": 999995,
+     "equal": true
+    },
+    "marker_abstract": {
+     "pg_ids": [
+      "0905.4950",
+      "1106.2680",
+      "1803.03407",
+      "1810.11531",
+      "2003.00545"
+     ],
+     "solr_ids": [
+      "0905.4950",
+      "1106.2680",
+      "1803.03407",
+      "1810.11531",
+      "2003.00545"
+     ],
+     "equal": true
+    },
+    "marker_title": {
+     "pg_ids": [
+      "2003.08087",
+      "2007.09437",
+      "2111.11963"
+     ],
+     "solr_ids": [
+      "2003.08087",
+      "2007.09437",
+      "2111.11963"
+     ],
+     "equal": true
+    },
+    "deleted_absent": {
+     "pg_left": [],
+     "solr_left": [],
+     "ok": true
+    },
+    "changed_docs_identical": {
+     "checked": 8,
+     "mismatches": [],
+     "ok": true
+    }
+   }
+  },
+  {
+   "time": "2026-11-21T19:20:44",
+   "event": "revert",
+   "detail": "rekordy demo przywrócone do stanu z pliku JSONL"
+  },
+  {
+   "time": "2026-11-21T19:20:44",
+   "event": "sync",
+   "upserted": 13,
+   "deleted": 0,
+   "upserted_ids": [
+    "0905.4950",
+    "1106.2680",
+    "1803.03407",
+    "1810.11531",
+    "2003.00545",
+    "2003.08087",
+    "2007.09437",
+    "2111.11963",
+    "2205.05011",
+    "2207.10931",
+    "2212.01951",
+    "2311.08532",
+    "2401.09007"
+   ],
+   "deleted_ids": []
+  },
+  {
+   "time": "2026-11-21T19:20:45",
+   "event": "verify:after_revert",
+   "ok": true,
+   "total_count": true,
+   "marker_abstract": true,
+   "marker_title": true,
+   "changed_docs_identical": true,
+   "detail": {
+    "total_count": {
+     "pg": 1000000,
+     "solr": 1000000,
+     "equal": true
+    },
+    "marker_abstract": {
+     "pg_ids": [],
+     "solr_ids": [],
+     "equal": true
+    },
+    "marker_title": {
+     "pg_ids": [],
+     "solr_ids": [],
+     "equal": true
+    },
+    "changed_docs_identical": {
+     "checked": 13,
+     "mismatches": [],
+     "ok": true
+    }
+   }
+  }
+ ]
+}

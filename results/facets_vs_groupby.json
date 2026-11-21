@@ -1,0 +1,2615 @@
+{
+ "timestamp": "2026-11-21T19:18:45",
+ "range": {
+  "start": 1990,
+  "end": 2030,
+  "gap": 5
+ },
+ "repeats": 5,
+ "results": [
+  {
+   "size": "10",
+   "case": "ALL",
+   "solr_q": "*:*",
+   "solr_fq": null,
+   "sql_where": "true",
+   "solr_url": "http://localhost:8983/solr/papers_10/select?q=%7B%21lucene+cache%3Dfalse%7D%2A%3A%2A&rows=0&facet=true&facet.field=primary_category&facet.field=archive&facet.limit=-1&facet.mincount=1&facet.sort=index&facet.range=year&facet.range.start=1990&facet.range.end=2030&facet.range.gap=5&facet.range.other=before&wt=json",
+   "solr_numFound": 100000,
+   "solr_qtime_ms": {
+    "median": 3.0,
+    "min": 2.0,
+    "max": 3.0,
+    "runs": [
+     3.0,
+     3.0,
+     3.0,
+     2.0,
+     2.0
+    ]
+   },
+   "solr_client_ms": {
+    "median": 5.587,
+    "min": 4.901,
+    "max": 5.978,
+    "runs": [
+     5.978,
+     5.717,
+     5.587,
+     4.901,
+     5.049
+    ]
+   },
+   "sql_separate": {
+    "primary_category": {
+     "sql": "SELECT primary_category, count(*) FROM papers_10 WHERE true GROUP BY 1",
+     "exec_ms": {
+      "median": 15.663,
+      "min": 15.062,
+      "max": 15.708,
+      "runs": [
+       15.708,
+       15.663,
+       15.062,
+       15.692,
+       15.138
+      ]
+     },
+     "client_ms": {
+      "median": 11.087,
+      "min": 10.15,
+      "max": 11.348,
+      "runs": [
+       11.087,
+       10.15,
+       11.348,
+       10.48,
+       11.202
+      ]
+     }
+    },
+    "archive": {
+     "sql": "SELECT archive, count(*) FROM papers_10 WHERE true GROUP BY 1",
+     "exec_ms": {
+      "median": 49.752,
+      "min": 46.861,
+      "max": 75.245,
+      "runs": [
+       64.022,
+       49.752,
+       46.861,
+       47.519,
+       75.245
+      ]
+     },
+     "client_ms": {
+      "median": 43.698,
+      "min": 41.893,
+      "max": 59.13,
+      "runs": [
+       59.13,
+       41.893,
+       42.437,
+       43.698,
+       47.263
+      ]
+     }
+    },
+    "year": {
+     "sql": "SELECT (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket, count(*) FROM papers_10 WHERE true AND year >= 1990 GROUP BY 1",
+     "exec_ms": {
+      "median": 19.158,
+      "min": 17.301,
+      "max": 21.58,
+      "runs": [
+       21.58,
+       19.475,
+       17.301,
+       17.44,
+       19.158
+      ]
+     },
+     "client_ms": {
+      "median": 16.235,
+      "min": 15.489,
+      "max": 19.668,
+      "runs": [
+       19.668,
+       17.893,
+       15.768,
+       15.489,
+       16.235
+      ]
+     }
+    }
+   },
+   "sql_separate_sum_exec_ms": 84.573,
+   "sql_separate_sum_client_ms": 71.02,
+   "sql_grouping_sets": {
+    "sql": "SELECT primary_category, archive, bucket, count(*) FROM (SELECT primary_category, archive, (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket FROM papers_10 WHERE true) s GROUP BY GROUPING SETS ((primary_category), (archive), (bucket))",
+    "exec_ms": {
+     "median": 75.046,
+     "min": 72.566,
+     "max": 86.313,
+     "runs": [
+      72.566,
+      74.551,
+      76.478,
+      75.046,
+      86.313
+     ]
+    },
+    "client_ms": {
+     "median": 69.992,
+     "min": 69.27,
+     "max": 72.226,
+     "runs": [
+      69.992,
+      69.327,
+      69.27,
+      70.575,
+      72.226
+     ]
+    }
+   },
+   "grouping_sets_equals_separate": true,
+   "comparison": {
+    "primary_category": {
+     "identical": true,
+     "solr_values": 168,
+     "sql_values": 168,
+     "max_abs_diff": 0,
+     "sum_solr": 100000,
+     "sum_sql": 100000
+    },
+    "archive": {
+     "identical": true,
+     "solr_values": 36,
+     "sql_values": 36,
+     "max_abs_diff": 0,
+     "sum_solr": 100000,
+     "sum_sql": 100000
+    },
+    "year": {
+     "identical": true,
+     "solr_values": 8,
+     "sql_values": 8,
+     "max_abs_diff": 0,
+     "sum_solr": 100000,
+     "sum_sql": 100000
+    }
+   },
+   "timestamp": "2026-11-21T19:17:46"
+  },
+  {
+   "size": "10",
+   "case": "STRUCT",
+   "solr_q": "*:*",
+   "solr_fq": [
+    "archive:cs",
+    "year:[2015 TO *]"
+   ],
+   "sql_where": "archive = 'cs' AND year >= 2015",
+   "solr_url": "http://localhost:8983/solr/papers_10/select?q=%7B%21lucene+cache%3Dfalse%7D%2A%3A%2A&rows=0&facet=true&facet.field=primary_category&facet.field=archive&facet.limit=-1&facet.mincount=1&facet.sort=index&facet.range=year&facet.range.start=1990&facet.range.end=2030&facet.range.gap=5&facet.range.other=before&fq=archive%3Acs&fq=year%3A%5B2015+TO+%2A%5D&wt=json",
+   "solr_numFound": 25241,
+   "solr_qtime_ms": {
+    "median": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "runs": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ]
+   },
+   "solr_client_ms": {
+    "median": 3.609,
+    "min": 3.396,
+    "max": 4.265,
+    "runs": [
+     3.609,
+     4.265,
+     3.813,
+     3.606,
+     3.396
+    ]
+   },
+   "sql_separate": {
+    "primary_category": {
+     "sql": "SELECT primary_category, count(*) FROM papers_10 WHERE archive = 'cs' AND year >= 2015 GROUP BY 1",
+     "exec_ms": {
+      "median": 38.552,
+      "min": 36.903,
+      "max": 40.836,
+      "runs": [
+       40.836,
+       38.965,
+       36.903,
+       38.045,
+       38.552
+      ]
+     },
+     "client_ms": {
+      "median": 37.235,
+      "min": 36.685,
+      "max": 39.07,
+      "runs": [
+       37.235,
+       36.685,
+       36.751,
+       39.07,
+       38.636
+      ]
+     }
+    },
+    "archive": {
+     "sql": "SELECT archive, count(*) FROM papers_10 WHERE archive = 'cs' AND year >= 2015 GROUP BY 1",
+     "exec_ms": {
+      "median": 34.541,
+      "min": 34.488,
+      "max": 35.91,
+      "runs": [
+       35.464,
+       34.533,
+       34.488,
+       35.91,
+       34.541
+      ]
+     },
+     "client_ms": {
+      "median": 35.703,
+      "min": 33.907,
+      "max": 37.172,
+      "runs": [
+       33.907,
+       37.172,
+       36.146,
+       35.703,
+       34.637
+      ]
+     }
+    },
+    "year": {
+     "sql": "SELECT (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket, count(*) FROM papers_10 WHERE archive = 'cs' AND year >= 2015 AND year >= 1990 GROUP BY 1",
+     "exec_ms": {
+      "median": 29.246,
+      "min": 28.118,
+      "max": 30.31,
+      "runs": [
+       28.118,
+       29.425,
+       29.246,
+       28.957,
+       30.31
+      ]
+     },
+     "client_ms": {
+      "median": 29.967,
+      "min": 27.699,
+      "max": 34.73,
+      "runs": [
+       27.92,
+       27.699,
+       34.73,
+       29.967,
+       30.355
+      ]
+     }
+    }
+   },
+   "sql_separate_sum_exec_ms": 102.339,
+   "sql_separate_sum_client_ms": 102.905,
+   "sql_grouping_sets": {
+    "sql": "SELECT primary_category, archive, bucket, count(*) FROM (SELECT primary_category, archive, (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket FROM papers_10 WHERE archive = 'cs' AND year >= 2015) s GROUP BY GROUPING SETS ((primary_category), (archive), (bucket))",
+    "exec_ms": {
+     "median": 44.56,
+     "min": 43.464,
+     "max": 50.068,
+     "runs": [
+      44.56,
+      43.491,
+      43.464,
+      50.068,
+      44.989
+     ]
+    },
+    "client_ms": {
+     "median": 44.272,
+     "min": 43.375,
+     "max": 44.987,
+     "runs": [
+      43.44,
+      43.375,
+      44.623,
+      44.272,
+      44.987
+     ]
+    }
+   },
+   "grouping_sets_equals_separate": true,
+   "comparison": {
+    "primary_category": {
+     "identical": true,
+     "solr_values": 39,
+     "sql_values": 39,
+     "max_abs_diff": 0,
+     "sum_solr": 25241,
+     "sum_sql": 25241
+    },
+    "archive": {
+     "identical": true,
+     "solr_values": 1,
+     "sql_values": 1,
+     "max_abs_diff": 0,
+     "sum_solr": 25241,
+     "sum_sql": 25241
+    },
+    "year": {
+     "identical": true,
+     "solr_values": 3,
+     "sql_values": 3,
+     "max_abs_diff": 0,
+     "sum_solr": 25241,
+     "sum_sql": 25241
+    }
+   },
+   "timestamp": "2026-11-21T19:17:47"
+  },
+  {
+   "size": "10",
+   "case": "Q1",
+   "solr_q": "text_all:simulate",
+   "solr_fq": null,
+   "sql_where": "tsv @@ plainto_tsquery('english', 'simulate')",
+   "solr_url": "http://localhost:8983/solr/papers_10/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3Asimulate&rows=0&facet=true&facet.field=primary_category&facet.field=archive&facet.limit=-1&facet.mincount=1&facet.sort=index&facet.range=year&facet.range.start=1990&facet.range.end=2030&facet.range.gap=5&facet.range.other=before&wt=json",
+   "solr_numFound": 12070,
+   "solr_qtime_ms": {
+    "median": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "runs": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ]
+   },
+   "solr_client_ms": {
+    "median": 3.485,
+    "min": 3.224,
+    "max": 3.726,
+    "runs": [
+     3.553,
+     3.485,
+     3.726,
+     3.466,
+     3.224
+    ]
+   },
+   "sql_separate": {
+    "primary_category": {
+     "sql": "SELECT primary_category, count(*) FROM papers_10 WHERE tsv @@ plainto_tsquery('english', 'simulate') GROUP BY 1",
+     "exec_ms": {
+      "median": 15.108,
+      "min": 14.495,
+      "max": 17.144,
+      "runs": [
+       15.028,
+       15.108,
+       14.495,
+       15.676,
+       17.144
+      ]
+     },
+     "client_ms": {
+      "median": 15.331,
+      "min": 14.991,
+      "max": 17.073,
+      "runs": [
+       15.331,
+       16.398,
+       14.991,
+       15.299,
+       17.073
+      ]
+     }
+    },
+    "archive": {
+     "sql": "SELECT archive, count(*) FROM papers_10 WHERE tsv @@ plainto_tsquery('english', 'simulate') GROUP BY 1",
+     "exec_ms": {
+      "median": 15.028,
+      "min": 15.008,
+      "max": 17.279,
+      "runs": [
+       17.279,
+       15.028,
+       16.497,
+       15.008,
+       15.026
+      ]
+     },
+     "client_ms": {
+      "median": 15.74,
+      "min": 15.113,
+      "max": 17.596,
+      "runs": [
+       17.596,
+       15.269,
+       15.803,
+       15.113,
+       15.74
+      ]
+     }
+    },
+    "year": {
+     "sql": "SELECT (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket, count(*) FROM papers_10 WHERE tsv @@ plainto_tsquery('english', 'simulate') AND year >= 1990 GROUP BY 1",
+     "exec_ms": {
+      "median": 16.678,
+      "min": 15.54,
+      "max": 17.13,
+      "runs": [
+       16.678,
+       17.063,
+       15.54,
+       17.13,
+       15.81
+      ]
+     },
+     "client_ms": {
+      "median": 16.95,
+      "min": 15.829,
+      "max": 19.663,
+      "runs": [
+       16.327,
+       18.036,
+       15.829,
+       16.95,
+       19.663
+      ]
+     }
+    }
+   },
+   "sql_separate_sum_exec_ms": 46.814,
+   "sql_separate_sum_client_ms": 48.021,
+   "sql_grouping_sets": {
+    "sql": "SELECT primary_category, archive, bucket, count(*) FROM (SELECT primary_category, archive, (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket FROM papers_10 WHERE tsv @@ plainto_tsquery('english', 'simulate')) s GROUP BY GROUPING SETS ((primary_category), (archive), (bucket))",
+    "exec_ms": {
+     "median": 18.317,
+     "min": 17.974,
+     "max": 19.298,
+     "runs": [
+      19.298,
+      17.974,
+      18.183,
+      18.776,
+      18.317
+     ]
+    },
+    "client_ms": {
+     "median": 19.202,
+     "min": 18.453,
+     "max": 21.746,
+     "runs": [
+      19.202,
+      20.128,
+      18.453,
+      18.733,
+      21.746
+     ]
+    }
+   },
+   "grouping_sets_equals_separate": true,
+   "comparison": {
+    "primary_category": {
+     "identical": false,
+     "solr_values": 142,
+     "sql_values": 142,
+     "max_abs_diff": 1,
+     "sum_solr": 12070,
+     "sum_sql": 12065
+    },
+    "archive": {
+     "identical": false,
+     "solr_values": 27,
+     "sql_values": 27,
+     "max_abs_diff": 3,
+     "sum_solr": 12070,
+     "sum_sql": 12065
+    },
+    "year": {
+     "identical": false,
+     "solr_values": 8,
+     "sql_values": 8,
+     "max_abs_diff": 5,
+     "sum_solr": 12070,
+     "sum_sql": 12065
+    }
+   },
+   "timestamp": "2026-11-21T19:17:48"
+  },
+  {
+   "size": "10",
+   "case": "Q2",
+   "solr_q": "text_all:\"dark matter\"",
+   "solr_fq": null,
+   "sql_where": "tsv @@ phraseto_tsquery('english', 'dark matter')",
+   "solr_url": "http://localhost:8983/solr/papers_10/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3A%22dark+matter%22&rows=0&facet=true&facet.field=primary_category&facet.field=archive&facet.limit=-1&facet.mincount=1&facet.sort=index&facet.range=year&facet.range.start=1990&facet.range.end=2030&facet.range.gap=5&facet.range.other=before&wt=json",
+   "solr_numFound": 1543,
+   "solr_qtime_ms": {
+    "median": 1.0,
+    "min": 0.0,
+    "max": 1.0,
+    "runs": [
+     1.0,
+     1.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "solr_client_ms": {
+    "median": 3.067,
+    "min": 2.843,
+    "max": 3.347,
+    "runs": [
+     3.347,
+     3.302,
+     2.843,
+     2.867,
+     3.067
+    ]
+   },
+   "sql_separate": {
+    "primary_category": {
+     "sql": "SELECT primary_category, count(*) FROM papers_10 WHERE tsv @@ phraseto_tsquery('english', 'dark matter') GROUP BY 1",
+     "exec_ms": {
+      "median": 7.16,
+      "min": 6.212,
+      "max": 7.584,
+      "runs": [
+       6.939,
+       7.16,
+       6.212,
+       7.206,
+       7.584
+      ]
+     },
+     "client_ms": {
+      "median": 7.637,
+      "min": 7.14,
+      "max": 9.18,
+      "runs": [
+       7.637,
+       9.18,
+       7.548,
+       7.14,
+       8.502
+      ]
+     }
+    },
+    "archive": {
+     "sql": "SELECT archive, count(*) FROM papers_10 WHERE tsv @@ phraseto_tsquery('english', 'dark matter') GROUP BY 1",
+     "exec_ms": {
+      "median": 6.513,
+      "min": 5.976,
+      "max": 7.0,
+      "runs": [
+       5.976,
+       6.373,
+       6.849,
+       7.0,
+       6.513
+      ]
+     },
+     "client_ms": {
+      "median": 7.218,
+      "min": 6.623,
+      "max": 8.194,
+      "runs": [
+       6.977,
+       6.623,
+       7.218,
+       8.194,
+       7.389
+      ]
+     }
+    },
+    "year": {
+     "sql": "SELECT (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket, count(*) FROM papers_10 WHERE tsv @@ phraseto_tsquery('english', 'dark matter') AND year >= 1990 GROUP BY 1",
+     "exec_ms": {
+      "median": 5.871,
+      "min": 5.612,
+      "max": 6.107,
+      "runs": [
+       5.669,
+       5.612,
+       5.871,
+       6.032,
+       6.107
+      ]
+     },
+     "client_ms": {
+      "median": 6.536,
+      "min": 6.244,
+      "max": 7.174,
+      "runs": [
+       6.244,
+       6.487,
+       6.864,
+       6.536,
+       7.174
+      ]
+     }
+    }
+   },
+   "sql_separate_sum_exec_ms": 19.544,
+   "sql_separate_sum_client_ms": 21.391,
+   "sql_grouping_sets": {
+    "sql": "SELECT primary_category, archive, bucket, count(*) FROM (SELECT primary_category, archive, (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket FROM papers_10 WHERE tsv @@ phraseto_tsquery('english', 'dark matter')) s GROUP BY GROUPING SETS ((primary_category), (archive), (bucket))",
+    "exec_ms": {
+     "median": 6.713,
+     "min": 6.54,
+     "max": 7.603,
+     "runs": [
+      7.603,
+      7.014,
+      6.625,
+      6.54,
+      6.713
+     ]
+    },
+    "client_ms": {
+     "median": 7.846,
+     "min": 6.901,
+     "max": 8.86,
+     "runs": [
+      7.934,
+      8.86,
+      7.181,
+      6.901,
+      7.846
+     ]
+    }
+   },
+   "grouping_sets_equals_separate": true,
+   "comparison": {
+    "primary_category": {
+     "identical": false,
+     "solr_values": 26,
+     "sql_values": 26,
+     "max_abs_diff": 4,
+     "sum_solr": 1543,
+     "sum_sql": 1531
+    },
+    "archive": {
+     "identical": false,
+     "solr_values": 13,
+     "sql_values": 13,
+     "max_abs_diff": 9,
+     "sum_solr": 1543,
+     "sum_sql": 1531
+    },
+    "year": {
+     "identical": false,
+     "solr_values": 8,
+     "sql_values": 8,
+     "max_abs_diff": 4,
+     "sum_solr": 1543,
+     "sum_sql": 1531
+    }
+   },
+   "timestamp": "2026-11-21T19:17:48"
+  },
+  {
+   "size": "10",
+   "case": "Q3",
+   "solr_q": "text_all:galaxy AND (text_all:cluster OR text_all:merger) AND NOT text_all:simulation",
+   "solr_fq": null,
+   "sql_where": "tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation')",
+   "solr_url": "http://localhost:8983/solr/papers_10/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3Agalaxy+AND+%28text_all%3Acluster+OR+text_all%3Amerger%29+AND+NOT+text_all%3Asimulation&rows=0&facet=true&facet.field=primary_category&facet.field=archive&facet.limit=-1&facet.mincount=1&facet.sort=index&facet.range=year&facet.range.start=1990&facet.range.end=2030&facet.range.gap=5&facet.range.other=before&wt=json",
+   "solr_numFound": 909,
+   "solr_qtime_ms": {
+    "median": 2.0,
+    "min": 2.0,
+    "max": 2.0,
+    "runs": [
+     2.0,
+     2.0,
+     2.0,
+     2.0,
+     2.0
+    ]
+   },
+   "solr_client_ms": {
+    "median": 4.53,
+    "min": 4.179,
+    "max": 4.915,
+    "runs": [
+     4.179,
+     4.567,
+     4.305,
+     4.915,
+     4.53
+    ]
+   },
+   "sql_separate": {
+    "primary_category": {
+     "sql": "SELECT primary_category, count(*) FROM papers_10 WHERE tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation') GROUP BY 1",
+     "exec_ms": {
+      "median": 1.666,
+      "min": 1.557,
+      "max": 2.251,
+      "runs": [
+       2.251,
+       2.226,
+       1.557,
+       1.666,
+       1.575
+      ]
+     },
+     "client_ms": {
+      "median": 2.456,
+      "min": 2.242,
+      "max": 3.069,
+      "runs": [
+       2.242,
+       2.456,
+       2.398,
+       2.747,
+       3.069
+      ]
+     }
+    },
+    "archive": {
+     "sql": "SELECT archive, count(*) FROM papers_10 WHERE tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation') GROUP BY 1",
+     "exec_ms": {
+      "median": 1.666,
+      "min": 1.465,
+      "max": 1.932,
+      "runs": [
+       1.666,
+       1.465,
+       1.465,
+       1.718,
+       1.932
+      ]
+     },
+     "client_ms": {
+      "median": 2.258,
+      "min": 1.934,
+      "max": 2.778,
+      "runs": [
+       2.073,
+       1.934,
+       2.258,
+       2.778,
+       2.691
+      ]
+     }
+    },
+    "year": {
+     "sql": "SELECT (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket, count(*) FROM papers_10 WHERE tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation') AND year >= 1990 GROUP BY 1",
+     "exec_ms": {
+      "median": 1.401,
+      "min": 1.4,
+      "max": 1.897,
+      "runs": [
+       1.4,
+       1.897,
+       1.4,
+       1.678,
+       1.401
+      ]
+     },
+     "client_ms": {
+      "median": 2.09,
+      "min": 1.939,
+      "max": 2.589,
+      "runs": [
+       2.09,
+       1.939,
+       2.126,
+       1.977,
+       2.589
+      ]
+     }
+    }
+   },
+   "sql_separate_sum_exec_ms": 4.733,
+   "sql_separate_sum_client_ms": 6.804,
+   "sql_grouping_sets": {
+    "sql": "SELECT primary_category, archive, bucket, count(*) FROM (SELECT primary_category, archive, (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket FROM papers_10 WHERE tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation')) s GROUP BY GROUPING SETS ((primary_category), (archive), (bucket))",
+    "exec_ms": {
+     "median": 1.594,
+     "min": 1.569,
+     "max": 1.644,
+     "runs": [
+      1.594,
+      1.57,
+      1.598,
+      1.569,
+      1.644
+     ]
+    },
+    "client_ms": {
+     "median": 2.294,
+     "min": 2.151,
+     "max": 3.071,
+     "runs": [
+      2.151,
+      2.394,
+      2.155,
+      2.294,
+      3.071
+     ]
+    }
+   },
+   "grouping_sets_equals_separate": true,
+   "comparison": {
+    "primary_category": {
+     "identical": false,
+     "solr_values": 13,
+     "sql_values": 13,
+     "max_abs_diff": 2,
+     "sum_solr": 909,
+     "sum_sql": 906
+    },
+    "archive": {
+     "identical": false,
+     "solr_values": 5,
+     "sql_values": 5,
+     "max_abs_diff": 3,
+     "sum_solr": 909,
+     "sum_sql": 906
+    },
+    "year": {
+     "identical": false,
+     "solr_values": 8,
+     "sql_values": 8,
+     "max_abs_diff": 3,
+     "sum_solr": 909,
+     "sum_sql": 906
+    }
+   },
+   "timestamp": "2026-11-21T19:17:49"
+  },
+  {
+   "size": "50",
+   "case": "ALL",
+   "solr_q": "*:*",
+   "solr_fq": null,
+   "sql_where": "true",
+   "solr_url": "http://localhost:8983/solr/papers_50/select?q=%7B%21lucene+cache%3Dfalse%7D%2A%3A%2A&rows=0&facet=true&facet.field=primary_category&facet.field=archive&facet.limit=-1&facet.mincount=1&facet.sort=index&facet.range=year&facet.range.start=1990&facet.range.end=2030&facet.range.gap=5&facet.range.other=before&wt=json",
+   "solr_numFound": 500000,
+   "solr_qtime_ms": {
+    "median": 13.0,
+    "min": 13.0,
+    "max": 16.0,
+    "runs": [
+     16.0,
+     14.0,
+     13.0,
+     13.0,
+     13.0
+    ]
+   },
+   "solr_client_ms": {
+    "median": 16.562,
+    "min": 15.857,
+    "max": 18.81,
+    "runs": [
+     18.81,
+     17.295,
+     16.562,
+     15.857,
+     16.101
+    ]
+   },
+   "sql_separate": {
+    "primary_category": {
+     "sql": "SELECT primary_category, count(*) FROM papers_50 WHERE true GROUP BY 1",
+     "exec_ms": {
+      "median": 49.128,
+      "min": 48.541,
+      "max": 51.465,
+      "runs": [
+       51.465,
+       49.128,
+       48.541,
+       49.018,
+       50.568
+      ]
+     },
+     "client_ms": {
+      "median": 37.507,
+      "min": 36.595,
+      "max": 40.033,
+      "runs": [
+       40.033,
+       38.491,
+       37.507,
+       36.846,
+       36.595
+      ]
+     }
+    },
+    "archive": {
+     "sql": "SELECT archive, count(*) FROM papers_50 WHERE true GROUP BY 1",
+     "exec_ms": {
+      "median": 104.092,
+      "min": 101.408,
+      "max": 112.738,
+      "runs": [
+       101.408,
+       102.567,
+       104.092,
+       111.829,
+       112.738
+      ]
+     },
+     "client_ms": {
+      "median": 94.795,
+      "min": 89.449,
+      "max": 107.193,
+      "runs": [
+       92.984,
+       98.33,
+       89.449,
+       107.193,
+       94.795
+      ]
+     }
+    },
+    "year": {
+     "sql": "SELECT (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket, count(*) FROM papers_50 WHERE true AND year >= 1990 GROUP BY 1",
+     "exec_ms": {
+      "median": 51.637,
+      "min": 50.009,
+      "max": 54.783,
+      "runs": [
+       51.637,
+       54.783,
+       50.769,
+       53.011,
+       50.009
+      ]
+     },
+     "client_ms": {
+      "median": 41.732,
+      "min": 40.973,
+      "max": 51.008,
+      "runs": [
+       41.555,
+       40.973,
+       42.704,
+       41.732,
+       51.008
+      ]
+     }
+    }
+   },
+   "sql_separate_sum_exec_ms": 204.857,
+   "sql_separate_sum_client_ms": 174.034,
+   "sql_grouping_sets": {
+    "sql": "SELECT primary_category, archive, bucket, count(*) FROM (SELECT primary_category, archive, (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket FROM papers_50 WHERE true) s GROUP BY GROUPING SETS ((primary_category), (archive), (bucket))",
+    "exec_ms": {
+     "median": 389.57,
+     "min": 370.948,
+     "max": 409.989,
+     "runs": [
+      392.525,
+      409.989,
+      379.215,
+      389.57,
+      370.948
+     ]
+    },
+    "client_ms": {
+     "median": 360.808,
+     "min": 354.934,
+     "max": 385.133,
+     "runs": [
+      354.934,
+      357.383,
+      360.808,
+      385.133,
+      373.754
+     ]
+    }
+   },
+   "grouping_sets_equals_separate": true,
+   "comparison": {
+    "primary_category": {
+     "identical": true,
+     "solr_values": 169,
+     "sql_values": 169,
+     "max_abs_diff": 0,
+     "sum_solr": 500000,
+     "sum_sql": 500000
+    },
+    "archive": {
+     "identical": true,
+     "solr_values": 37,
+     "sql_values": 37,
+     "max_abs_diff": 0,
+     "sum_solr": 500000,
+     "sum_sql": 500000
+    },
+    "year": {
+     "identical": true,
+     "solr_values": 8,
+     "sql_values": 8,
+     "max_abs_diff": 0,
+     "sum_solr": 500000,
+     "sum_sql": 500000
+    }
+   },
+   "timestamp": "2026-11-21T19:17:55"
+  },
+  {
+   "size": "50",
+   "case": "STRUCT",
+   "solr_q": "*:*",
+   "solr_fq": [
+    "archive:cs",
+    "year:[2015 TO *]"
+   ],
+   "sql_where": "archive = 'cs' AND year >= 2015",
+   "solr_url": "http://localhost:8983/solr/papers_50/select?q=%7B%21lucene+cache%3Dfalse%7D%2A%3A%2A&rows=0&facet=true&facet.field=primary_category&facet.field=archive&facet.limit=-1&facet.mincount=1&facet.sort=index&facet.range=year&facet.range.start=1990&facet.range.end=2030&facet.range.gap=5&facet.range.other=before&fq=archive%3Acs&fq=year%3A%5B2015+TO+%2A%5D&wt=json",
+   "solr_numFound": 125454,
+   "solr_qtime_ms": {
+    "median": 4.0,
+    "min": 3.0,
+    "max": 4.0,
+    "runs": [
+     4.0,
+     4.0,
+     3.0,
+     4.0,
+     3.0
+    ]
+   },
+   "solr_client_ms": {
+    "median": 6.299,
+    "min": 6.136,
+    "max": 6.789,
+    "runs": [
+     6.789,
+     6.482,
+     6.136,
+     6.264,
+     6.299
+    ]
+   },
+   "sql_separate": {
+    "primary_category": {
+     "sql": "SELECT primary_category, count(*) FROM papers_50 WHERE archive = 'cs' AND year >= 2015 GROUP BY 1",
+     "exec_ms": {
+      "median": 105.529,
+      "min": 100.747,
+      "max": 110.276,
+      "runs": [
+       107.851,
+       100.747,
+       110.276,
+       105.529,
+       104.737
+      ]
+     },
+     "client_ms": {
+      "median": 108.727,
+      "min": 99.747,
+      "max": 118.867,
+      "runs": [
+       99.747,
+       99.964,
+       118.867,
+       113.234,
+       108.727
+      ]
+     }
+    },
+    "archive": {
+     "sql": "SELECT archive, count(*) FROM papers_50 WHERE archive = 'cs' AND year >= 2015 GROUP BY 1",
+     "exec_ms": {
+      "median": 95.901,
+      "min": 91.513,
+      "max": 106.791,
+      "runs": [
+       95.901,
+       106.791,
+       94.377,
+       91.513,
+       98.694
+      ]
+     },
+     "client_ms": {
+      "median": 91.768,
+      "min": 88.007,
+      "max": 93.268,
+      "runs": [
+       91.768,
+       91.985,
+       88.007,
+       89.905,
+       93.268
+      ]
+     }
+    },
+    "year": {
+     "sql": "SELECT (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket, count(*) FROM papers_50 WHERE archive = 'cs' AND year >= 2015 AND year >= 1990 GROUP BY 1",
+     "exec_ms": {
+      "median": 113.784,
+      "min": 108.43,
+      "max": 127.347,
+      "runs": [
+       108.43,
+       110.477,
+       127.347,
+       116.578,
+       113.784
+      ]
+     },
+     "client_ms": {
+      "median": 115.255,
+      "min": 103.748,
+      "max": 120.012,
+      "runs": [
+       103.748,
+       106.506,
+       119.361,
+       120.012,
+       115.255
+      ]
+     }
+    }
+   },
+   "sql_separate_sum_exec_ms": 315.214,
+   "sql_separate_sum_client_ms": 315.75,
+   "sql_grouping_sets": {
+    "sql": "SELECT primary_category, archive, bucket, count(*) FROM (SELECT primary_category, archive, (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket FROM papers_50 WHERE archive = 'cs' AND year >= 2015) s GROUP BY GROUPING SETS ((primary_category), (archive), (bucket))",
+    "exec_ms": {
+     "median": 231.101,
+     "min": 225.445,
+     "max": 233.943,
+     "runs": [
+      225.445,
+      231.101,
+      231.175,
+      233.943,
+      230.796
+     ]
+    },
+    "client_ms": {
+     "median": 217.232,
+     "min": 212.052,
+     "max": 221.767,
+     "runs": [
+      221.767,
+      212.052,
+      215.63,
+      221.209,
+      217.232
+     ]
+    }
+   },
+   "grouping_sets_equals_separate": true,
+   "comparison": {
+    "primary_category": {
+     "identical": true,
+     "solr_values": 39,
+     "sql_values": 39,
+     "max_abs_diff": 0,
+     "sum_solr": 125454,
+     "sum_sql": 125454
+    },
+    "archive": {
+     "identical": true,
+     "solr_values": 1,
+     "sql_values": 1,
+     "max_abs_diff": 0,
+     "sum_solr": 125454,
+     "sum_sql": 125454
+    },
+    "year": {
+     "identical": true,
+     "solr_values": 3,
+     "sql_values": 3,
+     "max_abs_diff": 0,
+     "sum_solr": 125454,
+     "sum_sql": 125454
+    }
+   },
+   "timestamp": "2026-11-21T19:18:01"
+  },
+  {
+   "size": "50",
+   "case": "Q1",
+   "solr_q": "text_all:simulate",
+   "solr_fq": null,
+   "sql_where": "tsv @@ plainto_tsquery('english', 'simulate')",
+   "solr_url": "http://localhost:8983/solr/papers_50/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3Asimulate&rows=0&facet=true&facet.field=primary_category&facet.field=archive&facet.limit=-1&facet.mincount=1&facet.sort=index&facet.range=year&facet.range.start=1990&facet.range.end=2030&facet.range.gap=5&facet.range.other=before&wt=json",
+   "solr_numFound": 60004,
+   "solr_qtime_ms": {
+    "median": 2.0,
+    "min": 2.0,
+    "max": 3.0,
+    "runs": [
+     3.0,
+     2.0,
+     2.0,
+     2.0,
+     3.0
+    ]
+   },
+   "solr_client_ms": {
+    "median": 5.339,
+    "min": 5.194,
+    "max": 5.829,
+    "runs": [
+     5.829,
+     5.3,
+     5.194,
+     5.339,
+     5.633
+    ]
+   },
+   "sql_separate": {
+    "primary_category": {
+     "sql": "SELECT primary_category, count(*) FROM papers_50 WHERE tsv @@ plainto_tsquery('english', 'simulate') GROUP BY 1",
+     "exec_ms": {
+      "median": 80.567,
+      "min": 77.688,
+      "max": 88.691,
+      "runs": [
+       88.64,
+       77.688,
+       80.567,
+       79.336,
+       88.691
+      ]
+     },
+     "client_ms": {
+      "median": 76.174,
+      "min": 68.741,
+      "max": 82.386,
+      "runs": [
+       68.741,
+       82.386,
+       76.174,
+       72.137,
+       77.328
+      ]
+     }
+    },
+    "archive": {
+     "sql": "SELECT archive, count(*) FROM papers_50 WHERE tsv @@ plainto_tsquery('english', 'simulate') GROUP BY 1",
+     "exec_ms": {
+      "median": 73.655,
+      "min": 71.206,
+      "max": 80.968,
+      "runs": [
+       80.968,
+       73.513,
+       73.655,
+       73.943,
+       71.206
+      ]
+     },
+     "client_ms": {
+      "median": 75.56,
+      "min": 70.485,
+      "max": 80.95,
+      "runs": [
+       74.629,
+       77.021,
+       70.485,
+       75.56,
+       80.95
+      ]
+     }
+    },
+    "year": {
+     "sql": "SELECT (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket, count(*) FROM papers_50 WHERE tsv @@ plainto_tsquery('english', 'simulate') AND year >= 1990 GROUP BY 1",
+     "exec_ms": {
+      "median": 90.837,
+      "min": 88.401,
+      "max": 105.538,
+      "runs": [
+       91.841,
+       90.837,
+       88.505,
+       88.401,
+       105.538
+      ]
+     },
+     "client_ms": {
+      "median": 89.642,
+      "min": 86.638,
+      "max": 101.258,
+      "runs": [
+       98.417,
+       88.354,
+       89.642,
+       86.638,
+       101.258
+      ]
+     }
+    }
+   },
+   "sql_separate_sum_exec_ms": 245.059,
+   "sql_separate_sum_client_ms": 241.376,
+   "sql_grouping_sets": {
+    "sql": "SELECT primary_category, archive, bucket, count(*) FROM (SELECT primary_category, archive, (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket FROM papers_50 WHERE tsv @@ plainto_tsquery('english', 'simulate')) s GROUP BY GROUPING SETS ((primary_category), (archive), (bucket))",
+    "exec_ms": {
+     "median": 88.883,
+     "min": 88.438,
+     "max": 99.816,
+     "runs": [
+      99.816,
+      98.443,
+      88.859,
+      88.883,
+      88.438
+     ]
+    },
+    "client_ms": {
+     "median": 95.803,
+     "min": 85.565,
+     "max": 107.959,
+     "runs": [
+      107.364,
+      95.803,
+      107.959,
+      85.565,
+      87.416
+     ]
+    }
+   },
+   "grouping_sets_equals_separate": true,
+   "comparison": {
+    "primary_category": {
+     "identical": false,
+     "solr_values": 155,
+     "sql_values": 155,
+     "max_abs_diff": 3,
+     "sum_solr": 60004,
+     "sum_sql": 59989
+    },
+    "archive": {
+     "identical": false,
+     "solr_values": 29,
+     "sql_values": 29,
+     "max_abs_diff": 5,
+     "sum_solr": 60004,
+     "sum_sql": 59989
+    },
+    "year": {
+     "identical": false,
+     "solr_values": 8,
+     "sql_values": 8,
+     "max_abs_diff": 9,
+     "sum_solr": 60004,
+     "sum_sql": 59989
+    }
+   },
+   "timestamp": "2026-11-21T19:18:05"
+  },
+  {
+   "size": "50",
+   "case": "Q2",
+   "solr_q": "text_all:\"dark matter\"",
+   "solr_fq": null,
+   "sql_where": "tsv @@ phraseto_tsquery('english', 'dark matter')",
+   "solr_url": "http://localhost:8983/solr/papers_50/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3A%22dark+matter%22&rows=0&facet=true&facet.field=primary_category&facet.field=archive&facet.limit=-1&facet.mincount=1&facet.sort=index&facet.range=year&facet.range.start=1990&facet.range.end=2030&facet.range.gap=5&facet.range.other=before&wt=json",
+   "solr_numFound": 7510,
+   "solr_qtime_ms": {
+    "median": 2.0,
+    "min": 1.0,
+    "max": 2.0,
+    "runs": [
+     2.0,
+     2.0,
+     2.0,
+     2.0,
+     1.0
+    ]
+   },
+   "solr_client_ms": {
+    "median": 4.44,
+    "min": 4.039,
+    "max": 4.477,
+    "runs": [
+     4.44,
+     4.315,
+     4.477,
+     4.471,
+     4.039
+    ]
+   },
+   "sql_separate": {
+    "primary_category": {
+     "sql": "SELECT primary_category, count(*) FROM papers_50 WHERE tsv @@ phraseto_tsquery('english', 'dark matter') GROUP BY 1",
+     "exec_ms": {
+      "median": 33.199,
+      "min": 32.9,
+      "max": 37.733,
+      "runs": [
+       33.199,
+       32.9,
+       34.526,
+       32.949,
+       37.733
+      ]
+     },
+     "client_ms": {
+      "median": 34.828,
+      "min": 34.179,
+      "max": 35.552,
+      "runs": [
+       35.552,
+       34.828,
+       34.498,
+       34.95,
+       34.179
+      ]
+     }
+    },
+    "archive": {
+     "sql": "SELECT archive, count(*) FROM papers_50 WHERE tsv @@ phraseto_tsquery('english', 'dark matter') GROUP BY 1",
+     "exec_ms": {
+      "median": 33.931,
+      "min": 32.975,
+      "max": 35.829,
+      "runs": [
+       33.931,
+       35.025,
+       35.829,
+       32.975,
+       33.498
+      ]
+     },
+     "client_ms": {
+      "median": 33.71,
+      "min": 33.542,
+      "max": 37.455,
+      "runs": [
+       33.542,
+       33.561,
+       36.428,
+       37.455,
+       33.71
+      ]
+     }
+    },
+    "year": {
+     "sql": "SELECT (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket, count(*) FROM papers_50 WHERE tsv @@ phraseto_tsquery('english', 'dark matter') AND year >= 1990 GROUP BY 1",
+     "exec_ms": {
+      "median": 36.553,
+      "min": 34.895,
+      "max": 38.369,
+      "runs": [
+       36.553,
+       34.895,
+       37.043,
+       38.369,
+       34.969
+      ]
+     },
+     "client_ms": {
+      "median": 35.069,
+      "min": 33.593,
+      "max": 41.165,
+      "runs": [
+       34.088,
+       35.069,
+       33.593,
+       38.209,
+       41.165
+      ]
+     }
+    }
+   },
+   "sql_separate_sum_exec_ms": 103.683,
+   "sql_separate_sum_client_ms": 103.607,
+   "sql_grouping_sets": {
+    "sql": "SELECT primary_category, archive, bucket, count(*) FROM (SELECT primary_category, archive, (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket FROM papers_50 WHERE tsv @@ phraseto_tsquery('english', 'dark matter')) s GROUP BY GROUPING SETS ((primary_category), (archive), (bucket))",
+    "exec_ms": {
+     "median": 37.505,
+     "min": 35.504,
+     "max": 42.244,
+     "runs": [
+      35.504,
+      37.505,
+      42.244,
+      36.586,
+      38.997
+     ]
+    },
+    "client_ms": {
+     "median": 37.954,
+     "min": 35.448,
+     "max": 40.688,
+     "runs": [
+      40.554,
+      35.448,
+      37.954,
+      40.688,
+      37.061
+     ]
+    }
+   },
+   "grouping_sets_equals_separate": true,
+   "comparison": {
+    "primary_category": {
+     "identical": false,
+     "solr_values": 49,
+     "sql_values": 48,
+     "max_abs_diff": 17,
+     "sum_solr": 7510,
+     "sum_sql": 7470
+    },
+    "archive": {
+     "identical": false,
+     "solr_values": 17,
+     "sql_values": 17,
+     "max_abs_diff": 25,
+     "sum_solr": 7510,
+     "sum_sql": 7470
+    },
+    "year": {
+     "identical": false,
+     "solr_values": 8,
+     "sql_values": 8,
+     "max_abs_diff": 12,
+     "sum_solr": 7510,
+     "sum_sql": 7470
+    }
+   },
+   "timestamp": "2026-11-21T19:18:07"
+  },
+  {
+   "size": "50",
+   "case": "Q3",
+   "solr_q": "text_all:galaxy AND (text_all:cluster OR text_all:merger) AND NOT text_all:simulation",
+   "solr_fq": null,
+   "sql_where": "tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation')",
+   "solr_url": "http://localhost:8983/solr/papers_50/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3Agalaxy+AND+%28text_all%3Acluster+OR+text_all%3Amerger%29+AND+NOT+text_all%3Asimulation&rows=0&facet=true&facet.field=primary_category&facet.field=archive&facet.limit=-1&facet.mincount=1&facet.sort=index&facet.range=year&facet.range.start=1990&facet.range.end=2030&facet.range.gap=5&facet.range.other=before&wt=json",
+   "solr_numFound": 4444,
+   "solr_qtime_ms": {
+    "median": 4.0,
+    "min": 3.0,
+    "max": 4.0,
+    "runs": [
+     4.0,
+     3.0,
+     4.0,
+     3.0,
+     4.0
+    ]
+   },
+   "solr_client_ms": {
+    "median": 6.271,
+    "min": 5.903,
+    "max": 6.469,
+    "runs": [
+     6.271,
+     5.903,
+     6.469,
+     5.994,
+     6.417
+    ]
+   },
+   "sql_separate": {
+    "primary_category": {
+     "sql": "SELECT primary_category, count(*) FROM papers_50 WHERE tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation') GROUP BY 1",
+     "exec_ms": {
+      "median": 8.311,
+      "min": 7.856,
+      "max": 8.838,
+      "runs": [
+       8.838,
+       8.361,
+       8.311,
+       8.136,
+       7.856
+      ]
+     },
+     "client_ms": {
+      "median": 9.011,
+      "min": 8.373,
+      "max": 9.957,
+      "runs": [
+       9.215,
+       9.957,
+       8.436,
+       8.373,
+       9.011
+      ]
+     }
+    },
+    "archive": {
+     "sql": "SELECT archive, count(*) FROM papers_50 WHERE tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation') GROUP BY 1",
+     "exec_ms": {
+      "median": 8.243,
+      "min": 7.706,
+      "max": 9.051,
+      "runs": [
+       8.243,
+       7.706,
+       8.096,
+       9.051,
+       8.874
+      ]
+     },
+     "client_ms": {
+      "median": 8.18,
+      "min": 7.982,
+      "max": 11.194,
+      "runs": [
+       7.982,
+       8.18,
+       8.019,
+       8.552,
+       11.194
+      ]
+     }
+    },
+    "year": {
+     "sql": "SELECT (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket, count(*) FROM papers_50 WHERE tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation') AND year >= 1990 GROUP BY 1",
+     "exec_ms": {
+      "median": 7.741,
+      "min": 7.367,
+      "max": 9.72,
+      "runs": [
+       7.741,
+       8.337,
+       9.72,
+       7.722,
+       7.367
+      ]
+     },
+     "client_ms": {
+      "median": 9.046,
+      "min": 8.553,
+      "max": 9.684,
+      "runs": [
+       9.046,
+       8.553,
+       9.684,
+       9.613,
+       8.749
+      ]
+     }
+    }
+   },
+   "sql_separate_sum_exec_ms": 24.295,
+   "sql_separate_sum_client_ms": 26.237,
+   "sql_grouping_sets": {
+    "sql": "SELECT primary_category, archive, bucket, count(*) FROM (SELECT primary_category, archive, (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket FROM papers_50 WHERE tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation')) s GROUP BY GROUPING SETS ((primary_category), (archive), (bucket))",
+    "exec_ms": {
+     "median": 9.384,
+     "min": 8.88,
+     "max": 10.385,
+     "runs": [
+      9.701,
+      9.384,
+      9.294,
+      10.385,
+      8.88
+     ]
+    },
+    "client_ms": {
+     "median": 10.742,
+     "min": 9.528,
+     "max": 11.076,
+     "runs": [
+      9.528,
+      10.742,
+      10.848,
+      11.076,
+      10.365
+     ]
+    }
+   },
+   "grouping_sets_equals_separate": true,
+   "comparison": {
+    "primary_category": {
+     "identical": false,
+     "solr_values": 21,
+     "sql_values": 21,
+     "max_abs_diff": 6,
+     "sum_solr": 4444,
+     "sum_sql": 4430
+    },
+    "archive": {
+     "identical": false,
+     "solr_values": 11,
+     "sql_values": 11,
+     "max_abs_diff": 14,
+     "sum_solr": 4444,
+     "sum_sql": 4430
+    },
+    "year": {
+     "identical": false,
+     "solr_values": 8,
+     "sql_values": 8,
+     "max_abs_diff": 4,
+     "sum_solr": 4444,
+     "sum_sql": 4430
+    }
+   },
+   "timestamp": "2026-11-21T19:18:07"
+  },
+  {
+   "size": "100",
+   "case": "ALL",
+   "solr_q": "*:*",
+   "solr_fq": null,
+   "sql_where": "true",
+   "solr_url": "http://localhost:8983/solr/papers_100/select?q=%7B%21lucene+cache%3Dfalse%7D%2A%3A%2A&rows=0&facet=true&facet.field=primary_category&facet.field=archive&facet.limit=-1&facet.mincount=1&facet.sort=index&facet.range=year&facet.range.start=1990&facet.range.end=2030&facet.range.gap=5&facet.range.other=before&wt=json",
+   "solr_numFound": 1000000,
+   "solr_qtime_ms": {
+    "median": 25.0,
+    "min": 25.0,
+    "max": 26.0,
+    "runs": [
+     26.0,
+     25.0,
+     25.0,
+     25.0,
+     25.0
+    ]
+   },
+   "solr_client_ms": {
+    "median": 28.675,
+    "min": 27.963,
+    "max": 28.917,
+    "runs": [
+     28.675,
+     28.626,
+     28.856,
+     27.963,
+     28.917
+    ]
+   },
+   "sql_separate": {
+    "primary_category": {
+     "sql": "SELECT primary_category, count(*) FROM papers_100 WHERE true GROUP BY 1",
+     "exec_ms": {
+      "median": 117.41,
+      "min": 111.899,
+      "max": 134.928,
+      "runs": [
+       134.928,
+       114.744,
+       117.41,
+       120.011,
+       111.899
+      ]
+     },
+     "client_ms": {
+      "median": 87.084,
+      "min": 85.123,
+      "max": 96.591,
+      "runs": [
+       87.084,
+       87.07,
+       87.652,
+       96.591,
+       85.123
+      ]
+     }
+    },
+    "archive": {
+     "sql": "SELECT archive, count(*) FROM papers_100 WHERE true GROUP BY 1",
+     "exec_ms": {
+      "median": 245.719,
+      "min": 241.639,
+      "max": 267.672,
+      "runs": [
+       267.672,
+       254.044,
+       244.846,
+       245.719,
+       241.639
+      ]
+     },
+     "client_ms": {
+      "median": 216.721,
+      "min": 214.647,
+      "max": 254.967,
+      "runs": [
+       219.085,
+       215.676,
+       214.647,
+       254.967,
+       216.721
+      ]
+     }
+    },
+    "year": {
+     "sql": "SELECT (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket, count(*) FROM papers_100 WHERE true AND year >= 1990 GROUP BY 1",
+     "exec_ms": {
+      "median": 117.524,
+      "min": 110.149,
+      "max": 121.081,
+      "runs": [
+       117.524,
+       110.149,
+       111.221,
+       121.081,
+       119.465
+      ]
+     },
+     "client_ms": {
+      "median": 92.606,
+      "min": 90.747,
+      "max": 95.56,
+      "runs": [
+       92.606,
+       92.258,
+       93.86,
+       95.56,
+       90.747
+      ]
+     }
+    }
+   },
+   "sql_separate_sum_exec_ms": 480.653,
+   "sql_separate_sum_client_ms": 396.411,
+   "sql_grouping_sets": {
+    "sql": "SELECT primary_category, archive, bucket, count(*) FROM (SELECT primary_category, archive, (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket FROM papers_100 WHERE true) s GROUP BY GROUPING SETS ((primary_category), (archive), (bucket))",
+    "exec_ms": {
+     "median": 780.679,
+     "min": 768.27,
+     "max": 794.134,
+     "runs": [
+      790.962,
+      768.27,
+      794.134,
+      770.632,
+      780.679
+     ]
+    },
+    "client_ms": {
+     "median": 716.952,
+     "min": 709.345,
+     "max": 731.119,
+     "runs": [
+      711.245,
+      721.749,
+      731.119,
+      709.345,
+      716.952
+     ]
+    }
+   },
+   "grouping_sets_equals_separate": true,
+   "comparison": {
+    "primary_category": {
+     "identical": true,
+     "solr_values": 170,
+     "sql_values": 170,
+     "max_abs_diff": 0,
+     "sum_solr": 1000000,
+     "sum_sql": 1000000
+    },
+    "archive": {
+     "identical": true,
+     "solr_values": 38,
+     "sql_values": 38,
+     "max_abs_diff": 0,
+     "sum_solr": 1000000,
+     "sum_sql": 1000000
+    },
+    "year": {
+     "identical": true,
+     "solr_values": 8,
+     "sql_values": 8,
+     "max_abs_diff": 0,
+     "sum_solr": 999997,
+     "sum_sql": 999997
+    }
+   },
+   "timestamp": "2026-11-21T19:18:21"
+  },
+  {
+   "size": "100",
+   "case": "STRUCT",
+   "solr_q": "*:*",
+   "solr_fq": [
+    "archive:cs",
+    "year:[2015 TO *]"
+   ],
+   "sql_where": "archive = 'cs' AND year >= 2015",
+   "solr_url": "http://localhost:8983/solr/papers_100/select?q=%7B%21lucene+cache%3Dfalse%7D%2A%3A%2A&rows=0&facet=true&facet.field=primary_category&facet.field=archive&facet.limit=-1&facet.mincount=1&facet.sort=index&facet.range=year&facet.range.start=1990&facet.range.end=2030&facet.range.gap=5&facet.range.other=before&fq=archive%3Acs&fq=year%3A%5B2015+TO+%2A%5D&wt=json",
+   "solr_numFound": 250385,
+   "solr_qtime_ms": {
+    "median": 7.0,
+    "min": 7.0,
+    "max": 7.0,
+    "runs": [
+     7.0,
+     7.0,
+     7.0,
+     7.0,
+     7.0
+    ]
+   },
+   "solr_client_ms": {
+    "median": 10.381,
+    "min": 9.669,
+    "max": 10.516,
+    "runs": [
+     9.669,
+     10.381,
+     10.123,
+     10.516,
+     10.435
+    ]
+   },
+   "sql_separate": {
+    "primary_category": {
+     "sql": "SELECT primary_category, count(*) FROM papers_100 WHERE archive = 'cs' AND year >= 2015 GROUP BY 1",
+     "exec_ms": {
+      "median": 211.774,
+      "min": 195.704,
+      "max": 220.567,
+      "runs": [
+       220.567,
+       212.661,
+       195.704,
+       211.774,
+       209.288
+      ]
+     },
+     "client_ms": {
+      "median": 212.933,
+      "min": 192.801,
+      "max": 215.146,
+      "runs": [
+       212.933,
+       214.225,
+       198.948,
+       192.801,
+       215.146
+      ]
+     }
+    },
+    "archive": {
+     "sql": "SELECT archive, count(*) FROM papers_100 WHERE archive = 'cs' AND year >= 2015 GROUP BY 1",
+     "exec_ms": {
+      "median": 193.175,
+      "min": 188.947,
+      "max": 221.994,
+      "runs": [
+       188.947,
+       194.255,
+       189.795,
+       221.994,
+       193.175
+      ]
+     },
+     "client_ms": {
+      "median": 191.518,
+      "min": 182.555,
+      "max": 217.244,
+      "runs": [
+       182.555,
+       196.336,
+       191.518,
+       217.244,
+       185.474
+      ]
+     }
+    },
+    "year": {
+     "sql": "SELECT (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket, count(*) FROM papers_100 WHERE archive = 'cs' AND year >= 2015 AND year >= 1990 GROUP BY 1",
+     "exec_ms": {
+      "median": 207.1,
+      "min": 201.681,
+      "max": 236.188,
+      "runs": [
+       236.188,
+       211.955,
+       201.681,
+       204.198,
+       207.1
+      ]
+     },
+     "client_ms": {
+      "median": 215.053,
+      "min": 198.197,
+      "max": 217.851,
+      "runs": [
+       198.197,
+       215.053,
+       217.851,
+       205.051,
+       217.577
+      ]
+     }
+    }
+   },
+   "sql_separate_sum_exec_ms": 612.049,
+   "sql_separate_sum_client_ms": 619.504,
+   "sql_grouping_sets": {
+    "sql": "SELECT primary_category, archive, bucket, count(*) FROM (SELECT primary_category, archive, (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket FROM papers_100 WHERE archive = 'cs' AND year >= 2015) s GROUP BY GROUPING SETS ((primary_category), (archive), (bucket))",
+    "exec_ms": {
+     "median": 474.107,
+     "min": 473.103,
+     "max": 516.266,
+     "runs": [
+      473.103,
+      516.266,
+      473.6,
+      474.107,
+      476.996
+     ]
+    },
+    "client_ms": {
+     "median": 451.951,
+     "min": 439.751,
+     "max": 479.866,
+     "runs": [
+      479.866,
+      450.893,
+      454.104,
+      439.751,
+      451.951
+     ]
+    }
+   },
+   "grouping_sets_equals_separate": true,
+   "comparison": {
+    "primary_category": {
+     "identical": true,
+     "solr_values": 39,
+     "sql_values": 39,
+     "max_abs_diff": 0,
+     "sum_solr": 250385,
+     "sum_sql": 250385
+    },
+    "archive": {
+     "identical": true,
+     "solr_values": 1,
+     "sql_values": 1,
+     "max_abs_diff": 0,
+     "sum_solr": 250385,
+     "sum_sql": 250385
+    },
+    "year": {
+     "identical": true,
+     "solr_values": 3,
+     "sql_values": 3,
+     "max_abs_diff": 0,
+     "sum_solr": 250385,
+     "sum_sql": 250385
+    }
+   },
+   "timestamp": "2026-11-21T19:18:33"
+  },
+  {
+   "size": "100",
+   "case": "Q1",
+   "solr_q": "text_all:simulate",
+   "solr_fq": null,
+   "sql_where": "tsv @@ plainto_tsquery('english', 'simulate')",
+   "solr_url": "http://localhost:8983/solr/papers_100/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3Asimulate&rows=0&facet=true&facet.field=primary_category&facet.field=archive&facet.limit=-1&facet.mincount=1&facet.sort=index&facet.range=year&facet.range.start=1990&facet.range.end=2030&facet.range.gap=5&facet.range.other=before&wt=json",
+   "solr_numFound": 119255,
+   "solr_qtime_ms": {
+    "median": 4.0,
+    "min": 4.0,
+    "max": 5.0,
+    "runs": [
+     4.0,
+     4.0,
+     4.0,
+     5.0,
+     4.0
+    ]
+   },
+   "solr_client_ms": {
+    "median": 7.51,
+    "min": 7.058,
+    "max": 8.408,
+    "runs": [
+     7.058,
+     7.51,
+     7.438,
+     8.408,
+     7.92
+    ]
+   },
+   "sql_separate": {
+    "primary_category": {
+     "sql": "SELECT primary_category, count(*) FROM papers_100 WHERE tsv @@ plainto_tsquery('english', 'simulate') GROUP BY 1",
+     "exec_ms": {
+      "median": 173.1,
+      "min": 167.078,
+      "max": 186.814,
+      "runs": [
+       175.036,
+       167.709,
+       173.1,
+       167.078,
+       186.814
+      ]
+     },
+     "client_ms": {
+      "median": 172.13,
+      "min": 163.279,
+      "max": 256.984,
+      "runs": [
+       256.984,
+       168.075,
+       175.512,
+       163.279,
+       172.13
+      ]
+     }
+    },
+    "archive": {
+     "sql": "SELECT archive, count(*) FROM papers_100 WHERE tsv @@ plainto_tsquery('english', 'simulate') GROUP BY 1",
+     "exec_ms": {
+      "median": 175.41,
+      "min": 169.001,
+      "max": 191.098,
+      "runs": [
+       169.001,
+       175.41,
+       177.597,
+       175.252,
+       191.098
+      ]
+     },
+     "client_ms": {
+      "median": 174.693,
+      "min": 163.398,
+      "max": 192.442,
+      "runs": [
+       169.007,
+       163.398,
+       174.693,
+       177.337,
+       192.442
+      ]
+     }
+    },
+    "year": {
+     "sql": "SELECT (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket, count(*) FROM papers_100 WHERE tsv @@ plainto_tsquery('english', 'simulate') AND year >= 1990 GROUP BY 1",
+     "exec_ms": {
+      "median": 175.081,
+      "min": 170.046,
+      "max": 193.17,
+      "runs": [
+       175.531,
+       175.035,
+       193.17,
+       170.046,
+       175.081
+      ]
+     },
+     "client_ms": {
+      "median": 167.294,
+      "min": 166.488,
+      "max": 186.535,
+      "runs": [
+       186.535,
+       167.294,
+       166.488,
+       167.25,
+       172.978
+      ]
+     }
+    }
+   },
+   "sql_separate_sum_exec_ms": 523.591,
+   "sql_separate_sum_client_ms": 514.117,
+   "sql_grouping_sets": {
+    "sql": "SELECT primary_category, archive, bucket, count(*) FROM (SELECT primary_category, archive, (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket FROM papers_100 WHERE tsv @@ plainto_tsquery('english', 'simulate')) s GROUP BY GROUPING SETS ((primary_category), (archive), (bucket))",
+    "exec_ms": {
+     "median": 182.679,
+     "min": 181.623,
+     "max": 188.789,
+     "runs": [
+      182.679,
+      188.789,
+      181.623,
+      185.599,
+      182.19
+     ]
+    },
+    "client_ms": {
+     "median": 198.177,
+     "min": 173.725,
+     "max": 200.822,
+     "runs": [
+      198.456,
+      180.153,
+      200.822,
+      173.725,
+      198.177
+     ]
+    }
+   },
+   "grouping_sets_equals_separate": true,
+   "comparison": {
+    "primary_category": {
+     "identical": false,
+     "solr_values": 157,
+     "sql_values": 157,
+     "max_abs_diff": 3,
+     "sum_solr": 119255,
+     "sum_sql": 119222
+    },
+    "archive": {
+     "identical": false,
+     "solr_values": 31,
+     "sql_values": 31,
+     "max_abs_diff": 11,
+     "sum_solr": 119255,
+     "sum_sql": 119222
+    },
+    "year": {
+     "identical": false,
+     "solr_values": 8,
+     "sql_values": 8,
+     "max_abs_diff": 15,
+     "sum_solr": 119255,
+     "sum_sql": 119222
+    }
+   },
+   "timestamp": "2026-11-21T19:18:41"
+  },
+  {
+   "size": "100",
+   "case": "Q2",
+   "solr_q": "text_all:\"dark matter\"",
+   "solr_fq": null,
+   "sql_where": "tsv @@ phraseto_tsquery('english', 'dark matter')",
+   "solr_url": "http://localhost:8983/solr/papers_100/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3A%22dark+matter%22&rows=0&facet=true&facet.field=primary_category&facet.field=archive&facet.limit=-1&facet.mincount=1&facet.sort=index&facet.range=year&facet.range.start=1990&facet.range.end=2030&facet.range.gap=5&facet.range.other=before&wt=json",
+   "solr_numFound": 15025,
+   "solr_qtime_ms": {
+    "median": 2.0,
+    "min": 2.0,
+    "max": 3.0,
+    "runs": [
+     2.0,
+     2.0,
+     3.0,
+     2.0,
+     2.0
+    ]
+   },
+   "solr_client_ms": {
+    "median": 5.18,
+    "min": 4.911,
+    "max": 5.315,
+    "runs": [
+     5.315,
+     5.258,
+     5.18,
+     4.911,
+     5.107
+    ]
+   },
+   "sql_separate": {
+    "primary_category": {
+     "sql": "SELECT primary_category, count(*) FROM papers_100 WHERE tsv @@ phraseto_tsquery('english', 'dark matter') GROUP BY 1",
+     "exec_ms": {
+      "median": 66.88,
+      "min": 65.382,
+      "max": 72.145,
+      "runs": [
+       66.88,
+       65.382,
+       67.706,
+       72.145,
+       66.145
+      ]
+     },
+     "client_ms": {
+      "median": 67.831,
+      "min": 65.439,
+      "max": 69.309,
+      "runs": [
+       68.438,
+       69.309,
+       65.439,
+       67.035,
+       67.831
+      ]
+     }
+    },
+    "archive": {
+     "sql": "SELECT archive, count(*) FROM papers_100 WHERE tsv @@ phraseto_tsquery('english', 'dark matter') GROUP BY 1",
+     "exec_ms": {
+      "median": 66.176,
+      "min": 65.147,
+      "max": 70.702,
+      "runs": [
+       69.273,
+       66.176,
+       65.147,
+       65.416,
+       70.702
+      ]
+     },
+     "client_ms": {
+      "median": 67.584,
+      "min": 67.186,
+      "max": 71.181,
+      "runs": [
+       71.181,
+       70.704,
+       67.533,
+       67.186,
+       67.584
+      ]
+     }
+    },
+    "year": {
+     "sql": "SELECT (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket, count(*) FROM papers_100 WHERE tsv @@ phraseto_tsquery('english', 'dark matter') AND year >= 1990 GROUP BY 1",
+     "exec_ms": {
+      "median": 68.063,
+      "min": 67.307,
+      "max": 71.064,
+      "runs": [
+       71.064,
+       67.953,
+       67.307,
+       68.344,
+       68.063
+      ]
+     },
+     "client_ms": {
+      "median": 69.897,
+      "min": 65.305,
+      "max": 75.486,
+      "runs": [
+       75.486,
+       65.305,
+       68.576,
+       69.897,
+       71.007
+      ]
+     }
+    }
+   },
+   "sql_separate_sum_exec_ms": 201.119,
+   "sql_separate_sum_client_ms": 205.312,
+   "sql_grouping_sets": {
+    "sql": "SELECT primary_category, archive, bucket, count(*) FROM (SELECT primary_category, archive, (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket FROM papers_100 WHERE tsv @@ phraseto_tsquery('english', 'dark matter')) s GROUP BY GROUPING SETS ((primary_category), (archive), (bucket))",
+    "exec_ms": {
+     "median": 74.065,
+     "min": 72.612,
+     "max": 76.913,
+     "runs": [
+      74.065,
+      72.612,
+      74.183,
+      73.206,
+      76.913
+     ]
+    },
+    "client_ms": {
+     "median": 72.338,
+     "min": 70.559,
+     "max": 74.908,
+     "runs": [
+      71.434,
+      70.559,
+      72.338,
+      73.734,
+      74.908
+     ]
+    }
+   },
+   "grouping_sets_equals_separate": true,
+   "comparison": {
+    "primary_category": {
+     "identical": false,
+     "solr_values": 60,
+     "sql_values": 60,
+     "max_abs_diff": 27,
+     "sum_solr": 15025,
+     "sum_sql": 14955
+    },
+    "archive": {
+     "identical": false,
+     "solr_values": 20,
+     "sql_values": 20,
+     "max_abs_diff": 51,
+     "sum_solr": 15025,
+     "sum_sql": 14955
+    },
+    "year": {
+     "identical": false,
+     "solr_values": 8,
+     "sql_values": 8,
+     "max_abs_diff": 19,
+     "sum_solr": 15025,
+     "sum_sql": 14955
+    }
+   },
+   "timestamp": "2026-11-21T19:18:44"
+  },
+  {
+   "size": "100",
+   "case": "Q3",
+   "solr_q": "text_all:galaxy AND (text_all:cluster OR text_all:merger) AND NOT text_all:simulation",
+   "solr_fq": null,
+   "sql_where": "tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation')",
+   "solr_url": "http://localhost:8983/solr/papers_100/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3Agalaxy+AND+%28text_all%3Acluster+OR+text_all%3Amerger%29+AND+NOT+text_all%3Asimulation&rows=0&facet=true&facet.field=primary_category&facet.field=archive&facet.limit=-1&facet.mincount=1&facet.sort=index&facet.range=year&facet.range.start=1990&facet.range.end=2030&facet.range.gap=5&facet.range.other=before&wt=json",
+   "solr_numFound": 8918,
+   "solr_qtime_ms": {
+    "median": 4.0,
+    "min": 4.0,
+    "max": 5.0,
+    "runs": [
+     4.0,
+     5.0,
+     4.0,
+     4.0,
+     4.0
+    ]
+   },
+   "solr_client_ms": {
+    "median": 7.118,
+    "min": 6.868,
+    "max": 7.639,
+    "runs": [
+     6.868,
+     7.639,
+     7.118,
+     6.915,
+     7.362
+    ]
+   },
+   "sql_separate": {
+    "primary_category": {
+     "sql": "SELECT primary_category, count(*) FROM papers_100 WHERE tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation') GROUP BY 1",
+     "exec_ms": {
+      "median": 18.203,
+      "min": 17.618,
+      "max": 20.055,
+      "runs": [
+       18.203,
+       17.618,
+       18.252,
+       20.055,
+       17.848
+      ]
+     },
+     "client_ms": {
+      "median": 18.834,
+      "min": 17.378,
+      "max": 19.499,
+      "runs": [
+       17.378,
+       18.143,
+       19.499,
+       18.834,
+       19.238
+      ]
+     }
+    },
+    "archive": {
+     "sql": "SELECT archive, count(*) FROM papers_100 WHERE tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation') GROUP BY 1",
+     "exec_ms": {
+      "median": 17.482,
+      "min": 16.621,
+      "max": 18.033,
+      "runs": [
+       18.033,
+       17.452,
+       17.677,
+       16.621,
+       17.482
+      ]
+     },
+     "client_ms": {
+      "median": 18.679,
+      "min": 17.482,
+      "max": 19.645,
+      "runs": [
+       18.679,
+       19.048,
+       19.645,
+       17.482,
+       18.023
+      ]
+     }
+    },
+    "year": {
+     "sql": "SELECT (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket, count(*) FROM papers_100 WHERE tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation') AND year >= 1990 GROUP BY 1",
+     "exec_ms": {
+      "median": 18.181,
+      "min": 17.561,
+      "max": 19.992,
+      "runs": [
+       17.585,
+       17.561,
+       18.19,
+       18.181,
+       19.992
+      ]
+     },
+     "client_ms": {
+      "median": 18.786,
+      "min": 17.665,
+      "max": 22.787,
+      "runs": [
+       19.974,
+       17.964,
+       17.665,
+       18.786,
+       22.787
+      ]
+     }
+    }
+   },
+   "sql_separate_sum_exec_ms": 53.866,
+   "sql_separate_sum_client_ms": 56.299,
+   "sql_grouping_sets": {
+    "sql": "SELECT primary_category, archive, bucket, count(*) FROM (SELECT primary_category, archive, (CASE WHEN year >= 1990 AND year < 2030 THEN 1990 + ((year - 1990) / 5) * 5 END) AS bucket FROM papers_100 WHERE tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation')) s GROUP BY GROUPING SETS ((primary_category), (archive), (bucket))",
+    "exec_ms": {
+     "median": 20.039,
+     "min": 19.676,
+     "max": 23.112,
+     "runs": [
+      23.112,
+      19.944,
+      21.403,
+      20.039,
+      19.676
+     ]
+    },
+    "client_ms": {
+     "median": 21.726,
+     "min": 20.249,
+     "max": 25.66,
+     "runs": [
+      25.66,
+      21.726,
+      22.219,
+      20.249,
+      20.55
+     ]
+    }
+   },
+   "grouping_sets_equals_separate": true,
+   "comparison": {
+    "primary_category": {
+     "identical": false,
+     "solr_values": 30,
+     "sql_values": 30,
+     "max_abs_diff": 12,
+     "sum_solr": 8918,
+     "sum_sql": 8887
+    },
+    "archive": {
+     "identical": false,
+     "solr_values": 15,
+     "sql_values": 15,
+     "max_abs_diff": 31,
+     "sum_solr": 8918,
+     "sum_sql": 8887
+    },
+    "year": {
+     "identical": false,
+     "solr_values": 8,
+     "sql_values": 8,
+     "max_abs_diff": 8,
+     "sum_solr": 8918,
+     "sum_sql": 8887
+    }
+   },
+   "timestamp": "2026-11-21T19:18:45"
+  }
+ ]
+}

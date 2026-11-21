@@ -1,0 +1,407 @@
+{
+ "timestamp": "2026-11-21T19:20:37",
+ "size": "100",
+ "solr_q": "text_all:(model OR method)",
+ "pg_tsquery": "to_tsquery('english', 'model | method')",
+ "numFound": 523591,
+ "rows": 1000,
+ "repeats": 3,
+ "results": [
+  {
+   "depth": 0,
+   "rows": 1000,
+   "solr_start_rows": {
+    "url": "http://localhost:8983/solr/papers_100/select?q=text_all%3A%28model+OR+method%29&fl=id&sort=score+desc%2C+id+asc&rows=1000&start=0&wt=json",
+    "client_ms": {
+     "median": 25.957,
+     "min": 25.777,
+     "max": 26.692,
+     "runs": [
+      25.777,
+      25.957,
+      26.692
+     ]
+    },
+    "qtime_ms": {
+     "median": 21.0,
+     "min": 21.0,
+     "max": 21.0,
+     "runs": [
+      21.0,
+      21.0,
+      21.0
+     ]
+    }
+   },
+   "solr_cursor": {
+    "url": "http://localhost:8983/solr/papers_100/select?q=text_all%3A%28model+OR+method%29&fl=id&sort=score+desc%2C+id+asc&rows=1000&cursorMark=%2A&wt=json",
+    "client_ms": {
+     "median": 26.359,
+     "min": 26.346,
+     "max": 26.381,
+     "runs": [
+      26.359,
+      26.346,
+      26.381
+     ]
+    },
+    "qtime_ms": {
+     "median": 21.0,
+     "min": 21.0,
+     "max": 21.0,
+     "runs": [
+      21.0,
+      21.0,
+      21.0
+     ]
+    },
+    "cumulative_walk_seconds_to_reach": 0.0
+   },
+   "same_page_start_vs_cursor": true,
+   "sql_offset": {
+    "sql": "SELECT id FROM papers_100, (SELECT to_tsquery('english', 'model | method') AS q) s WHERE tsv @@ s.q ORDER BY ts_rank_cd(tsv, s.q) DESC, id ASC LIMIT 1000 OFFSET 0",
+    "client_ms": {
+     "median": 1780.776,
+     "min": 1711.375,
+     "max": 1782.878,
+     "runs": [
+      1780.776,
+      1711.375,
+      1782.878
+     ]
+    },
+    "exec_ms": 1777.369
+   }
+  },
+  {
+   "depth": 1000,
+   "rows": 1000,
+   "solr_start_rows": {
+    "url": "http://localhost:8983/solr/papers_100/select?q=text_all%3A%28model+OR+method%29&fl=id&sort=score+desc%2C+id+asc&rows=1000&start=1000&wt=json",
+    "client_ms": {
+     "median": 35.802,
+     "min": 34.477,
+     "max": 39.755,
+     "runs": [
+      35.802,
+      39.755,
+      34.477
+     ]
+    },
+    "qtime_ms": {
+     "median": 30.0,
+     "min": 29.0,
+     "max": 34.0,
+     "runs": [
+      30.0,
+      34.0,
+      29.0
+     ]
+    }
+   },
+   "solr_cursor": {
+    "url": "http://localhost:8983/solr/papers_100/select?q=text_all%3A%28model+OR+method%29&fl=id&sort=score+desc%2C+id+asc&rows=1000&cursorMark=AoIIP%2B2zjyoxODEwLjA5OTQz&wt=json",
+    "client_ms": {
+     "median": 26.615,
+     "min": 25.91,
+     "max": 27.305,
+     "runs": [
+      25.91,
+      26.615,
+      27.305
+     ]
+    },
+    "qtime_ms": {
+     "median": 22.0,
+     "min": 21.0,
+     "max": 22.0,
+     "runs": [
+      21.0,
+      22.0,
+      22.0
+     ]
+    },
+    "cumulative_walk_seconds_to_reach": 0.029
+   },
+   "same_page_start_vs_cursor": true,
+   "sql_offset": {
+    "sql": "SELECT id FROM papers_100, (SELECT to_tsquery('english', 'model | method') AS q) s WHERE tsv @@ s.q ORDER BY ts_rank_cd(tsv, s.q) DESC, id ASC LIMIT 1000 OFFSET 1000",
+    "client_ms": {
+     "median": 1704.16,
+     "min": 1698.478,
+     "max": 1724.156,
+     "runs": [
+      1704.16,
+      1724.156,
+      1698.478
+     ]
+    },
+    "exec_ms": 1847.606
+   }
+  },
+  {
+   "depth": 10000,
+   "rows": 1000,
+   "solr_start_rows": {
+    "url": "http://localhost:8983/solr/papers_100/select?q=text_all%3A%28model+OR+method%29&fl=id&sort=score+desc%2C+id+asc&rows=1000&start=10000&wt=json",
+    "client_ms": {
+     "median": 81.765,
+     "min": 80.781,
+     "max": 83.917,
+     "runs": [
+      81.765,
+      80.781,
+      83.917
+     ]
+    },
+    "qtime_ms": {
+     "median": 76.0,
+     "min": 75.0,
+     "max": 79.0,
+     "runs": [
+      76.0,
+      75.0,
+      79.0
+     ]
+    }
+   },
+   "solr_cursor": {
+    "url": "http://localhost:8983/solr/papers_100/select?q=text_all%3A%28model+OR+method%29&fl=id&sort=score+desc%2C+id+asc&rows=1000&cursorMark=AoIIP9SUySkwOTEyLjIwMjI%3D&wt=json",
+    "client_ms": {
+     "median": 28.493,
+     "min": 27.227,
+     "max": 29.121,
+     "runs": [
+      27.227,
+      28.493,
+      29.121
+     ]
+    },
+    "qtime_ms": {
+     "median": 23.0,
+     "min": 22.0,
+     "max": 24.0,
+     "runs": [
+      22.0,
+      23.0,
+      24.0
+     ]
+    },
+    "cumulative_walk_seconds_to_reach": 0.325
+   },
+   "same_page_start_vs_cursor": true,
+   "sql_offset": {
+    "sql": "SELECT id FROM papers_100, (SELECT to_tsquery('english', 'model | method') AS q) s WHERE tsv @@ s.q ORDER BY ts_rank_cd(tsv, s.q) DESC, id ASC LIMIT 1000 OFFSET 10000",
+    "client_ms": {
+     "median": 1814.404,
+     "min": 1801.302,
+     "max": 1815.735,
+     "runs": [
+      1801.302,
+      1815.735,
+      1814.404
+     ]
+    },
+    "exec_ms": 1860.701
+   }
+  },
+  {
+   "depth": 100000,
+   "rows": 1000,
+   "solr_start_rows": {
+    "url": "http://localhost:8983/solr/papers_100/select?q=text_all%3A%28model+OR+method%29&fl=id&sort=score+desc%2C+id+asc&rows=1000&start=100000&wt=json",
+    "client_ms": {
+     "median": 457.054,
+     "min": 447.395,
+     "max": 470.484,
+     "runs": [
+      457.054,
+      470.484,
+      447.395
+     ]
+    },
+    "qtime_ms": {
+     "median": 452.0,
+     "min": 442.0,
+     "max": 465.0,
+     "runs": [
+      452.0,
+      465.0,
+      442.0
+     ]
+    }
+   },
+   "solr_cursor": {
+    "url": "http://localhost:8983/solr/papers_100/select?q=text_all%3A%28model+OR+method%29&fl=id&sort=score+desc%2C+id+asc&rows=1000&cursorMark=AoIIP5CetikxNDAxLjA3OTk%3D&wt=json",
+    "client_ms": {
+     "median": 29.975,
+     "min": 29.882,
+     "max": 35.861,
+     "runs": [
+      29.882,
+      29.975,
+      35.861
+     ]
+    },
+    "qtime_ms": {
+     "median": 25.0,
+     "min": 25.0,
+     "max": 29.0,
+     "runs": [
+      25.0,
+      25.0,
+      29.0
+     ]
+    },
+    "cumulative_walk_seconds_to_reach": 3.164
+   },
+   "same_page_start_vs_cursor": true,
+   "sql_offset": {
+    "sql": "SELECT id FROM papers_100, (SELECT to_tsquery('english', 'model | method') AS q) s WHERE tsv @@ s.q ORDER BY ts_rank_cd(tsv, s.q) DESC, id ASC LIMIT 1000 OFFSET 100000",
+    "client_ms": {
+     "median": 2247.987,
+     "min": 2172.805,
+     "max": 2272.145,
+     "runs": [
+      2272.145,
+      2172.805,
+      2247.987
+     ]
+    },
+    "exec_ms": 2238.736
+   }
+  },
+  {
+   "depth": 250000,
+   "rows": 1000,
+   "solr_start_rows": {
+    "url": "http://localhost:8983/solr/papers_100/select?q=text_all%3A%28model+OR+method%29&fl=id&sort=score+desc%2C+id+asc&rows=1000&start=250000&wt=json",
+    "client_ms": {
+     "median": 999.094,
+     "min": 998.816,
+     "max": 1036.907,
+     "runs": [
+      999.094,
+      1036.907,
+      998.816
+     ]
+    },
+    "qtime_ms": {
+     "median": 994.0,
+     "min": 994.0,
+     "max": 1032.0,
+     "runs": [
+      994.0,
+      1032.0,
+      994.0
+     ]
+    }
+   },
+   "solr_cursor": {
+    "url": "http://localhost:8983/solr/papers_100/select?q=text_all%3A%28model+OR+method%29&fl=id&sort=score+desc%2C+id+asc&rows=1000&cursorMark=AoIIPzIihyoxNTA0LjA0Mzc0&wt=json",
+    "client_ms": {
+     "median": 32.874,
+     "min": 32.39,
+     "max": 39.087,
+     "runs": [
+      32.39,
+      32.874,
+      39.087
+     ]
+    },
+    "qtime_ms": {
+     "median": 27.0,
+     "min": 27.0,
+     "max": 33.0,
+     "runs": [
+      27.0,
+      27.0,
+      33.0
+     ]
+    },
+    "cumulative_walk_seconds_to_reach": 7.831
+   },
+   "same_page_start_vs_cursor": true,
+   "sql_offset": {
+    "sql": "SELECT id FROM papers_100, (SELECT to_tsquery('english', 'model | method') AS q) s WHERE tsv @@ s.q ORDER BY ts_rank_cd(tsv, s.q) DESC, id ASC LIMIT 1000 OFFSET 250000",
+    "client_ms": {
+     "median": 2263.92,
+     "min": 2225.147,
+     "max": 2276.539,
+     "runs": [
+      2276.539,
+      2225.147,
+      2263.92
+     ]
+    },
+    "exec_ms": 2300.434
+   }
+  },
+  {
+   "depth": 500000,
+   "rows": 1000,
+   "solr_start_rows": {
+    "url": "http://localhost:8983/solr/papers_100/select?q=text_all%3A%28model+OR+method%29&fl=id&sort=score+desc%2C+id+asc&rows=1000&start=500000&wt=json",
+    "client_ms": {
+     "median": 1283.668,
+     "min": 1256.918,
+     "max": 1285.524,
+     "runs": [
+      1256.918,
+      1283.668,
+      1285.524
+     ]
+    },
+    "qtime_ms": {
+     "median": 1279.0,
+     "min": 1252.0,
+     "max": 1281.0,
+     "runs": [
+      1252.0,
+      1279.0,
+      1281.0
+     ]
+    }
+   },
+   "solr_cursor": {
+    "url": "http://localhost:8983/solr/papers_100/select?q=text_all%3A%28model+OR+method%29&fl=id&sort=score+desc%2C+id+asc&rows=1000&cursorMark=AoIIPsAHuDBhc3Ryby1waC8wNTA0NTY1&wt=json",
+    "client_ms": {
+     "median": 33.654,
+     "min": 31.165,
+     "max": 37.748,
+     "runs": [
+      37.748,
+      31.165,
+      33.654
+     ]
+    },
+    "qtime_ms": {
+     "median": 28.0,
+     "min": 26.0,
+     "max": 33.0,
+     "runs": [
+      33.0,
+      26.0,
+      28.0
+     ]
+    },
+    "cumulative_walk_seconds_to_reach": 15.75
+   },
+   "same_page_start_vs_cursor": true,
+   "sql_offset": {
+    "sql": "SELECT id FROM papers_100, (SELECT to_tsquery('english', 'model | method') AS q) s WHERE tsv @@ s.q ORDER BY ts_rank_cd(tsv, s.q) DESC, id ASC LIMIT 1000 OFFSET 500000",
+    "client_ms": {
+     "median": 5492.975,
+     "min": 5393.678,
+     "max": 5498.492,
+     "runs": [
+      5498.492,
+      5492.975,
+      5393.678
+     ]
+    },
+    "exec_ms": 5596.112
+   }
+  }
+ ]
+}

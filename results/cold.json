@@ -1,0 +1,80 @@
+{
+ "timestamp": "2026-11-21T19:21:42",
+ "size": "100",
+ "vm_page_cache_dropped": true,
+ "method": "docker compose restart postgres solr",
+ "results": [
+  {
+   "query_key": "Q1",
+   "method": "FTS count",
+   "first_run_client_ms": 20982.62,
+   "timestamp": "2026-11-21T19:21:32"
+  },
+  {
+   "query_key": "Q1",
+   "method": "FTS top10",
+   "first_run_client_ms": 6034.74,
+   "timestamp": "2026-11-21T19:21:38"
+  },
+  {
+   "query_key": "Q1",
+   "method": "Solr count",
+   "first_run_client_ms": 100.38,
+   "timestamp": "2026-11-21T19:21:38"
+  },
+  {
+   "query_key": "Q1",
+   "method": "Solr top10",
+   "first_run_client_ms": 145.32,
+   "timestamp": "2026-11-21T19:21:38"
+  },
+  {
+   "query_key": "Q2",
+   "method": "FTS count",
+   "first_run_client_ms": 1997.61,
+   "timestamp": "2026-11-21T19:21:40"
+  },
+  {
+   "query_key": "Q2",
+   "method": "FTS top10",
+   "first_run_client_ms": 142.11,
+   "timestamp": "2026-11-21T19:21:40"
+  },
+  {
+   "query_key": "Q2",
+   "method": "Solr count",
+   "first_run_client_ms": 76.43,
+   "timestamp": "2026-11-21T19:21:40"
+  },
+  {
+   "query_key": "Q2",
+   "method": "Solr top10",
+   "first_run_client_ms": 105.09,
+   "timestamp": "2026-11-21T19:21:40"
+  },
+  {
+   "query_key": "Q3",
+   "method": "FTS count",
+   "first_run_client_ms": 882.12,
+   "timestamp": "2026-11-21T19:21:41"
+  },
+  {
+   "query_key": "Q3",
+   "method": "FTS top10",
+   "first_run_client_ms": 170.24,
+   "timestamp": "2026-11-21T19:21:41"
+  },
+  {
+   "query_key": "Q3",
+   "method": "Solr count",
+   "first_run_client_ms": 56.57,
+   "timestamp": "2026-11-21T19:21:42"
+  },
+  {
+   "query_key": "Q3",
+   "method": "Solr top10",
+   "first_run_client_ms": 78.47,
+   "timestamp": "2026-11-21T19:21:42"
+  }
+ ]
+}

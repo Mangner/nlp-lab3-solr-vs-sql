@@ -14,7 +14,7 @@ import time
 
 from lab3.config import config
 from lab3.db import pg_connect
-from lab3.measure import REPEATS, now, save_json, solr_measure, solr_run, summarize
+from lab3.measure import REPEATS, nocache, now, save_json, solr_measure, solr_run, summarize
 from lab3.queries import QUERIES
 
 RANGE = {"start": 1990, "end": 2030, "gap": 5}
@@ -83,7 +83,7 @@ def main() -> int:
             t = f"papers_{size}"
             for name, sq, fq, where in cases:
                 sp = solr_params(sq, fq)
-                ms = solr_measure(t, sp, args.repeats, f"{name} facety", size)
+                ms = solr_measure(t, nocache(sp), args.repeats, f"{name} facety (cache=false)", size)
                 facets = solr_facets(solr_run(t, sp)["json"])
                 sqls = sql_queries(t, where)
                 sep, sep_time = {}, {"exec": 0.0, "client": 0.0, "exec_runs": None}
