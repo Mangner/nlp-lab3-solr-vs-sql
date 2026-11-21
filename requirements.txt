@@ -1,0 +1,8 @@
+requests>=2.32
+psycopg[binary]>=3.2
+pyarrow>=17
+pandas>=2.2
+huggingface_hub>=0.25
+matplotlib>=3.9
+python-dotenv>=1.0
+tqdm>=4.66

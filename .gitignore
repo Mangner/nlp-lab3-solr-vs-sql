@@ -1,0 +1,21 @@
+# dane (pobierane skryptem, nie idą do repo ani archiwum)
+data/*
+!data/.gitkeep
+
+# konfiguracja lokalna i sekrety
+.env
+
+# środowisko Pythona
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# pliki tymczasowe wyników
+results/*.tmp
+
+# IDE / system
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

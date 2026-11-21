@@ -1,0 +1,51 @@
+# Infrastruktura laboratorium 3: PostgreSQL 17 + Apache Solr 10.
+# Python działa na hoście i łączy się przez porty 5432 i 8983.
+services:
+  postgres:
+    image: postgres:17
+    container_name: lab3-postgres
+    environment:
+      POSTGRES_USER: ${PG_USER:-lab3}
+      POSTGRES_PASSWORD: ${PG_PASSWORD:-lab3}
+      POSTGRES_DB: ${PG_DATABASE:-lab3}
+    ports:
+      - "${PG_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # katalog data/ tylko do odczytu — źródło plików dla COPY ... FROM '/data/...'
+      - ./data:/data:ro
+    # ustawienia pod import i budowę indeksu GIN (Docker Desktop z min. 6 GB RAM)
+    command: >
+      postgres
+      -c shared_buffers=1GB
+      -c maintenance_work_mem=1GB
+      -c work_mem=64MB
+      -c effective_cache_size=2GB
+      -c max_wal_size=4GB
+      -c checkpoint_timeout=15min
+    shm_size: 1g
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER:-lab3} -d ${PG_DATABASE:-lab3}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  solr:
+    image: solr:10
+    container_name: lab3-solr
+    environment:
+      SOLR_HEAP: ${SOLR_HEAP:-2g}
+    ports:
+      - "${SOLR_PORT:-8983}:8983"
+    volumes:
+      - solrdata:/var/solr
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8983/solr/admin/info/system > /dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+volumes:
+  pgdata:
+  solrdata:
