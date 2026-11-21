@@ -1,0 +1,7 @@
+{
+  "set-user-property": {"update.autoCreateFields": "false"},
+  "set-property": {
+    "updateHandler.autoCommit.maxTime": -1,
+    "updateHandler.autoSoftCommit.maxTime": -1
+  }
+}

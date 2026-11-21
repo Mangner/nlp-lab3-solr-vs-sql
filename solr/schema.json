@@ -1,0 +1,16 @@
+{
+  "add-field": [
+    {"name": "title",            "type": "text_en", "indexed": true, "stored": true},
+    {"name": "abstract",         "type": "text_en", "indexed": true, "stored": true},
+    {"name": "text_all",         "type": "text_en", "indexed": true, "stored": false, "multiValued": true},
+    {"name": "primary_category", "type": "string",  "indexed": true, "stored": true, "docValues": true},
+    {"name": "archive",          "type": "string",  "indexed": true, "stored": true, "docValues": true},
+    {"name": "license",          "type": "string",  "indexed": true, "stored": true, "docValues": true},
+    {"name": "categories",       "type": "string",  "indexed": true, "stored": true, "docValues": true, "multiValued": true},
+    {"name": "year",             "type": "pint",    "indexed": true, "stored": true, "docValues": true}
+  ],
+  "add-copy-field": [
+    {"source": "title",    "dest": "text_all"},
+    {"source": "abstract", "dest": "text_all"}
+  ]
+}
