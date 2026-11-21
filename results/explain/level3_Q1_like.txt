@@ -1,0 +1,21 @@
+-- Q1 LIKE (100%)
+SELECT count(*) FROM papers_100 WHERE (title || ' ' || abstract) ILIKE '%simulate%'
+
+Finalize Aggregate  (cost=197627.99..197628.00 rows=1 width=8) (actual time=4657.992..4684.303 rows=1 loops=1)
+  Buffers: shared hit=106860 read=109520
+  ->  Gather  (cost=197627.77..197627.98 rows=2 width=8) (actual time=4657.822..4684.283 rows=3 loops=1)
+        Workers Planned: 2
+        Workers Launched: 2
+        Buffers: shared hit=106860 read=109520
+        ->  Partial Aggregate  (cost=196627.77..196627.78 rows=1 width=8) (actual time=4639.020..4639.021 rows=1 loops=3)
+              Buffers: shared hit=106860 read=109520
+              ->  Parallel Seq Scan on papers_100  (cost=0.00..196627.67 rows=42 width=0) (actual time=5.676..4636.965 rows=8111 loops=3)
+                    Filter: (((title || ' '::text) || abstract) ~~* '%simulate%'::text)
+                    Rows Removed by Filter: 325222
+                    Buffers: shared hit=106860 read=109520
+Planning Time: 0.066 ms
+JIT:
+  Functions: 14
+  Options: Inlining false, Optimization false, Expressions true, Deforming true
+  Timing: Generation 1.206 ms (Deform 0.265 ms), Inlining 0.000 ms, Optimization 0.717 ms, Emission 11.089 ms, Total 13.011 ms
+Execution Time: 4684.653 ms

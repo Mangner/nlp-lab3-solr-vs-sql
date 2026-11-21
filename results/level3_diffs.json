@@ -1,0 +1,218 @@
+{
+ "size": "100",
+ "timestamp": "2026-11-21T18:58:03",
+ "diffs": {
+  "Q1": {
+   "counts": {
+    "like": 24333,
+    "fts": 119222,
+    "solr": 119255
+   },
+   "fts_and_solr": 119220,
+   "fts_only": 2,
+   "solr_only": 35,
+   "like_only_vs_fts": 12,
+   "fts_only_vs_like": 94901,
+   "like_and_fts": 24321,
+   "examples": {
+    "fts_only": [
+     {
+      "id": "1810.03390",
+      "title": "Constant Time Quantum search Algorithm Over A Datasets: An Experimental Study Using IBM Q Experience",
+      "abstract": "In this work, a constant time Quantum searching algorithm over a datasets is proposed and subsequently the algorithm is executed in real chip quantum computer developed by IBM Quantum experience (IBMQ). QISKit, the software platform developed by IBM is used for this algorithm implementation. Quantum interference, Quantum superposition and {\\pi} phase shift of quantum state applied for this constant time search algorithm. The proposed quantum algorithm is executed in QISKit SDK local backend 'local_qasm_simulator', real chip 'ibmq_16_melbourne' and 'ibmqx4' IBMQ. Result also suggest that real chip ibmq_16_melbourne is more quantum error or noise prone than ibmqx4."
+     },
+     {
+      "id": "2207.07417",
+      "title": "Near-Linear Time and Fixed-Parameter Tractable Algorithms for Tensor Decompositions",
+      "abstract": "We study low rank approximation of tensors, focusing on the tensor train and Tucker decompositions, as well as approximations with tree tensor networks and more general tensor networks. For tensor train decomposition, we give a bicriteria $(1 + \\eps)$-approximation algorithm with a small bicriteria rank and $O(q \\cdot \\nnz(A))$ running time, up to lower order terms, which improves over the additive error algorithm of \\cite{huber2017randomized}. We also show how to convert the algorithm of \\cite{huber2017randomized} into a relative error algorithm, but their algorithm necessarily has a running time of $O(qr^2 \\cdot \\nnz(A)) + n \\cdot \\poly(qk/\\eps)$ when converted to a $(1 + \\eps)$-approximation algorithm with bicriteria rank $r$. To the best of our knowledge, our work is the first to achieve polynomial time relative error approximation for tensor train decomposition. Our key technique is a method for obtaining subspace embeddings with a number of rows polynomial in $q$ for a matrix which is the flattening of a tensor train of $q$ tensors. We extend our algorithm to tree tensor networks. In addition, we extend our algorithm to tensor networks with arbitrary graphs (which we refer to as general tensor networks), by using a result of \\cite{ms08_simulating_quantum_tensor_contraction} and showing that a general tensor network of rank $k$ can be contracted to a binary tree network of rank $k^{O(\\deg(G)\\tw(G))}$, allowing us to reduce to the case of tree tensor networks. Finally, we give new fixed-parameter tractable algorithms for the tensor train, Tucker, and CP decompositions, which are simpler than those of \\cite{swz19_tensor_low_rank} since they do not make use of polynomial system solvers. Our technique of Gaussian subspace embeddings with exactly $k$ rows (and thus exponentially small success probability) may be of independent interest."
+     }
+    ],
+    "solr_only": [
+     {
+      "id": "1008.1143",
+      "title": "Script Handbook for Interactive Scientific Website Building",
+      "abstract": "In this script handbook, we collect the basic (and partially upgraded) PHP scripts used for building the AMIDAS website (http://pisrv0.pit.physik.uni-tuebingen.de/darkmatter/amidas/), an online interactive simulation/data analysis system for direct Dark Matter detection experiments and phenomenology. In this (1.73205) version, we add more materials and improve the scripts for offering a more convenient, comfortable and user-friendly environment on interactive scientific computing websites. Some basic, often used commands of (X)HTML, CSS, JavaScript, HTML DOM, and PHP are also given in Appendix. Online demonstrations and downloadable template scripts are given on http://www.tir.tw/iswb/ss2012/templates.php."
+     },
+     {
+      "id": "1208.3789",
+      "title": "On Global Stability of Financial Networks",
+      "abstract": "The recent financial crisis have generated renewed interests in fragilities of global financial networks among economists and regulatory authorities. In particular, a potential vulnerability of the financial networks is the \"financial contagion\" process in which insolvencies of individual entities propagate through the \"web of dependencies\" to affect the entire system. In this paper, we formalize an extension of a financial network model originally proposed by Nier et al. for scenarios such as the OTC derivatives market, define a suitable global stability measure for this model, and perform a comprehensive empirical evaluation of this stability measure over more than 700,000 combinations of networks types and parameter combinations. Based on our evaluations, we discover many interesting implications of our evaluations of this stability measure, and derive topological properties and parameters combinations that may be used to flag the network as a possible fragile network. An interactive software FIN-STAB for computing the stability is available from the website www2.cs.uic.edu/~dasgupta/financial-simulator-files"
+     },
+     {
+      "id": "1212.4182",
+      "title": "Measurement of specific contact resistivity using scanning voltage probes",
+      "abstract": "Specific contact resistivity measurements have conventionally been heavy in both fabrication and simulation/calculation in order to account for complicated geometries and other effects such as parasitic resistance. We propose a simpler geometry to deliver current, and the use of a scanning voltage probe to sense the potential variation along the sample surface, from which the specific contact resistivity can be straightforwardly deduced. We demonstrate an analytical example in the case where both materials are thin films. Experimental data with a scanning Kelvin probe measurement on graphene from the literature corroborates our model calculation."
+     }
+    ],
+    "like_only": [
+     {
+      "id": "0709.3304",
+      "title": "HST morphologies of local Lyman break galaxy analogs I: Evidence for starbursts triggered by merging",
+      "abstract": "Heckman et al. (2005) used the Galaxy Evolution Explorer (GALEX) UV imaging survey to show that there exists a rare population of nearby compact UV-luminous galaxies (UVLGs) that closely resembles high redshift Lyman break galaxies (LBGs). We present HST images in the UV, optical, and Ha, and resimulate them at the depth and resolution of the GOODS/UDF fields to show that the morphologies of UVLGs are also similar to those of LBGs. Our sample of 8 LBG analogs thus provides detailed insight into the connection between star formation and LBG morphology. Faint tidal features or companions can be seen in all of the rest-frame optical images, suggesting that the starbursts are the result of a merger or interaction. The UV/optical light is dominated by unresolved (~100-300 pc) super starburst regions (SSBs). A detailed comparison with the galaxies Haro 11 and VV 114 at z=0.02 indicates that the SSBs themselves consist of diffuse stars and (super) star clusters. The structural features revealed by the new HST images occur on very small physical scales and are thus not detectable in images of high redshift LBGs, except in a few cases where they are magnified by gravitational lensing. We propose, therefore, that LBGs are mergers of gas-rich, relatively low-mass (~10^10 Msun) systems, and that the mergers trigger the formation of SSBs. If galaxies at high redshifts are dominated by SSBs, then the faint end slope of the luminosity function is predicted to have slope alpha~2. Our results are the most direct confirmation to date of models that predict that the main mode of star formation in the early universe was highly collisional."
+     },
+     {
+      "id": "0901.2027",
+      "title": "Hydrodynamic Description of Dilepton Production",
+      "abstract": "The first part of this thesis focuses on the production of thermal dileptons from a hadronic gas at finite temperature. The rates are calculated by an expansion in Pion density and constrained by broken chiral symmetry and vacuum correlation functions, many of which have been measured by experiment. We focus on emission processes having two Pions in the final state. Next, follows a separate discussion on viscous hydrodynamics and its effect on $p_\\perp$ spectra and elliptic flow. A non-central hydrodynamic model of Au-Au collisions in 2+1 dimensions is simulated.Off-equilibrium corrections to the distribution can bring about large changes in the differential elliptic flow, especially at higher $p_\\perp$. Also discussed is the shear viscous correction to dilepton production in a quark-gluon plasma (QGP) emanating from $q\\overline{q}$ annihilation in the Born approximation. It is argued that a thermal description is reliable for invariant masses less than $M_{max} \\approx (2\\tau_0 T_0^2)/(\\eta/s)$. Shear viscosity leads to qualitative differences in dilepton $p_\\perp$ spectrum, which could be used to extract information on the thermalization time, viscosity to entropy ratio and possibly the thermalization mechanism in heavy-ion collisions. Finally, the dilepton rates used in this work are integrated over the space-time evolution of the collision region and compared to the recent results from the NA60 experiment at CERN and the PHENIX experiment at RHIC. The role played by chiral symmetry restoration in the hadronic phase and viscosity in the QGP phase is discussed."
+     },
+     {
+      "id": "1501.07329",
+      "title": "A Big Data Architecture Design for Smart Grids Based on Random Matrix Theory",
+      "abstract": "Model-based analysis tools, built on assumptions and simplifications, are difficult to handle smart grids with data characterized by 4Vs data. This paper, using random matrix theory (RMT), motivates data-driven tools to perceive the complex grids in highdimension; meanwhile, an architecture with detailed procedures is proposed. In algorithm perspective, the architecture performs a high-dimensional analysis, and compares the findings with RMT predictions to conduct anomaly detections. Mean Spectral Radius (MSR), as a statistical indicator, is defined to reflect the correlations of system data in different dimensions. In management mode perspective, a group-work mode is discussed for smart grids operation. This mode breaks through regional limitations for energy flows and data flows, and makes advanced big data analyses possible. For a specific large-scale zone-dividing system with multiple connected utilities, each site, operating under the group-work mode, is able to work out the regional MSR only with its own measured/simulated data. The large-scale interconnected system, in this way, is naturally decoupled from statistical parameters perspective, rather than from engineering models perspective. Furthermore, a comparative analysis of these distributed MSRs, even with imperceptible different raw data, will produce a contour line to detect the event and locate the source. It demonstrates that the architecture is compatible with the block calculation only using the regional small database; beyond that, this architecture, as a data-driven solution, is sensitive to system situation awareness, and practical for real large-scale interconnected systems. Five case studies and their visualizations validate the designed architecture in various fields of power systems. To our best knowledge, this study is the first attempt to apply big data technology into smart grids."
+     }
+    ],
+    "fts_not_like": [
+     {
+      "id": "0704.0021",
+      "title": "Molecular Synchronization Waves in Arrays of Allosterically Regulated Enzymes",
+      "abstract": "Spatiotemporal pattern formation in a product-activated enzymic reaction at high enzyme concentrations is investigated. Stochastic simulations show that catalytic turnover cycles of individual enzymes can become coherent and that complex wave patterns of molecular synchronization can develop. The analysis based on the mean-field approximation indicates that the observed patterns result from the presence of Hopf and wave bifurcations in the considered system."
+     },
+     {
+      "id": "0704.0022",
+      "title": "Stochastic Lie group integrators",
+      "abstract": "We present Lie group integrators for nonlinear stochastic differential equations with non-commutative vector fields whose solution evolves on a smooth finite dimensional manifold. Given a Lie group action that generates transport along the manifold, we pull back the stochastic flow on the manifold to the Lie group via the action, and subsequently pull back the flow to the corresponding Lie algebra via the exponential map. We construct an approximation to the stochastic flow in the Lie algebra via closed operations and then push back to the Lie group and then to the manifold, thus ensuring our approximation lies in the manifold. We call such schemes stochastic Munthe-Kaas methods after their deterministic counterparts. We also present stochastic Lie group integration schemes based on Castell--Gaines methods. These involve using an underlying ordinary differential integrator to approximate the flow generated by a truncated stochastic exponential Lie series. They become stochastic Lie group integrator schemes if we use Munthe-Kaas methods as the underlying ordinary differential integrator. Further, we show that some Castell--Gaines methods are uniformly more accurate than the corresponding stochastic Taylor schemes. Lastly we demonstrate our methods by simulating the dynamics of a free rigid body such as a satellite and an autonomous underwater vehicle both perturbed by two independent multiplicative stochastic noise processes."
+     },
+     {
+      "id": "0704.0035",
+      "title": "Convergence of the discrete dipole approximation. II. An extrapolation technique to increase the accuracy",
+      "abstract": "We propose an extrapolation technique that allows accuracy improvement of the discrete dipole approximation computations. The performance of this technique was studied empirically based on extensive simulations for 5 test cases using many different discretizations. The quality of the extrapolation improves with refining discretization reaching extraordinary performance especially for cubically shaped particles. A two order of magnitude decrease of error was demonstrated. We also propose estimates of the extrapolation error, which were proven to be reliable. Finally we propose a simple method to directly separate shape and discretization errors and illustrated this for one test case."
+     }
+    ]
+   }
+  },
+  "Q2": {
+   "counts": {
+    "like": 14655,
+    "fts": 14955,
+    "solr": 15025
+   },
+   "fts_and_solr": 14955,
+   "fts_only": 0,
+   "solr_only": 70,
+   "like_only_vs_fts": 73,
+   "fts_only_vs_like": 373,
+   "like_and_fts": 14582,
+   "examples": {
+    "fts_only": [],
+    "solr_only": [
+     {
+      "id": "0711.4288",
+      "title": "Linear and non-Linear Instabilities in Unified Dark Energy Models",
+      "abstract": "We revisit the paradigm of unified dark energy discussing in detail the averaging problem in this type of scenarios, highlighting the need for a full non-linear treatment. We also address the question of if and how models with one or several dark fluids can be observationally distinguished. Simpler and physically clearer derivations of some key results, most notably on the relation between the generalized Chaplygin gas and the standard ($\\Lambda$CDM) `concordance' model and on a Jeans-type small-scale instability of some coupled dark energy/dark matter models are presented."
+     },
+     {
+      "id": "0712.1543",
+      "title": "Quantum-limited position measurements of a dark matter-wave soliton",
+      "abstract": "We show that the position of a dark matter-wave soliton can be determined with a precision that scales with the atomic density as $n^{-3/4}$. This surpasses the standard shot-noise detection limit for independent particles, without use of squeezing and entanglement, and it suggests that interactions among particles may present new advantages in high-precision metrology. We also take into account quantum density fluctuations due to phonon and Goldstone modes and we show that they, somewhat unexpectedly, actually improve the resolution. This happens because the fluctuations depend on the soliton position and make a larger amount of information available."
+     },
+     {
+      "id": "0811.1942",
+      "title": "Matter-Wave Solitons in the Presence of Collisional Inhomogeneities: Perturbation theory and the impact of derivative terms",
+      "abstract": "We study the dynamics of bright and dark matter-wave solitons in the presence of a spatially varying nonlinearity. When the spatial variation does not involve zero crossings, a transformation is used to bring the problem to a standard nonlinear Schrodinger form, but with two additional terms: an effective potential one and a non-potential term. We illustrate how to apply perturbation theory of dark and bright solitons to the transformed equations. We develop the general case, but primarily focus on the non-standard special case whereby the potential term vanishes, for an inverse square spatial dependence of the nonlinearity. In both cases of repulsive and attractive interactions, appropriate versions of the soliton perturbation theory are shown to accurately describe the soliton dynamics."
+     }
+    ],
+    "like_only": [
+     {
+      "id": "0711.4288",
+      "title": "Linear and non-Linear Instabilities in Unified Dark Energy Models",
+      "abstract": "We revisit the paradigm of unified dark energy discussing in detail the averaging problem in this type of scenarios, highlighting the need for a full non-linear treatment. We also address the question of if and how models with one or several dark fluids can be observationally distinguished. Simpler and physically clearer derivations of some key results, most notably on the relation between the generalized Chaplygin gas and the standard ($\\Lambda$CDM) `concordance' model and on a Jeans-type small-scale instability of some coupled dark energy/dark matter models are presented."
+     },
+     {
+      "id": "0712.1543",
+      "title": "Quantum-limited position measurements of a dark matter-wave soliton",
+      "abstract": "We show that the position of a dark matter-wave soliton can be determined with a precision that scales with the atomic density as $n^{-3/4}$. This surpasses the standard shot-noise detection limit for independent particles, without use of squeezing and entanglement, and it suggests that interactions among particles may present new advantages in high-precision metrology. We also take into account quantum density fluctuations due to phonon and Goldstone modes and we show that they, somewhat unexpectedly, actually improve the resolution. This happens because the fluctuations depend on the soliton position and make a larger amount of information available."
+     },
+     {
+      "id": "0811.1942",
+      "title": "Matter-Wave Solitons in the Presence of Collisional Inhomogeneities: Perturbation theory and the impact of derivative terms",
+      "abstract": "We study the dynamics of bright and dark matter-wave solitons in the presence of a spatially varying nonlinearity. When the spatial variation does not involve zero crossings, a transformation is used to bring the problem to a standard nonlinear Schrodinger form, but with two additional terms: an effective potential one and a non-potential term. We illustrate how to apply perturbation theory of dark and bright solitons to the transformed equations. We develop the general case, but primarily focus on the non-standard special case whereby the potential term vanishes, for an inverse square spatial dependence of the nonlinearity. In both cases of repulsive and attractive interactions, appropriate versions of the soliton perturbation theory are shown to accurately describe the soliton dynamics."
+     }
+    ],
+    "fts_not_like": [
+     {
+      "id": "0705.0429",
+      "title": "Bayesian reconstruction of the cosmological large-scale structure: methodology, inverse algorithms and numerical optimization",
+      "abstract": "We address the inverse problem of cosmic large-scale structure reconstruction from a Bayesian perspective. For a linear data model, a number of known and novel reconstruction schemes, which differ in terms of the underlying signal prior, data likelihood, and numerical inverse extra-regularization schemes are derived and classified. The Bayesian methodology presented in this paper tries to unify and extend the following methods: Wiener-filtering, Tikhonov regularization, Ridge regression, Maximum Entropy, and inverse regularization techniques. The inverse techniques considered here are the asymptotic regularization, the Jacobi, Steepest Descent, Newton-Raphson, Landweber-Fridman, and both linear and non-linear Krylov methods based on Fletcher-Reeves, Polak-Ribiere, and Hestenes-Stiefel Conjugate Gradients. The structures of the up-to-date highest-performing algorithms are presented, based on an operator scheme, which permits one to exploit the power of fast Fourier transforms. Using such an implementation of the generalized Wiener-filter in the novel ARGO-software package, the different numerical schemes are benchmarked with 1-, 2-, and 3-dimensional problems including structured white and Poissonian noise, data windowing and blurring effects. A novel numerical Krylov scheme is shown to be superior in terms of performance and fidelity. These fast inverse methods ultimately will enable the application of sampling techniques to explore complex joint posterior distributions. We outline how the space of the dark-matter density field, the peculiar velocity field, and the power spectrum can jointly be investigated by a Gibbs-sampling process. Such a method can be applied for the redshift distortions correction of the observed galaxies and for time-reversal reconstructions of the initial density field."
+     },
+     {
+      "id": "0708.1987",
+      "title": "Environmental effect on the subhalo abundance -- a solution to the missing dwarf problem",
+      "abstract": "Recent high-resolution simulations of the formation of dark-matter halos have shown that the distribution of subhalos is scale-free, in the sense that if scaled by the velocity dispersion of the parent halo, the velocity distribution function of galaxy-sized and cluster-sized halos are identical. For cluster-sized halos, simulation results agreed well with observations. Simulations, however, predicted far too many subhalos for galaxy-sized halos. Our galaxy has several tens of known dwarf galaxies. On the other hands, simulated dark-matter halos contain thousands of subhalos. We have performed simulation of a single large volume and measured the abundance of subhalos in all massive halos. We found that the variation of the subhalo abundance is very large, and those with largest number of subhalos correspond to simulated halos in previous studies. The subhalo abundance depends strongly on the local density of the background. Halos in high-density regions contain large number of subhalos. Our galaxy is in the low-density region. For our simulated halos in low-density regions, the number of subhalos is within a factor of three to that of our galaxy. We argue that the ``missing dwarf problem'' is not a real problem but caused by the biased selection of the initial conditions in previous studies, which were not appropriate for field galaxies."
+     },
+     {
+      "id": "0708.2910",
+      "title": "A Note on Agegraphic Dark Energy",
+      "abstract": "Recently a new model of dynamical dark energy, or time-varying $\\Lambda$, was proposed by Cai [arXiv:0707.4049] by relating the energy density of quantum fluctuations in a Minkowski space-time, namely $\\rho_q \\equiv 3 n^2 m_P^2/t^2$, where $n\\sim {\\cal O}(1)$ and t is the cosmic time, to the present day dark energy density. In this note, we show that the model can be adjusted to the present values of dark energy density parameter $\\Omega_q$ ($\\simeq 0.73$) and the equation of state ${\\rm w}\\Z{q}$ ($\\simeq -1$) only if the numerical coefficient $n$ takes a reasonably large value ($n\\gtrsim 3$) or the present value of the gravitational coupling of q-field to (dark) matter is also nonzero, namely, $\\tilde{Q}\\simeq \\frac{2}{n}(\\Omega\\Z{q0})^{3/2}>0$ where $\\Omega\\Z{q0}$ is the present value of dark energy density fraction. We also discuss some of the difficulties of this proposal as a viable dark energy model with a constant $n$; especially, the bound imposed on the dark energy density parameter $\\Omega_q <0.1$ during big bang nucleosynthesis (BBN) requires $n< 1/6$. To overcome this drawback, we outline a few modifications where such constraints can be weakened or relaxed. Finally, by establishing a correspondence between the agegraphic dark energy scenario and the standard scalar-field model, we also point out some interesting features of an agegraphic quintessence model."
+     }
+    ]
+   }
+  },
+  "Q3": {
+   "counts": {
+    "like": 7259,
+    "fts": 8887,
+    "solr": 8918
+   },
+   "fts_and_solr": 8887,
+   "fts_only": 0,
+   "solr_only": 31,
+   "like_only_vs_fts": 342,
+   "fts_only_vs_like": 1970,
+   "like_and_fts": 6917,
+   "examples": {
+    "fts_only": [],
+    "solr_only": [
+     {
+      "id": "0710.0955",
+      "title": "The XMM-Newton bright serendipitous survey. Identification and optical spectral properties",
+      "abstract": "AIMS: We present the optical classification and redshift of 348 X-ray selected sources from the XMM-Newton Bright Serendipitous Survey (XBS) which contains a total of 400 objects (identification level = 87%). About 240 are new identifications. In particular, we discuss in detail the classification criteria adopted for the Active Galactic Nuclei population. METHODS: By means of systematic spectroscopic campaigns and through the literature search we have collected an optical spectrum for the large majority of the sources in the XBS survey and applied a well-defined classification ``flow-chart''. RESULTS: We find that the AGN represent the most numerous population at the flux limit of the XBS survey (~10^-13 erg cm^-2 s^-1) constituting 80% of the XBS sources selected in the 0.5-4.5 keV energy band and 95% of the ``hard'' (4.5-7.5 keV) selected objects. Galactic sources populate significantly the 0.5-4.5 keV sample (17%) and only marginally (3%) the 4.5-7.5 keV sample. The remaining sources in both samples are clusters/groups of galaxies and normal galaxies (i.e. probably not powered by an AGN). Furthermore, the percentage of type2 AGN (i.e. optically absorbed AGNs with A_V>2mag) dramatically increases going from the 0.5-4.5 keV sample (f=N_AGN2/N_AGN=7%) to the 4.5-7.5 keV sample (f=32%). We finally propose two simple diagnostic plots that can be easily used to obtain the spectral classification for relatively low redshift AGNs even if the quality of the spectrum is not good."
+     },
+     {
+      "id": "0801.1109",
+      "title": "Integrated field spectroscopy of E+A (post-starburst) galaxies with the Kyoto3DII",
+      "abstract": "We have performed a two-dimensional spectroscopy of three nearby E+A (post-starburst) galaxies with the Kyoto3DII integral field spectrograph. In all the cases, Hdelta absorption is stronger at the centre of the galaxies, but significantly extended in a few kpc scale. For one galaxy (J1656), we found a close companion galaxy at the same redshift. The galaxy turned out to be a star-forming galaxy with a strong emission in Hgamma. For the other two galaxies, we have found that the central post-starburst regions possibly extend toward the direction of the tidal tails. Our results are consistent with the merger/interaction origin of E+A galaxies, where the infalling-gas possibly caused by a galaxy-galaxy merging creates a central-starburst, succeeded by a post-starburst (E+A) phase once the gas is depleted."
+     },
+     {
+      "id": "0808.0461",
+      "title": "X-ray Spectral Properties of the BAT AGN Sample",
+      "abstract": "The 9-month Swift Burst Alert Telescope (BAT) catalog provides the first unbiased (log N_H < 24) look at local (<z> = 0.03) AGN. In this paper, we present the collected X-ray properties (0.3 - 12keV) for the 153 AGN detected. In addition, we examine the X-ray properties for a complete sample of non-beamed sources, above the Galactic plane. Of these, 45% are best fit by simple power law models while 55% require the more complex partial covering model. One of our goals was to determine the fraction of \"hidden\" AGN, which we define as sources with scattering fractions < 0.03 and ratios of soft to hard X-ray flux < 0.04. We found that \"hidden\" AGN constitute a high percentage of the sample (24%), proving that they are a very significant portion of local AGN. Further, we find that the fraction of absorbed sources does increase at lower unabsorbed 2-10 keV luminosities, as well as accretion rates. Some of the most interesting results for the BAT AGN sample involve the host galaxy properties. We found that 33% are hosted in peculiar/irregular galaxies and only 5/74 hosted in ellipticals. Further, 54% are hosted in interacting/merger galaxies. Finally, we present both the average X-ray spectrum (0.1-10 keV) and log N-log S in the 2-10 keV band. With our average spectrum, we have the remarkable result of reproducing the measured CXB X-ray power law slope of ~ 1.4 (Marshall et al. 1980). From the log N-log S relationship, we show that we are complete to log S < -11 in the 2-10 keV band. Both the collected X-ray properties of our uniform sample and the log N-log S relationship will now provide valuable input to X-ray background models for z ~ 0. (abridged)"
+     }
+    ],
+    "like_only": [
+     {
+      "id": "0706.1593",
+      "title": "Groups of galaxies in the SDSS Data Release 5. A group-finder and a catalogue",
+      "abstract": "We extract groups of galaxies from the SDSS Data Release 5 with the purpose of studying the supercluster-void network and environmental properties of groups therein. We use a modified friends-of-friends (FoF) method with adopted variable linking length in transverse and radial direction to eliminate selection effects and to find reliably as many groups as possible to track the supercluster network. We take into account various selection effects due to the use of a magnitude limited sample. To determine linking length scaling we study the luminosity-density relation in observed groups. We follow the changes in group sizes and mean galaxy number densities within groups when shifting nearby groups to larger distances. As a result we show that the linking length should be a slowly growing function with distance. Our final sample contains 17143 groups in the equatorial, and 33219 groups in the northern part of the DR5 survey with membership N_g >= 2. The group catalogue is available at our web-site http://www.obs.ee/~erik/index.html. Due to a narrow magnitude window in the SDSS the group catalogue based on this survey has been obtained by moderately growing linking length scaling law up to redshift z = 0.12. Above this redshift the scaling law turns down. In the redshift range z=0.12 - 0.2 only the cores are detected. Along with applying weights when calculating luminosities it is possible to use groups for determination of the large-scale luminosity-density field."
+     },
+     {
+      "id": "0706.2865",
+      "title": "Morphologies of Galaxies in and around a Protocluster at z=2.300",
+      "abstract": "We present results from the first robust investigation of galaxy morphology as a function of environment at z>1.5. Our study is motivated by the fact that star-forming galaxies contained within a protocluster at z=2.3 in the HS1700+64 field have significantly older ages and larger stellar masses on average than those at similar redshifts but more typical environmental densities. In the analysis of HST/ACS images, we apply non-parametric statistics to characterize the rest-frame UV morphologies of a sample of 85 UV-selected star-forming galaxies at z=1.7-2.9, 22 of which are contained in the protocluster. The remaining 63 control-sample galaxies are not in the protocluster but have a similar mean redshift of <z>~2.3. We find no environmental dependence for the distributions of morphological properties. Combining the measured morphologies with the results of population synthesis modeling, we find only weak correlations, if any, between morphological and stellar population properties such as stellar mass, age, extinction and star-formation rate. Given the incomplete census of the protocluster galaxy population, and the lack of correlation between rest-frame UV morphology and star-formation history at z~2 within our sample, the absence of environmental trends in the distribution of morphological properties is not surprising. Additionally, using a larger sample of photometric candidates, we compare morphological distributions for 282 UV-selected and 43 near-IR-selected galaxies. While the difference in the degree of nebulosity between the two samples appears to be a byproduct of the fainter average rest-frame UV surface brightness of the near-IR-selected galaxies, we find that, among the lowest surface brightness galaxies, the near-IR-selected objects have significantly smaller angular sizes (abridged)."
+     },
+     {
+      "id": "0706.4096",
+      "title": "Formation and evolution of compact binaries in globular clusters: II. Binaries with neutron stars",
+      "abstract": "In this paper, the second of a series, we study the stellar dynamical and evolutionary processes leading to the formation of compact binaries containing neutron stars (NSs) in dense globular clusters (GCs). For this study, 70 dense clusters were simulated independently, with a total stellar mass ~2x10^7Msun, exceeding the total mass of all dense GCs in our Galaxy. We find that, in order to reproduce the empirically derived formation rate of low-mass X-ray binaries (LMXBs), we must assume that NSs can be formed via electron-capture supernovae (ECS) with typical natal kicks smaller than in core-collapse supernovae. Our results explain the observed dependence of the number of LMXBs on ``collision number'' as well as the large scatter observed between different GCs. We predict that the number of quiescent LMXBs in different GCs should not have a strong metallicity dependence. In our cluster model the following mass-gaining events create populations of MSPs that do not match the observations: (i) accretion during a common envelope event with a NS formed through ECS, and (ii) mass transfer (MT) from a WD donor. Some processes lead only to a mild recycling. In addition, for MSPs, we distinguish low-magnetic-field (long-lived) and high-magnetic-field (short-lived) populations. With this distinction and by considering only those mass-gaining events that appear to lead to NS recycling, we obtain good agreement of our models with the numbers and characteristics of observed MSPs in 47 Tuc and Terzan 5, as well as with the cumulative statistics for MSPs detected in GCs of different dynamical properties. We find that significant production of merging double NSs potentially detectable as short gamma-ray bursts occurs only in very dense, most likely core-collapsed GCs. (abridged)"
+     }
+    ],
+    "fts_not_like": [
+     {
+      "id": "0704.0478",
+      "title": "Super Star Cluster Velocity Dispersions and Virial Masses in the M82 Nuclear Starburst",
+      "abstract": "We use high-resolution near-infrared spectroscopy from Keck Observatory to measure the stellar velocity dispersions of 19 super star clusters (SSCs) in the nuclear starburst of M82. The clusters have ages on the order of 10 Myr, which is many times longer than the crossing times implied by their velocity dispersions and radii. We therefore apply the Virial Theorem to derive the kinematic mass for 15 of the SSCs. The SSCs have masses of 2 x 10^5 to 4 x 10^6 solar masses, with a total population mass of 1.4 x 10^7 solar masses. Comparison of the loci of the young M82 SSCs and old Milky Way globular clusters in a plot of radius versus velocity dispersion suggests that the SSCs are a population of potential globular clusters. We present the mass function for the SSCs, and find a power law fit with an index of gamma = -1.91 +/- 0.06. This result is nearly identical to the mass function of young SSCs in the Antennae galaxies."
+     },
+     {
+      "id": "0704.2057",
+      "title": "Structural parameters for globular clusters in M31 and generalizations for the fundamental plane",
+      "abstract": "The structures of globular clusters (GCs) reflect their dynamical states and past histories. High-resolution imaging allows the exploration of morphologies of clusters in other galaxies. Surface brightness profiles from new Hubble Space Telescope observations of 34 globular clusters in M31 are presented, together with fits of several different structural models to each cluster. M31 clusters appear to be adequately fit by standard King models, and do not obviously require alternate descriptions with relatively stronger halos, such as are needed to fit many GCs in other nearby galaxies. The derived structural parameters are combined with corrected versions of those measured in an earlier survey to construct a comprehensive catalog of structural and dynamical parameters for M31 GCs with a sample size similar to that for the Milky Way. Clusters in M31, the Milky Way, Magellanic Clouds, Fornax dwarf spheroidal and NGC 5128 define a very tight fundamental plane with identical slopes. The combined evidence for these widely different galaxies strongly reinforces the view that old globular clusters have near-universal structural properties regardless of host environment."
+     },
+     {
+      "id": "0704.3012",
+      "title": "MS 2053.7-0449: Confirmation of a bimodal mass distribution from strong gravitational lensing",
+      "abstract": "We present the first strong lensing study of the mass distribution in the cluster MS 2053-04 based on HST archive data. This massive, X-ray luminous cluster has a redshift z=0.583, and it is composed of two structures that are gravitationally bound to each other. The cluster has one multiply imaged system constituted by a double gravitational arc. We have performed a parametric strong lensing mass reconstruction using NFW density profiles to model the cluster potential. We also included perturbations from 23 galaxies, modeled like elliptical singular isothermal sphere, that are approximately within 1'x1' around the cluster center. These galaxies were constrained in both the geometric and dynamical parameters with observational data. Our analysis predicts a third image which is slightly demagnified. We found a candidate for this counter-image near the expected position and with the same F702W-F814W colors as the gravitational arcs in the cluster. The results from the strong lensing model shows the complex structure in this cluster, the asymmetry and the elongation in the mass distribution, and are consistent with previous spectrophotometric results that indicate that the cluster has a bimodal mass distribution. Finally, the derived mass profile was used to estimate the mass within the arcs and for comparison with X-ray estimates."
+     }
+    ]
+   }
+  }
+ }
+}

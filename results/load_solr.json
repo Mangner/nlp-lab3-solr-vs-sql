@@ -15,7 +15,9 @@
    "num_found": 100000,
    "pg_rows": 100000,
    "index_bytes": 132826116,
-   "counts_match": true
+   "counts_match": true,
+   "index_bytes_settled": 132826116,
+   "segments_settled": 2
   },
   {
    "collection": "papers_50",
@@ -28,7 +30,9 @@
    "num_found": 500000,
    "pg_rows": 500000,
    "index_bytes": 660066702,
-   "counts_match": true
+   "counts_match": true,
+   "index_bytes_settled": 660066702,
+   "segments_settled": 6
   },
   {
    "collection": "papers_100",
@@ -41,7 +45,9 @@
    "num_found": 1000000,
    "pg_rows": 1000000,
    "index_bytes": 2203348916,
-   "counts_match": true
+   "counts_match": true,
+   "index_bytes_settled": 1301153275,
+   "segments_settled": 4
   }
  ]
 }

@@ -30,8 +30,8 @@ i sprawozdanie PDF (archiwum `LAB3_Nazwisko_Imie_Nazwisko_Imie.zip`, bez zbioru 
 - [x] 1. Szkielet projektu i infrastruktura
 - [x] 2. Pobranie i przygotowanie danych
 - [x] 3. PostgreSQL: schemat, COPY, tsvector + GIN, pomiary ładowania
-- [ ] 4. Solr: kolekcje, schemat, loader, pomiary indeksowania
-- [ ] 5. Zapytania poziomu 3.0 + tabela wyników
+- [x] 4. Solr: kolekcje, schemat, loader, pomiary indeksowania
+- [x] 5. Zapytania poziomu 3.0 + tabela wyników
 - [ ] 6. Poziom 4.0: ranking, GROUP BY, eDisMax, facety, highlighting, porównanie top-10, benchmark (mediana z 5), boost
 - [ ] 7. Poziom 5.0: skalowanie 10/50/100%, facety + facet.range vs GROUP BY, cursorMark, synchronizacja zmian
 - [ ] 8. Wykresy, README, informacje o sprzęcie/wersjach, materiały do sprawozdania, archiwum do oddania
@@ -88,3 +88,14 @@ docs/                  Lab3.pdf, materiały do sprawozdania
   (żeby był jeden commit na końcu).
 - Solr text_en = Porter (porterStem) + stoplista Lucene; PG 'english' = snowball (Porter2) + inna stoplista — źródło różnic w liczbach trafień.
 - Windows: heredoc w Bash potrafi się wywrócić przy długich plikach — pliki tworzyć narzędziem Write. Nie zabijać `python.exe` globalnie.
+
+## Wnioski z etapów 4–5 (zrobione)
+- **Etap 4**: `lab3/load_solr.py` (`--settle-only` = ponowny pomiar rozmiaru po scaleniu segmentów), `solr/schema.json`, `solr/collection_config.json`.
+  Zaraz po commicie indeks 100% miał 2,2 GB (trwał merge, stare segmenty jeszcze na dysku) — po dodatkowym commicie 1241 MiB; w `load_solr.json`
+  są oba pola (`index_bytes`, `index_bytes_settled`). Tlog 100% ≈ 1,2 GB (autoCommit wyłączony).
+- **Etap 5**: `lab3/queries.py` (definicje Q1–Q3 + wariant z fq), `lab3/level3.py` -> `results/level3*.json`, `level3_table.md`, `docs/zapytania_solr.md`,
+  `results/explain/`. Zapytania: Q1 simulate, Q2 "dark matter", Q3 galaxy AND (cluster OR merger) AND NOT simulation — wszystkie mają tysiące trafień.
+  LIKE = parallel seq scan (~4,6 s na 1 mln), FTS = Bitmap Index Scan na GIN. Różnice FTS vs Solr (kilkadziesiąt dok. na ~10^5) wynikają z tokenizacji:
+  PG parser traktuje `simulation/data` jako token typu file, URL-e jako url/host/url_path, rozbija `local_qasm_simulator` na części
+  (Solr StandardTokenizer: underscore nie dzieli słów), `matter-wave` -> `matter-wav`+`matter`. Przykłady w `results/level3_diffs.json`.
+- Cache wyników Solra: `{!cache=false}` vs domyślnie — QTime 0–4 ms vs 1 ms; pomiary robimy na domyślnej konfiguracji (opis w sprawozdaniu).

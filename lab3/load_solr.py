@@ -107,15 +107,35 @@ def pg_rows(table: str):
         return None
 
 
+def settle_sizes(out: Path) -> None:
+    """Po załadowaniu Lucene scala segmenty w tle; stare pliki znikają dopiero po kolejnym commicie.
+    Dodatkowy (pusty) commit zwalnia je — zapisujemy rozmiar po scaleniu obok rozmiaru zaraz po commicie."""
+    data = json.loads(out.read_text(encoding="utf-8"))
+    for c in data["collections"]:
+        api("GET", f"{c['collection']}/update", params={"commit": "true", "wt": "json"})
+    time.sleep(5)
+    st = solr_get("admin/cores", action="STATUS")["status"]
+    for c in data["collections"]:
+        cores = [v for k, v in st.items() if k.startswith(c["collection"] + "_shard")]
+        c["index_bytes_settled"] = sum(v["index"]["sizeInBytes"] for v in cores)
+        c["segments_settled"] = sum(v["index"]["segmentCount"] for v in cores)
+        print(f"{c['collection']}: indeks po scaleniu {c['index_bytes_settled'] / 2**20:.0f} MiB, segmentów {c['segments_settled']}")
+    out.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--sizes", nargs="+", default=["10", "50", "100"], choices=["10", "50", "100"])
     ap.add_argument("--data-dir", default=None)
     ap.add_argument("--batch", type=int, default=5000)
     ap.add_argument("--out", default=None)
+    ap.add_argument("--settle-only", action="store_true", help="tylko ponowny pomiar rozmiaru indeksów po scaleniu segmentów")
     args = ap.parse_args()
     data_dir = Path(args.data_dir) if args.data_dir else config.data_dir
     out = Path(args.out) if args.out else config.results_dir / "load_solr.json"
+    if args.settle_only:
+        settle_sizes(out)
+        return 0
 
     results = []
     for size in args.sizes:

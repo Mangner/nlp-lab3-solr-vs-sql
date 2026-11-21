@@ -1,0 +1,17 @@
+-- Q2 FTS (100%)
+SELECT count(*) FROM papers_100 WHERE tsv @@ phraseto_tsquery('english', 'dark matter')
+
+Aggregate  (cost=3741.08..3741.09 rows=1 width=8) (actual time=67.589..67.590 rows=1 loops=1)
+  Buffers: shared hit=62260
+  ->  Bitmap Heap Scan on papers_100  (cost=43.71..3738.64 rows=975 width=0) (actual time=5.738..66.653 rows=14955 loops=1)
+        Recheck Cond: (tsv @@ '''dark'' <-> ''matter'''::tsquery)
+        Rows Removed by Index Recheck: 1265
+        Heap Blocks: exact=15081
+        Buffers: shared hit=62260
+        ->  Bitmap Index Scan on papers_100_tsv_gin  (cost=0.00..43.46 rows=975 width=0) (actual time=3.855..3.856 rows=16220 loops=1)
+              Index Cond: (tsv @@ '''dark'' <-> ''matter'''::tsquery)
+              Buffers: shared hit=38
+Planning:
+  Buffers: shared hit=1
+Planning Time: 0.115 ms
+Execution Time: 67.610 ms

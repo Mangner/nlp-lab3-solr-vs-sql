@@ -1,0 +1,447 @@
+{
+ "size": "100",
+ "table": "papers_100",
+ "timestamp": "2026-11-21T18:58:03",
+ "rows": [
+  {
+   "key": "Q1",
+   "title": "słowo w dowolnej formie: simulate (simulated, simulates, simulating, simulation…)",
+   "like": {
+    "engine": "postgres",
+    "label": "Q1 LIKE",
+    "size": "100",
+    "query": "SELECT count(*) FROM papers_100 WHERE (title || ' ' || abstract) ILIKE '%simulate%'",
+    "result_count": 24333,
+    "exec_ms": {
+     "median": 4665.825,
+     "min": 4644.213,
+     "max": 4860.768,
+     "runs": [
+      4860.768,
+      4660.899,
+      4665.825,
+      4702.739,
+      4644.213
+     ]
+    },
+    "client_ms": {
+     "median": 4725.351,
+     "min": 4637.902,
+     "max": 4743.036,
+     "runs": [
+      4725.351,
+      4637.902,
+      4675.618,
+      4733.709,
+      4743.036
+     ]
+    },
+    "timestamp": "2026-11-21T18:55:45",
+    "plan_flags": {
+     "parallel_seq_scan": true,
+     "seq_scan": true,
+     "gin_bitmap": false
+    }
+   },
+   "fts": {
+    "engine": "postgres",
+    "label": "Q1 FTS",
+    "size": "100",
+    "query": "SELECT count(*) FROM papers_100 WHERE tsv @@ plainto_tsquery('english', 'simulate')",
+    "result_count": 119222,
+    "exec_ms": {
+     "median": 124.363,
+     "min": 112.492,
+     "max": 127.449,
+     "runs": [
+      112.88,
+      124.363,
+      112.492,
+      127.449,
+      124.574
+     ]
+    },
+    "client_ms": {
+     "median": 108.398,
+     "min": 104.296,
+     "max": 131.922,
+     "runs": [
+      126.803,
+      106.651,
+      104.296,
+      108.398,
+      131.922
+     ]
+    },
+    "timestamp": "2026-11-21T18:55:47",
+    "plan_flags": {
+     "parallel_seq_scan": false,
+     "seq_scan": false,
+     "gin_bitmap": true
+    }
+   },
+   "solr": {
+    "engine": "solr",
+    "label": "Q1 Solr",
+    "size": "100",
+    "query": "http://localhost:8983/solr/papers_100/select?q=text_all%3Asimulate&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&sort=score+desc%2C+id+asc&rows=10&wt=json",
+    "result_count": 119255,
+    "qtime_ms": {
+     "median": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "runs": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ]
+    },
+    "client_ms": {
+     "median": 17.021,
+     "min": 14.69,
+     "max": 25.122,
+     "runs": [
+      24.99,
+      16.865,
+      25.122,
+      14.69,
+      17.021
+     ]
+    },
+    "timestamp": "2026-11-21T18:55:47"
+   }
+  },
+  {
+   "key": "Q2",
+   "title": "fraza \"dark matter\" (słowa obok siebie, w tej kolejności)",
+   "like": {
+    "engine": "postgres",
+    "label": "Q2 LIKE",
+    "size": "100",
+    "query": "SELECT count(*) FROM papers_100 WHERE (title || ' ' || abstract) ILIKE '%dark matter%'",
+    "result_count": 14655,
+    "exec_ms": {
+     "median": 4570.948,
+     "min": 4532.672,
+     "max": 4605.589,
+     "runs": [
+      4570.948,
+      4532.672,
+      4605.589,
+      4604.48,
+      4563.974
+     ]
+    },
+    "client_ms": {
+     "median": 4606.166,
+     "min": 4501.487,
+     "max": 4631.676,
+     "runs": [
+      4626.444,
+      4501.487,
+      4606.166,
+      4631.676,
+      4549.726
+     ]
+    },
+    "timestamp": "2026-11-21T18:56:48",
+    "plan_flags": {
+     "parallel_seq_scan": true,
+     "seq_scan": true,
+     "gin_bitmap": false
+    }
+   },
+   "fts": {
+    "engine": "postgres",
+    "label": "Q2 FTS",
+    "size": "100",
+    "query": "SELECT count(*) FROM papers_100 WHERE tsv @@ phraseto_tsquery('english', 'dark matter')",
+    "result_count": 14955,
+    "exec_ms": {
+     "median": 65.576,
+     "min": 64.165,
+     "max": 71.252,
+     "runs": [
+      65.576,
+      65.498,
+      66.967,
+      71.252,
+      64.165
+     ]
+    },
+    "client_ms": {
+     "median": 67.87,
+     "min": 64.01,
+     "max": 69.917,
+     "runs": [
+      68.122,
+      65.13,
+      64.01,
+      67.87,
+      69.917
+     ]
+    },
+    "timestamp": "2026-11-21T18:56:49",
+    "plan_flags": {
+     "parallel_seq_scan": false,
+     "seq_scan": false,
+     "gin_bitmap": true
+    }
+   },
+   "solr": {
+    "engine": "solr",
+    "label": "Q2 Solr",
+    "size": "100",
+    "query": "http://localhost:8983/solr/papers_100/select?q=text_all%3A%22dark+matter%22&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&sort=score+desc%2C+id+asc&rows=10&wt=json",
+    "result_count": 15025,
+    "qtime_ms": {
+     "median": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "runs": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ]
+    },
+    "client_ms": {
+     "median": 15.373,
+     "min": 6.68,
+     "max": 21.531,
+     "runs": [
+      18.974,
+      15.373,
+      21.531,
+      6.68,
+      7.098
+     ]
+    },
+    "timestamp": "2026-11-21T18:56:49"
+   }
+  },
+  {
+   "key": "Q3",
+   "title": "galaxy AND (cluster OR merger) AND NOT simulation",
+   "like": {
+    "engine": "postgres",
+    "label": "Q3 LIKE",
+    "size": "100",
+    "query": "SELECT count(*) FROM papers_100 WHERE ((title || ' ' || abstract) ILIKE '%galaxy%' AND ((title || ' ' || abstract) ILIKE '%cluster%' OR (title || ' ' || abstract) ILIKE '%merger%') AND NOT (title || ' ' || abstract) ILIKE '%simulation%')",
+    "result_count": 7259,
+    "exec_ms": {
+     "median": 4840.047,
+     "min": 4778.298,
+     "max": 4883.292,
+     "runs": [
+      4778.298,
+      4864.626,
+      4840.047,
+      4883.292,
+      4803.7
+     ]
+    },
+    "client_ms": {
+     "median": 4800.143,
+     "min": 4785.144,
+     "max": 4835.931,
+     "runs": [
+      4785.144,
+      4790.603,
+      4835.931,
+      4800.143,
+      4825.223
+     ]
+    },
+    "timestamp": "2026-11-21T18:57:52",
+    "plan_flags": {
+     "parallel_seq_scan": true,
+     "seq_scan": true,
+     "gin_bitmap": false
+    }
+   },
+   "fts": {
+    "engine": "postgres",
+    "label": "Q3 FTS",
+    "size": "100",
+    "query": "SELECT count(*) FROM papers_100 WHERE tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation')",
+    "result_count": 8887,
+    "exec_ms": {
+     "median": 14.909,
+     "min": 14.156,
+     "max": 16.345,
+     "runs": [
+      14.842,
+      14.909,
+      16.345,
+      16.235,
+      14.156
+     ]
+    },
+    "client_ms": {
+     "median": 15.471,
+     "min": 15.195,
+     "max": 16.681,
+     "runs": [
+      15.356,
+      15.471,
+      15.959,
+      15.195,
+      16.681
+     ]
+    },
+    "timestamp": "2026-11-21T18:57:52",
+    "plan_flags": {
+     "parallel_seq_scan": false,
+     "seq_scan": false,
+     "gin_bitmap": true
+    }
+   },
+   "solr": {
+    "engine": "solr",
+    "label": "Q3 Solr",
+    "size": "100",
+    "query": "http://localhost:8983/solr/papers_100/select?q=text_all%3Agalaxy+AND+%28text_all%3Acluster+OR+text_all%3Amerger%29+AND+NOT+text_all%3Asimulation&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&sort=score+desc%2C+id+asc&rows=10&wt=json",
+    "result_count": 8918,
+    "qtime_ms": {
+     "median": 1.0,
+     "min": 1.0,
+     "max": 2.0,
+     "runs": [
+      1.0,
+      2.0,
+      1.0,
+      1.0,
+      2.0
+     ]
+    },
+    "client_ms": {
+     "median": 8.717,
+     "min": 7.909,
+     "max": 9.434,
+     "runs": [
+      9.434,
+      8.717,
+      7.909,
+      8.068,
+      8.738
+     ]
+    },
+    "timestamp": "2026-11-21T18:57:52"
+   }
+  },
+  {
+   "key": "Q1+fq",
+   "title": "Q1 z filtrem: archive=astro-ph, lata 2010–2020",
+   "like": {
+    "engine": "postgres",
+    "label": "Q1+fq LIKE",
+    "size": "100",
+    "query": "SELECT count(*) FROM papers_100 WHERE (title || ' ' || abstract) ILIKE '%simulate%' AND archive = 'astro-ph' AND year BETWEEN 2010 AND 2020",
+    "result_count": 2138,
+    "exec_ms": {
+     "median": 405.466,
+     "min": 382.574,
+     "max": 422.763,
+     "runs": [
+      422.307,
+      382.574,
+      394.297,
+      405.466,
+      422.763
+     ]
+    },
+    "client_ms": {
+     "median": 409.284,
+     "min": 406.807,
+     "max": 421.213,
+     "runs": [
+      408.041,
+      421.213,
+      414.405,
+      406.807,
+      409.284
+     ]
+    },
+    "timestamp": "2026-11-21T18:58:02",
+    "plan_flags": {
+     "parallel_seq_scan": false,
+     "seq_scan": false,
+     "gin_bitmap": false
+    }
+   },
+   "fts": {
+    "engine": "postgres",
+    "label": "Q1+fq FTS",
+    "size": "100",
+    "query": "SELECT count(*) FROM papers_100 WHERE tsv @@ plainto_tsquery('english', 'simulate') AND archive = 'astro-ph' AND year BETWEEN 2010 AND 2020",
+    "result_count": 9447,
+    "exec_ms": {
+     "median": 88.873,
+     "min": 86.463,
+     "max": 91.859,
+     "runs": [
+      87.645,
+      90.709,
+      91.859,
+      88.873,
+      86.463
+     ]
+    },
+    "client_ms": {
+     "median": 89.856,
+     "min": 87.503,
+     "max": 97.568,
+     "runs": [
+      91.503,
+      89.627,
+      97.568,
+      87.503,
+      89.856
+     ]
+    },
+    "timestamp": "2026-11-21T18:58:03",
+    "plan_flags": {
+     "parallel_seq_scan": false,
+     "seq_scan": false,
+     "gin_bitmap": true
+    }
+   },
+   "solr": {
+    "engine": "solr",
+    "label": "Q1+fq Solr",
+    "size": "100",
+    "query": "http://localhost:8983/solr/papers_100/select?q=text_all%3Asimulate&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&sort=score+desc%2C+id+asc&rows=10&fq=archive%3Aastro-ph&fq=year%3A%5B2010+TO+2020%5D&wt=json",
+    "result_count": 9449,
+    "qtime_ms": {
+     "median": 1.0,
+     "min": 1.0,
+     "max": 2.0,
+     "runs": [
+      1.0,
+      2.0,
+      1.0,
+      1.0,
+      1.0
+     ]
+    },
+    "client_ms": {
+     "median": 20.236,
+     "min": 8.156,
+     "max": 30.329,
+     "runs": [
+      20.236,
+      22.966,
+      30.329,
+      8.156,
+      8.388
+     ]
+    },
+    "timestamp": "2026-11-21T18:58:03"
+   }
+  }
+ ]
+}

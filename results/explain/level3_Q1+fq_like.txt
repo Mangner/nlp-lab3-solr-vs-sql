@@ -1,0 +1,22 @@
+-- Q1+fq LIKE (100%)
+SELECT count(*) FROM papers_100 WHERE (title || ' ' || abstract) ILIKE '%simulate%' AND archive = 'astro-ph' AND year BETWEEN 2010 AND 2020
+
+Finalize Aggregate  (cost=161566.31..161566.32 rows=1 width=8) (actual time=358.808..385.606 rows=1 loops=1)
+  Buffers: shared hit=94516
+  ->  Gather  (cost=161566.09..161566.30 rows=2 width=8) (actual time=358.797..385.596 rows=3 loops=1)
+        Workers Planned: 2
+        Workers Launched: 2
+        Buffers: shared hit=94516
+        ->  Partial Aggregate  (cost=160566.09..160566.10 rows=1 width=8) (actual time=342.777..342.778 rows=1 loops=3)
+              Buffers: shared hit=94516
+              ->  Parallel Index Scan using papers_100_year_idx on papers_100  (cost=0.42..160566.09 rows=2 width=0) (actual time=5.103..342.589 rows=713 loops=3)
+                    Index Cond: ((year >= 2010) AND (year <= 2020))
+                    Filter: ((archive = 'astro-ph'::text) AND (((title || ' '::text) || abstract) ~~* '%simulate%'::text))
+                    Rows Removed by Filter: 126690
+                    Buffers: shared hit=94516
+Planning Time: 0.090 ms
+JIT:
+  Functions: 20
+  Options: Inlining false, Optimization false, Expressions true, Deforming true
+  Timing: Generation 1.708 ms (Deform 0.471 ms), Inlining 0.000 ms, Optimization 0.798 ms, Emission 12.857 ms, Total 15.364 ms
+Execution Time: 386.157 ms

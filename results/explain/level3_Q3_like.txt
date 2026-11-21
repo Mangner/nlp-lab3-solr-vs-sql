@@ -1,0 +1,19 @@
+-- Q3 LIKE (100%)
+SELECT count(*) FROM papers_100 WHERE ((title || ' ' || abstract) ILIKE '%galaxy%' AND ((title || ' ' || abstract) ILIKE '%cluster%' OR (title || ' ' || abstract) ILIKE '%merger%') AND NOT (title || ' ' || abstract) ILIKE '%simulation%')
+
+Aggregate  (cost=207002.77..207002.78 rows=1 width=8) (actual time=4745.976..4772.518 rows=1 loops=1)
+  Buffers: shared hit=131064 read=88464
+  ->  Gather  (cost=1000.00..207002.77 rows=1 width=0) (actual time=5.412..4771.488 rows=7259 loops=1)
+        Workers Planned: 2
+        Workers Launched: 2
+        Buffers: shared hit=131064 read=88464
+        ->  Parallel Seq Scan on papers_100  (cost=0.00..206002.67 rows=1 width=0) (actual time=9.936..4727.897 rows=2420 loops=3)
+              Filter: ((((title || ' '::text) || abstract) ~~* '%galaxy%'::text) AND (((title || ' '::text) || abstract) !~~* '%simulation%'::text) AND ((((title || ' '::text) || abstract) ~~* '%cluster%'::text) OR (((title || ' '::text) || abstract) ~~* '%merger%'::text)))
+              Rows Removed by Filter: 330914
+              Buffers: shared hit=131064 read=88464
+Planning Time: 0.069 ms
+JIT:
+  Functions: 11
+  Options: Inlining false, Optimization false, Expressions true, Deforming true
+  Timing: Generation 1.162 ms (Deform 0.195 ms), Inlining 0.000 ms, Optimization 0.654 ms, Emission 10.093 ms, Total 11.909 ms
+Execution Time: 4772.913 ms
