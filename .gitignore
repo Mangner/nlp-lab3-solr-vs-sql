@@ -19,3 +19,5 @@ results/*.tmp
 .vscode/
 .DS_Store
 Thumbs.db
+dist/
+docs/sprawozdanie.html

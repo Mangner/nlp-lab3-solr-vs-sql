@@ -3,13 +3,13 @@
  "postgres_version": "17.12 (Debian 17.12-1.pgdg13+1)",
  "settings": {
   "default_text_search_config": "pg_catalog.english",
-  "effective_cache_size": "2621448kB",
-  "maintenance_work_mem": "1048576kB",
+  "effective_cache_size": "2GB",
+  "maintenance_work_mem": "1GB",
   "max_parallel_maintenance_workers": "2",
   "max_parallel_workers_per_gather": "2",
-  "max_wal_size": "4096MB",
-  "shared_buffers": "1310728kB",
-  "work_mem": "65536kB"
+  "max_wal_size": "4GB",
+  "shared_buffers": "1GB",
+  "work_mem": "64MB"
  },
  "tables": [
   {

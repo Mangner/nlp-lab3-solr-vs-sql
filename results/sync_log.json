@@ -1,5 +1,5 @@
 {
- "timestamp": "2026-11-21T19:20:45",
+ "timestamp": "2026-11-21T19:32:37",
  "table": "papers_100",
  "abstract_updated": [
   "0905.4950",
@@ -44,17 +44,17 @@
  },
  "log": [
   {
-   "time": "2026-11-21T19:20:43",
+   "time": "2026-11-21T19:32:35",
    "event": "setup",
    "detail": "triggery + tabele śledzące gotowe"
   },
   {
-   "time": "2026-11-21T19:20:43",
+   "time": "2026-11-21T19:32:35",
    "event": "revert",
    "detail": "rekordy demo przywrócone do stanu z pliku JSONL"
   },
   {
-   "time": "2026-11-21T19:20:43",
+   "time": "2026-11-21T19:32:36",
    "event": "sync",
    "upserted": 13,
    "deleted": 0,
@@ -76,7 +76,7 @@
    "deleted_ids": []
   },
   {
-   "time": "2026-11-21T19:20:44",
+   "time": "2026-11-21T19:32:36",
    "event": "verify:baseline",
    "ok": true,
    "total_count": true,
@@ -107,7 +107,7 @@
    }
   },
   {
-   "time": "2026-11-21T19:20:44",
+   "time": "2026-11-21T19:32:36",
    "event": "modify_in_postgres",
    "abstract_updated": [
     "0905.4950",
@@ -130,7 +130,7 @@
    ]
   },
   {
-   "time": "2026-11-21T19:20:44",
+   "time": "2026-11-21T19:32:36",
    "event": "verify:before_sync",
    "ok": false,
    "total_count": false,
@@ -167,11 +167,11 @@
     "deleted_absent": {
      "pg_left": [],
      "solr_left": [
-      "2205.05011",
-      "2207.10931",
       "2212.01951",
+      "2401.09007",
+      "2207.10931",
       "2311.08532",
-      "2401.09007"
+      "2205.05011"
      ],
      "ok": false
     },
@@ -192,7 +192,7 @@
    }
   },
   {
-   "time": "2026-11-21T19:20:44",
+   "time": "2026-11-21T19:32:36",
    "event": "sync",
    "upserted": 8,
    "deleted": 5,
@@ -215,7 +215,7 @@
    ]
   },
   {
-   "time": "2026-11-21T19:20:44",
+   "time": "2026-11-21T19:32:36",
    "event": "verify:after_sync",
    "ok": true,
    "total_count": true,
@@ -272,12 +272,12 @@
    }
   },
   {
-   "time": "2026-11-21T19:20:44",
+   "time": "2026-11-21T19:32:36",
    "event": "revert",
    "detail": "rekordy demo przywrócone do stanu z pliku JSONL"
   },
   {
-   "time": "2026-11-21T19:20:44",
+   "time": "2026-11-21T19:32:37",
    "event": "sync",
    "upserted": 13,
    "deleted": 0,
@@ -299,7 +299,7 @@
    "deleted_ids": []
   },
   {
-   "time": "2026-11-21T19:20:45",
+   "time": "2026-11-21T19:32:37",
    "event": "verify:after_revert",
    "ok": true,
    "total_count": true,

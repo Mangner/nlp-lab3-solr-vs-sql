@@ -1,0 +1,51 @@
+{
+ "timestamp": "2026-11-21T19:22:36",
+ "os": "Windows 11 (10.0.26300)",
+ "cpu": "AMD Ryzen 5 3600 6-Core Processor",
+ "cpu_cores_physical": 6,
+ "cpu_threads": 12,
+ "ram_gb": 31.9,
+ "disk": {
+  "total_gb": 232,
+  "free_gb": 5,
+  "physical_disks": [
+   {
+    "FriendlyName": "WDS250G3X0C-00SJG0",
+    "MediaType": "SSD",
+    "Size": 250059350016
+   },
+   {
+    "FriendlyName": "WDC WD10EZEX-75WN4A1",
+    "MediaType": "HDD",
+    "Size": 1000204886016
+   }
+  ]
+ },
+ "python": "3.13.12",
+ "docker_version": "29.5.3",
+ "docker_resources": "12 CPU, 16728145920 B RAM",
+ "solr": {
+  "version": "10.1.0",
+  "lucene": "10.4.0",
+  "mode": "solrcloud",
+  "jvm_max_heap_gb": 2.0,
+  "jvm": "Eclipse Adoptium OpenJDK 64-Bit Server VM 25.0.5.1 25.0.5.1+2-LTS",
+  "SOLR_HEAP": "2g"
+ },
+ "postgres": {
+  "version": "17.12 (Debian 17.12-1.pgdg13+1)",
+  "settings": {
+   "checkpoint_timeout": "15min",
+   "default_text_search_config": "pg_catalog.english",
+   "effective_cache_size": "2GB",
+   "jit": "on",
+   "maintenance_work_mem": "1GB",
+   "max_parallel_workers": "8",
+   "max_parallel_workers_per_gather": "2",
+   "max_wal_size": "4GB",
+   "max_worker_processes": "8",
+   "shared_buffers": "1GB",
+   "work_mem": "64MB"
+  }
+ }
+}

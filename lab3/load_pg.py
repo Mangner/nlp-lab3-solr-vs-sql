@@ -103,7 +103,7 @@ def main() -> int:
             results.append(load_table(conn, size, data_dir, schema_sql, idx))
         settings = {
             r[0]: r[1] for r in conn.execute(
-                "SELECT name, setting || coalesce(unit, '') FROM pg_settings WHERE name IN "
+                "SELECT name, current_setting(name) FROM pg_settings WHERE name IN "
                 "('shared_buffers','work_mem','maintenance_work_mem','effective_cache_size','max_wal_size',"
                 "'max_parallel_workers_per_gather','max_parallel_maintenance_workers','default_text_search_config')")
         }

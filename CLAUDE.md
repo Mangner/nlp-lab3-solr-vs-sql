@@ -34,7 +34,7 @@ i sprawozdanie PDF (archiwum `LAB3_Nazwisko_Imie_Nazwisko_Imie.zip`, bez zbioru 
 - [x] 5. Zapytania poziomu 3.0 + tabela wyników
 - [x] 6. Poziom 4.0: ranking, GROUP BY, eDisMax, facety, highlighting, porównanie top-10, benchmark (mediana z 5), boost
 - [x] 7. Poziom 5.0: skalowanie 10/50/100%, facety + facet.range vs GROUP BY, cursorMark, synchronizacja zmian
-- [ ] 8. Wykresy, README, informacje o sprzęcie/wersjach, materiały do sprawozdania, archiwum do oddania
+- [x] 8. Wykresy, README, informacje o sprzęcie/wersjach, materiały do sprawozdania, archiwum do oddania
 
 Na końcu każdego etapu aktualizuj ten plik (checkbox, wnioski, nowe pliki).
 
@@ -76,7 +76,7 @@ docs/                  Lab3.pdf, materiały do sprawozdania
 - Healthcheck: wyjście przez potok na Windows może mieć zniekształcone polskie znaki (kodowanie konsoli) — w terminalu OK.
 
 ## Wnioski z etapów 2–3 (zrobione)
-- **Etap 2** (`lab3/prepare_data.py`): HF mirror = 11 plików parquet (`data/train-*.parquet`, ~2,6 GB, kolumny jak w oryginale
+- **Etap 2** (`lab3/prepare_data.py`): HF mirror = 11 plików parquet (`data/raw/data/train-*.parquet`, ~2,6 GB, kolumny jak w oryginale
   Kaggle: `versions` = lista struct{version, created "Mon, 7 Dec 1998 12:07:38 GMT"}, `update_date` = timestamp). Rok = min rok z versions[].created.
   Źródło: 3 224 635 rekordów; w źródle są **powtórzone id (83)** — deduplikacja (pierwsze wystąpienie); po filtrach (abstrakt ≥300 zn., rok) 3 093 551;
   wybrano 1 000 000 deterministycznie (blake2b(seed:id), najmniejsze klucze), 10% i 50% = N/10 i N/2 najmniejszych kluczy.
@@ -112,3 +112,12 @@ docs/                  Lab3.pdf, materiały do sprawozdania
 - Zimny start (restart kontenerów + drop_caches w VM Dockera, działa): pierwsze FTS count Q1 ~21 s vs Solr ~100 ms.
 - **Następne: etap 8** — environment.json, wykresy (`lab3/figures.py`), README, sprawozdanie (`docs/sprawozdanie.md` generowane z results/ przez `lab3/report.py`, PDF przez pandoc/Docker),
   `docs/odpowiedz_ustna.md`, `lab3/run_all.py`, `scripts/pack_zip.py`.
+
+## Etap 8 (zrobiony) — stan końcowy
+- Pliki: `lab3/environment.py`, `lab3/figures.py` (PNG w `results/figures/`), `lab3/report.py` (-> `docs/sprawozdanie.md` + tabela w README), `lab3/oral.py` (-> `docs/odpowiedz_ustna.md`),
+  `lab3/run_all.py` (jeden punkt wejścia; `--skip/--only/--limit/--with-cold`), `scripts/build_pdf.py` (Markdown -> HTML -> PDF przez Edge/Chrome headless; `--engine pandoc` = Docker),
+  `scripts/pack_zip.py` (`dist/LAB3_…zip`). Treść sprawozdania i ściągi generowana z `results/` — po zmianie pomiarów uruchom `python -m lab3.run_all --only figures report pdf`.
+- Decyzja: PDF przez przeglądarkę headless zamiast pandoc/Docker (mało miejsca na dysku — ok. 5 GB wolne; Edge jest w Windows). Weryfikacja: strony PDF wyrenderowane (pymupdf) i obejrzane — polskie znaki i wykresy OK.
+- Do uzupełnienia ręcznie: imiona i nazwiska autorów (`python -m lab3.report --authors "Imię Nazwisko" "Imię Nazwisko"`, potem `scripts/build_pdf.py`) oraz nazwa archiwum (`pack_zip.py --authors N1 I1 N2 I2`).
+- Błąd z historii: `setting`+`unit` z pg_settings sklejone w złym formacie — poprawiono na `current_setting()` (load_pg.json uzupełniony).
+- Stan końcowy danych: papers_* w PG i kolekcje Solra = stan wyjściowy (sync demo przywraca rekordy); na papers_100 zostają triggery z sql/03_sync.sql.
