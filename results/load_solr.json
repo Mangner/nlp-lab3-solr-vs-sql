@@ -1,0 +1,47 @@
+{
+ "timestamp": "2026-11-21T18:53:10",
+ "solr_version": "10.1.0",
+ "lucene_version": "10.4.0",
+ "jvm_max_heap_bytes": 2147483648,
+ "collections": [
+  {
+   "collection": "papers_10",
+   "batch_size": 5000,
+   "docs_sent": 100000,
+   "send_seconds": 21.74,
+   "commit_seconds": 0.34,
+   "jsonl_bytes": 133669705,
+   "total_seconds": 22.55,
+   "num_found": 100000,
+   "pg_rows": 100000,
+   "index_bytes": 132826116,
+   "counts_match": true
+  },
+  {
+   "collection": "papers_50",
+   "batch_size": 5000,
+   "docs_sent": 500000,
+   "send_seconds": 106.56,
+   "commit_seconds": 2.68,
+   "jsonl_bytes": 668668119,
+   "total_seconds": 114.75,
+   "num_found": 500000,
+   "pg_rows": 500000,
+   "index_bytes": 660066702,
+   "counts_match": true
+  },
+  {
+   "collection": "papers_100",
+   "batch_size": 5000,
+   "docs_sent": 1000000,
+   "send_seconds": 213.02,
+   "commit_seconds": 1.2,
+   "jsonl_bytes": 1338042251,
+   "total_seconds": 220.12,
+   "num_found": 1000000,
+   "pg_rows": 1000000,
+   "index_bytes": 2203348916,
+   "counts_match": true
+  }
+ ]
+}
