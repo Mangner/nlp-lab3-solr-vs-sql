@@ -28,8 +28,8 @@ i sprawozdanie PDF (archiwum `LAB3_Nazwisko_Imie_Nazwisko_Imie.zip`, bez zbioru 
 
 ## Plan etapów
 - [x] 1. Szkielet projektu i infrastruktura
-- [ ] 2. Pobranie i przygotowanie danych
-- [ ] 3. PostgreSQL: schemat, COPY, tsvector + GIN, pomiary ładowania
+- [x] 2. Pobranie i przygotowanie danych
+- [x] 3. PostgreSQL: schemat, COPY, tsvector + GIN, pomiary ładowania
 - [ ] 4. Solr: kolekcje, schemat, loader, pomiary indeksowania
 - [ ] 5. Zapytania poziomu 3.0 + tabela wyników
 - [ ] 6. Poziom 4.0: ranking, GROUP BY, eDisMax, facety, highlighting, porównanie top-10, benchmark (mediana z 5), boost
@@ -74,3 +74,17 @@ docs/                  Lab3.pdf, materiały do sprawozdania
   `PG_PORT=5433` (docker-compose mapuje host:`${PG_PORT}` -> 5432 w kontenerze). `.env.example` ma 5432.
 - Docker Desktop: 12 CPU, ~15.6 GB RAM. Python hosta: 3.13.
 - Healthcheck: wyjście przez potok na Windows może mieć zniekształcone polskie znaki (kodowanie konsoli) — w terminalu OK.
+
+## Wnioski z etapów 2–3 (zrobione)
+- **Etap 2** (`lab3/prepare_data.py`): HF mirror = 11 plików parquet (`data/train-*.parquet`, ~2,6 GB, kolumny jak w oryginale
+  Kaggle: `versions` = lista struct{version, created "Mon, 7 Dec 1998 12:07:38 GMT"}, `update_date` = timestamp). Rok = min rok z versions[].created.
+  Źródło: 3 224 635 rekordów; w źródle są **powtórzone id (83)** — deduplikacja (pierwsze wystąpienie); po filtrach (abstrakt ≥300 zn., rok) 3 093 551;
+  wybrano 1 000 000 deterministycznie (blake2b(seed:id), najmniejsze klucze), 10% i 50% = N/10 i N/2 najmniejszych kluczy.
+  Pliki: `data/papers_{10,50,100}.{csv,jsonl}`, surowe parquet w `data/raw/` (można skasować po przygotowaniu), `results/dataset_stats.json`.
+- **Etap 3** (`lab3/load_pg.py`, `sql/01_schema.sql`, `sql/02_indexes.sql` — szablony z `{t}`): COPY klientem (STDIN) z tqdm; osobno mierzone COPY / GIN / B-tree / ANALYZE;
+  `results/load_pg.json`. Tabele mają też `updated_at` (pod synchronizację w etapie 7).
+- **Uwaga Solr/SolrCloud:** schemat i config leżą w configsecie w ZooKeeperze współdzielonym przez kolekcje — dlatego każda kolekcja ma własny
+  configset `lab3_papers_<N>` (kopia `_default`). Domyślny `_default` ma autoCommit 15 s i autoSoftCommit 3 s — wyłączone w `solr/collection_config.json`
+  (żeby był jeden commit na końcu).
+- Solr text_en = Porter (porterStem) + stoplista Lucene; PG 'english' = snowball (Porter2) + inna stoplista — źródło różnic w liczbach trafień.
+- Windows: heredoc w Bash potrafi się wywrócić przy długich plikach — pliki tworzyć narzędziem Write. Nie zabijać `python.exe` globalnie.

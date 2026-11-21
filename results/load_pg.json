@@ -1,0 +1,73 @@
+{
+ "timestamp": "2026-11-21T18:46:51",
+ "postgres_version": "17.12 (Debian 17.12-1.pgdg13+1)",
+ "settings": {
+  "default_text_search_config": "pg_catalog.english",
+  "effective_cache_size": "2621448kB",
+  "maintenance_work_mem": "1048576kB",
+  "max_parallel_maintenance_workers": "2",
+  "max_parallel_workers_per_gather": "2",
+  "max_wal_size": "4096MB",
+  "shared_buffers": "1310728kB",
+  "work_mem": "65536kB"
+ },
+ "tables": [
+  {
+   "table": "papers_10",
+   "rows": 100000,
+   "csv_bytes": 122249994,
+   "copy_seconds": 24.75,
+   "gin_seconds": 8.54,
+   "btree_year_seconds": 0.07,
+   "btree_category_seconds": 0.09,
+   "analyze_seconds": 0.67,
+   "heap_bytes": 155254784,
+   "table_bytes_with_toast": 255508480,
+   "indexes_bytes": 51519488,
+   "total_bytes": 307027968,
+   "gin_bytes": 45785088,
+   "btree_year_bytes": 720896,
+   "btree_category_bytes": 737280,
+   "pkey_bytes": 4276224,
+   "avg_tsv_bytes": 1187
+  },
+  {
+   "table": "papers_50",
+   "rows": 500000,
+   "csv_bytes": 611570344,
+   "copy_seconds": 124.64,
+   "gin_seconds": 32.12,
+   "btree_year_seconds": 0.25,
+   "btree_category_seconds": 0.48,
+   "analyze_seconds": 0.75,
+   "heap_bytes": 775028736,
+   "table_bytes_with_toast": 1276977152,
+   "indexes_bytes": 204767232,
+   "total_bytes": 1481744384,
+   "gin_bytes": 176316416,
+   "btree_year_bytes": 3506176,
+   "btree_category_bytes": 3571712,
+   "pkey_bytes": 21372928,
+   "avg_tsv_bytes": 1187
+  },
+  {
+   "table": "papers_100",
+   "rows": 1000000,
+   "csv_bytes": 1223842069,
+   "copy_seconds": 241.73,
+   "gin_seconds": 65.33,
+   "btree_year_seconds": 0.69,
+   "btree_category_seconds": 0.97,
+   "analyze_seconds": 0.99,
+   "heap_bytes": 1551040512,
+   "table_bytes_with_toast": 2556485632,
+   "indexes_bytes": 372711424,
+   "total_bytes": 2929197056,
+   "gin_bytes": 316047360,
+   "btree_year_bytes": 6971392,
+   "btree_category_bytes": 7061504,
+   "pkey_bytes": 42631168,
+   "avg_tsv_bytes": 1188
+  }
+ ]
+}
