@@ -9,7 +9,7 @@ import sys
 
 from lab3.config import ROOT, config
 from lab3.db import pg_connect
-from lab3.measure import now, pg_measure, pg_plan_flags, save_json, solr_measure, solr_run
+from lab3.measure import nocache, now, pg_measure, pg_plan_flags, save_json, solr_measure, solr_run
 from lab3.queries import FILTER_SOLR_FQ, FILTER_SQL, QUERIES, TOP_FL
 
 
@@ -59,7 +59,8 @@ def main() -> int:
             m_fts["plan_flags"] = {k: v for k, v in pg_plan_flags(conn, fts_sql).items() if k != "plan"}
             m_like["plan_flags"] = {k: v for k, v in pg_plan_flags(conn, like_sql).items() if k != "plan"}
             m_solr = solr_measure(t, sp, args.repeats, f"{key} Solr", args.size)
-            rows.append({"key": key, "title": title, "like": m_like, "fts": m_fts, "solr": m_solr})
+            m_solr_nc = solr_measure(t, nocache(sp), args.repeats, f"{key} Solr (cache=false)", args.size)
+            rows.append({"key": key, "title": title, "like": m_like, "fts": m_fts, "solr": m_solr, "solr_nocache": m_solr_nc})
             print(f"{key}: LIKE={m_like['result_count']} ({m_like['exec_ms']['median']} ms)  FTS={m_fts['result_count']} "
                   f"({m_fts['exec_ms']['median']} ms)  Solr={m_solr['result_count']} (QTime {m_solr['qtime_ms']['median']} ms)")
             if key in QUERIES:
@@ -91,12 +92,13 @@ def main() -> int:
 
     # --- tabela markdown ---
     lines = [f"Zbiór: tabela/kolekcja `{t}`. Czasy: mediana z {args.repeats} uruchomień po rozgrzewce.", "",
-             "| zapytanie | wyniki LIKE | wyniki FTS (SQL) | numFound Solr | LIKE exec [ms] | FTS exec [ms] | FTS klient [ms] | Solr QTime [ms] | Solr klient [ms] |",
-             "|---|---:|---:|---:|---:|---:|---:|---:|---:|"]
+             "| zapytanie | wyniki LIKE | wyniki FTS (SQL) | numFound Solr | LIKE exec [ms] | FTS exec [ms] | FTS klient [ms] | Solr QTime [ms] | Solr klient [ms] | Solr QTime cache=false [ms] | Solr klient cache=false [ms] |",
+             "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
     for r in rows:
         lines.append(f"| {r['key']}: {r['title']} | {r['like']['result_count']} | {r['fts']['result_count']} | {r['solr']['result_count']} | "
                      f"{r['like']['exec_ms']['median']} | {r['fts']['exec_ms']['median']} | {r['fts']['client_ms']['median']} | "
-                     f"{r['solr']['qtime_ms']['median']} | {r['solr']['client_ms']['median']} |")
+                     f"{r['solr']['qtime_ms']['median']} | {r['solr']['client_ms']['median']} | "
+                     f"{r['solr_nocache']['qtime_ms']['median']} | {r['solr_nocache']['client_ms']['median']} |")
     (res_dir / "level3_table.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     # --- docs/zapytania_solr.md ---

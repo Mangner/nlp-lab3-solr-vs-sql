@@ -1,21 +1,21 @@
 -- Q2 LIKE (100%)
 SELECT count(*) FROM papers_100 WHERE (title || ' ' || abstract) ILIKE '%dark matter%'
 
-Finalize Aggregate  (cost=197627.99..197628.00 rows=1 width=8) (actual time=4593.054..4620.105 rows=1 loops=1)
-  Buffers: shared hit=128291 read=88089
-  ->  Gather  (cost=197627.77..197627.98 rows=2 width=8) (actual time=4592.872..4620.087 rows=3 loops=1)
+Finalize Aggregate  (cost=197627.99..197628.00 rows=1 width=8) (actual time=4538.594..4571.377 rows=1 loops=1)
+  Buffers: shared hit=129409 read=86971
+  ->  Gather  (cost=197627.77..197627.98 rows=2 width=8) (actual time=4538.421..4571.361 rows=3 loops=1)
         Workers Planned: 2
         Workers Launched: 2
-        Buffers: shared hit=128291 read=88089
-        ->  Partial Aggregate  (cost=196627.77..196627.78 rows=1 width=8) (actual time=4575.886..4575.888 rows=1 loops=3)
-              Buffers: shared hit=128291 read=88089
-              ->  Parallel Seq Scan on papers_100  (cost=0.00..196627.67 rows=42 width=0) (actual time=4.725..4574.459 rows=4885 loops=3)
+        Buffers: shared hit=129409 read=86971
+        ->  Partial Aggregate  (cost=196627.77..196627.78 rows=1 width=8) (actual time=4522.862..4522.863 rows=1 loops=3)
+              Buffers: shared hit=129409 read=86971
+              ->  Parallel Seq Scan on papers_100  (cost=0.00..196627.67 rows=42 width=0) (actual time=4.231..4521.471 rows=4885 loops=3)
                     Filter: (((title || ' '::text) || abstract) ~~* '%dark matter%'::text)
                     Rows Removed by Filter: 328448
-                    Buffers: shared hit=128291 read=88089
-Planning Time: 0.065 ms
+                    Buffers: shared hit=129409 read=86971
+Planning Time: 0.064 ms
 JIT:
   Functions: 14
   Options: Inlining false, Optimization false, Expressions true, Deforming true
-  Timing: Generation 1.183 ms (Deform 0.230 ms), Inlining 0.000 ms, Optimization 0.708 ms, Emission 10.374 ms, Total 12.266 ms
-Execution Time: 4620.453 ms
+  Timing: Generation 1.036 ms (Deform 0.203 ms), Inlining 0.000 ms, Optimization 0.587 ms, Emission 9.172 ms, Total 10.795 ms
+Execution Time: 4571.713 ms

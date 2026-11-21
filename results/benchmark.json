@@ -1,0 +1,2216 @@
+{
+ "timestamp": "2026-11-21T19:09:11",
+ "repeats": 5,
+ "sizes": [
+  "10",
+  "50",
+  "100"
+ ],
+ "measurements": [
+  {
+   "engine": "postgres",
+   "label": "Q1 LIKE count",
+   "size": "10",
+   "query": "SELECT count(*) FROM papers_10 WHERE (title || ' ' || abstract) ILIKE '%simulate%'",
+   "result_count": 2473,
+   "exec_ms": {
+    "median": 1198.596,
+    "min": 1183.571,
+    "max": 1233.581,
+    "runs": [
+     1183.571,
+     1225.285,
+     1189.892,
+     1233.581,
+     1198.596
+    ]
+   },
+   "client_ms": {
+    "median": 1214.065,
+    "min": 1208.821,
+    "max": 1242.167,
+    "runs": [
+     1213.315,
+     1224.265,
+     1214.065,
+     1208.821,
+     1242.167
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:37",
+   "query_key": "Q1",
+   "mode": "count",
+   "method": "LIKE"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q1 FTS count",
+   "size": "10",
+   "query": "SELECT count(*) FROM papers_10 WHERE tsv @@ plainto_tsquery('english', 'simulate')",
+   "result_count": 12065,
+   "exec_ms": {
+    "median": 13.169,
+    "min": 12.764,
+    "max": 14.683,
+    "runs": [
+     13.169,
+     12.764,
+     14.683,
+     13.425,
+     12.911
+    ]
+   },
+   "client_ms": {
+    "median": 15.071,
+    "min": 14.179,
+    "max": 19.568,
+    "runs": [
+     15.071,
+     14.725,
+     19.568,
+     14.179,
+     15.575
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:37",
+   "query_key": "Q1",
+   "mode": "count",
+   "method": "FTS"
+  },
+  {
+   "engine": "solr",
+   "label": "Q1 Solr count (cache=false)",
+   "size": "10",
+   "query": "http://localhost:8983/solr/papers_10/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3Asimulate&rows=0&wt=json",
+   "result_count": 12070,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "runs": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 2.123,
+    "min": 1.829,
+    "max": 2.33,
+    "runs": [
+     2.33,
+     2.213,
+     2.123,
+     1.893,
+     1.829
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:37",
+   "query_key": "Q1",
+   "mode": "count",
+   "method": "Solr"
+  },
+  {
+   "engine": "solr",
+   "label": "Q1 Solr count (queryResultCache)",
+   "size": "10",
+   "query": "http://localhost:8983/solr/papers_10/select?q=text_all%3Asimulate&rows=0&wt=json",
+   "result_count": 12070,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "runs": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 2.21,
+    "min": 1.996,
+    "max": 2.387,
+    "runs": [
+     2.387,
+     1.996,
+     2.21,
+     2.084,
+     2.245
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:37",
+   "query_key": "Q1",
+   "mode": "count",
+   "method": "Solr+cache"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q1 FTS top10",
+   "size": "10",
+   "query": "SELECT id, title, year, primary_category, ts_rank_cd(tsv, s.q) AS rank FROM papers_10, (SELECT plainto_tsquery('english', 'simulate') AS q) s WHERE tsv @@ s.q ORDER BY rank DESC, id ASC LIMIT 10",
+   "result_count": 10,
+   "exec_ms": {
+    "median": 53.341,
+    "min": 52.536,
+    "max": 56.154,
+    "runs": [
+     55.275,
+     53.341,
+     52.568,
+     52.536,
+     56.154
+    ]
+   },
+   "client_ms": {
+    "median": 54.393,
+    "min": 54.23,
+    "max": 54.945,
+    "runs": [
+     54.23,
+     54.945,
+     54.773,
+     54.316,
+     54.393
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:38",
+   "query_key": "Q1",
+   "mode": "top10",
+   "method": "FTS"
+  },
+  {
+   "engine": "solr",
+   "label": "Q1 Solr top10 (cache=false)",
+   "size": "10",
+   "query": "http://localhost:8983/solr/papers_10/select?q=%7B%21edismax+qf%3D%22title%5E3+abstract%22+cache%3Dfalse%7Dsimulate&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&wt=json",
+   "result_count": 12070,
+   "qtime_ms": {
+    "median": 2.0,
+    "min": 2.0,
+    "max": 2.0,
+    "runs": [
+     2.0,
+     2.0,
+     2.0,
+     2.0,
+     2.0
+    ]
+   },
+   "client_ms": {
+    "median": 5.197,
+    "min": 5.092,
+    "max": 6.181,
+    "runs": [
+     5.092,
+     5.172,
+     5.197,
+     6.162,
+     6.181
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:38",
+   "query_key": "Q1",
+   "mode": "top10",
+   "method": "Solr"
+  },
+  {
+   "engine": "solr",
+   "label": "Q1 Solr top10 (queryResultCache)",
+   "size": "10",
+   "query": "http://localhost:8983/solr/papers_10/select?defType=edismax&q=simulate&qf=title%5E3+abstract&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&wt=json",
+   "result_count": 12070,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 1.0,
+    "runs": [
+     0.0,
+     1.0,
+     1.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 3.75,
+    "min": 3.042,
+    "max": 4.15,
+    "runs": [
+     3.75,
+     4.15,
+     3.753,
+     3.552,
+     3.042
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:38",
+   "query_key": "Q1",
+   "mode": "top10",
+   "method": "Solr+cache"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q2 LIKE count",
+   "size": "10",
+   "query": "SELECT count(*) FROM papers_10 WHERE (title || ' ' || abstract) ILIKE '%dark matter%'",
+   "result_count": 1513,
+   "exec_ms": {
+    "median": 1157.342,
+    "min": 1152.047,
+    "max": 1162.612,
+    "runs": [
+     1152.047,
+     1160.351,
+     1157.342,
+     1162.612,
+     1156.048
+    ]
+   },
+   "client_ms": {
+    "median": 1183.458,
+    "min": 1177.637,
+    "max": 1208.786,
+    "runs": [
+     1177.637,
+     1177.837,
+     1208.786,
+     1183.458,
+     1207.129
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:51",
+   "query_key": "Q2",
+   "mode": "count",
+   "method": "LIKE"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q2 FTS count",
+   "size": "10",
+   "query": "SELECT count(*) FROM papers_10 WHERE tsv @@ phraseto_tsquery('english', 'dark matter')",
+   "result_count": 1531,
+   "exec_ms": {
+    "median": 7.251,
+    "min": 6.165,
+    "max": 7.289,
+    "runs": [
+     7.107,
+     7.251,
+     7.289,
+     7.281,
+     6.165
+    ]
+   },
+   "client_ms": {
+    "median": 8.0,
+    "min": 7.701,
+    "max": 8.377,
+    "runs": [
+     8.0,
+     8.377,
+     8.341,
+     7.701,
+     7.918
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:51",
+   "query_key": "Q2",
+   "mode": "count",
+   "method": "FTS"
+  },
+  {
+   "engine": "solr",
+   "label": "Q2 Solr count (cache=false)",
+   "size": "10",
+   "query": "http://localhost:8983/solr/papers_10/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3A%22dark+matter%22&rows=0&wt=json",
+   "result_count": 1543,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "runs": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 2.687,
+    "min": 2.601,
+    "max": 2.783,
+    "runs": [
+     2.636,
+     2.773,
+     2.687,
+     2.783,
+     2.601
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:51",
+   "query_key": "Q2",
+   "mode": "count",
+   "method": "Solr"
+  },
+  {
+   "engine": "solr",
+   "label": "Q2 Solr count (queryResultCache)",
+   "size": "10",
+   "query": "http://localhost:8983/solr/papers_10/select?q=text_all%3A%22dark+matter%22&rows=0&wt=json",
+   "result_count": 1543,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "runs": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 2.425,
+    "min": 1.912,
+    "max": 2.607,
+    "runs": [
+     1.912,
+     2.425,
+     2.326,
+     2.607,
+     2.519
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:51",
+   "query_key": "Q2",
+   "mode": "count",
+   "method": "Solr+cache"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q2 FTS top10",
+   "size": "10",
+   "query": "SELECT id, title, year, primary_category, ts_rank_cd(tsv, s.q) AS rank FROM papers_10, (SELECT phraseto_tsquery('english', 'dark matter') AS q) s WHERE tsv @@ s.q ORDER BY rank DESC, id ASC LIMIT 10",
+   "result_count": 10,
+   "exec_ms": {
+    "median": 12.517,
+    "min": 12.332,
+    "max": 13.26,
+    "runs": [
+     13.26,
+     12.332,
+     12.517,
+     12.454,
+     12.779
+    ]
+   },
+   "client_ms": {
+    "median": 13.813,
+    "min": 12.593,
+    "max": 16.297,
+    "runs": [
+     13.882,
+     13.429,
+     12.593,
+     13.813,
+     16.297
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:51",
+   "query_key": "Q2",
+   "mode": "top10",
+   "method": "FTS"
+  },
+  {
+   "engine": "solr",
+   "label": "Q2 Solr top10 (cache=false)",
+   "size": "10",
+   "query": "http://localhost:8983/solr/papers_10/select?q=%7B%21edismax+qf%3D%22title%5E3+abstract%22+pf%3D%22title%5E3+abstract%22+cache%3Dfalse%7D%22dark+matter%22&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&wt=json",
+   "result_count": 1543,
+   "qtime_ms": {
+    "median": 2.0,
+    "min": 1.0,
+    "max": 2.0,
+    "runs": [
+     2.0,
+     2.0,
+     1.0,
+     2.0,
+     2.0
+    ]
+   },
+   "client_ms": {
+    "median": 4.764,
+    "min": 4.213,
+    "max": 4.942,
+    "runs": [
+     4.764,
+     4.508,
+     4.213,
+     4.942,
+     4.82
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:51",
+   "query_key": "Q2",
+   "mode": "top10",
+   "method": "Solr"
+  },
+  {
+   "engine": "solr",
+   "label": "Q2 Solr top10 (queryResultCache)",
+   "size": "10",
+   "query": "http://localhost:8983/solr/papers_10/select?defType=edismax&q=%22dark+matter%22&qf=title%5E3+abstract&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&pf=title%5E3+abstract&wt=json",
+   "result_count": 1543,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "runs": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 2.92,
+    "min": 2.591,
+    "max": 3.247,
+    "runs": [
+     2.591,
+     2.65,
+     2.92,
+     3.247,
+     3.175
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:51",
+   "query_key": "Q2",
+   "mode": "top10",
+   "method": "Solr+cache"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q3 LIKE count",
+   "size": "10",
+   "query": "SELECT count(*) FROM papers_10 WHERE ((title || ' ' || abstract) ILIKE '%galaxy%' AND ((title || ' ' || abstract) ILIKE '%cluster%' OR (title || ' ' || abstract) ILIKE '%merger%') AND NOT (title || ' ' || abstract) ILIKE '%simulation%')",
+   "result_count": 747,
+   "exec_ms": {
+    "median": 474.84,
+    "min": 470.3,
+    "max": 485.188,
+    "runs": [
+     474.84,
+     477.158,
+     473.334,
+     485.188,
+     470.3
+    ]
+   },
+   "client_ms": {
+    "median": 499.523,
+    "min": 487.173,
+    "max": 519.91,
+    "runs": [
+     487.173,
+     499.523,
+     519.91,
+     490.188,
+     508.566
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:57",
+   "query_key": "Q3",
+   "mode": "count",
+   "method": "LIKE"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q3 FTS count",
+   "size": "10",
+   "query": "SELECT count(*) FROM papers_10 WHERE tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation')",
+   "result_count": 906,
+   "exec_ms": {
+    "median": 1.173,
+    "min": 1.136,
+    "max": 1.334,
+    "runs": [
+     1.334,
+     1.203,
+     1.136,
+     1.158,
+     1.173
+    ]
+   },
+   "client_ms": {
+    "median": 1.888,
+    "min": 1.671,
+    "max": 2.496,
+    "runs": [
+     2.378,
+     1.671,
+     1.737,
+     1.888,
+     2.496
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:57",
+   "query_key": "Q3",
+   "mode": "count",
+   "method": "FTS"
+  },
+  {
+   "engine": "solr",
+   "label": "Q3 Solr count (cache=false)",
+   "size": "10",
+   "query": "http://localhost:8983/solr/papers_10/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3Agalaxy+AND+%28text_all%3Acluster+OR+text_all%3Amerger%29+AND+NOT+text_all%3Asimulation&rows=0&wt=json",
+   "result_count": 909,
+   "qtime_ms": {
+    "median": 4.0,
+    "min": 1.0,
+    "max": 5.0,
+    "runs": [
+     5.0,
+     4.0,
+     4.0,
+     3.0,
+     1.0
+    ]
+   },
+   "client_ms": {
+    "median": 7.489,
+    "min": 4.463,
+    "max": 7.737,
+    "runs": [
+     7.737,
+     7.645,
+     7.489,
+     5.723,
+     4.463
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:57",
+   "query_key": "Q3",
+   "mode": "count",
+   "method": "Solr"
+  },
+  {
+   "engine": "solr",
+   "label": "Q3 Solr count (queryResultCache)",
+   "size": "10",
+   "query": "http://localhost:8983/solr/papers_10/select?q=text_all%3Agalaxy+AND+%28text_all%3Acluster+OR+text_all%3Amerger%29+AND+NOT+text_all%3Asimulation&rows=0&wt=json",
+   "result_count": 909,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "runs": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 2.706,
+    "min": 2.546,
+    "max": 2.776,
+    "runs": [
+     2.546,
+     2.594,
+     2.706,
+     2.716,
+     2.776
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:57",
+   "query_key": "Q3",
+   "mode": "count",
+   "method": "Solr+cache"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q3 FTS top10",
+   "size": "10",
+   "query": "SELECT id, title, year, primary_category, ts_rank_cd(tsv, s.q) AS rank FROM papers_10, (SELECT to_tsquery('english', 'galaxy & (cluster | merger) & !simulation') AS q) s WHERE tsv @@ s.q ORDER BY rank DESC, id ASC LIMIT 10",
+   "result_count": 10,
+   "exec_ms": {
+    "median": 8.928,
+    "min": 8.101,
+    "max": 9.133,
+    "runs": [
+     9.033,
+     8.116,
+     9.133,
+     8.928,
+     8.101
+    ]
+   },
+   "client_ms": {
+    "median": 9.875,
+    "min": 8.996,
+    "max": 10.342,
+    "runs": [
+     10.289,
+     9.875,
+     8.996,
+     10.342,
+     9.494
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:57",
+   "query_key": "Q3",
+   "mode": "top10",
+   "method": "FTS"
+  },
+  {
+   "engine": "solr",
+   "label": "Q3 Solr top10 (cache=false)",
+   "size": "10",
+   "query": "http://localhost:8983/solr/papers_10/select?q=%7B%21edismax+qf%3D%22title%5E3+abstract%22+cache%3Dfalse%7Dgalaxy+AND+%28cluster+OR+merger%29+AND+NOT+simulation&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&wt=json",
+   "result_count": 909,
+   "qtime_ms": {
+    "median": 2.0,
+    "min": 2.0,
+    "max": 3.0,
+    "runs": [
+     3.0,
+     2.0,
+     2.0,
+     2.0,
+     2.0
+    ]
+   },
+   "client_ms": {
+    "median": 5.128,
+    "min": 5.007,
+    "max": 5.667,
+    "runs": [
+     5.667,
+     5.084,
+     5.189,
+     5.007,
+     5.128
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:57",
+   "query_key": "Q3",
+   "mode": "top10",
+   "method": "Solr"
+  },
+  {
+   "engine": "solr",
+   "label": "Q3 Solr top10 (queryResultCache)",
+   "size": "10",
+   "query": "http://localhost:8983/solr/papers_10/select?defType=edismax&q=galaxy+AND+%28cluster+OR+merger%29+AND+NOT+simulation&qf=title%5E3+abstract&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&wt=json",
+   "result_count": 909,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 1.0,
+    "runs": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "client_ms": {
+    "median": 3.365,
+    "min": 3.212,
+    "max": 3.734,
+    "runs": [
+     3.734,
+     3.297,
+     3.212,
+     3.365,
+     3.553
+    ]
+   },
+   "timestamp": "2026-11-21T19:04:57",
+   "query_key": "Q3",
+   "mode": "top10",
+   "method": "Solr+cache"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q1 LIKE count",
+   "size": "50",
+   "query": "SELECT count(*) FROM papers_50 WHERE (title || ' ' || abstract) ILIKE '%simulate%'",
+   "result_count": 12285,
+   "exec_ms": {
+    "median": 2275.901,
+    "min": 2243.525,
+    "max": 2304.152,
+    "runs": [
+     2243.525,
+     2304.152,
+     2275.901,
+     2282.498,
+     2261.916
+    ]
+   },
+   "client_ms": {
+    "median": 2296.727,
+    "min": 2276.442,
+    "max": 2387.654,
+    "runs": [
+     2296.727,
+     2315.201,
+     2387.654,
+     2276.442,
+     2296.671
+    ]
+   },
+   "timestamp": "2026-11-21T19:05:22",
+   "query_key": "Q1",
+   "mode": "count",
+   "method": "LIKE"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q1 FTS count",
+   "size": "50",
+   "query": "SELECT count(*) FROM papers_50 WHERE tsv @@ plainto_tsquery('english', 'simulate')",
+   "result_count": 59989,
+   "exec_ms": {
+    "median": 64.093,
+    "min": 57.444,
+    "max": 75.091,
+    "runs": [
+     64.093,
+     69.072,
+     75.091,
+     64.087,
+     57.444
+    ]
+   },
+   "client_ms": {
+    "median": 63.334,
+    "min": 60.671,
+    "max": 65.787,
+    "runs": [
+     63.334,
+     64.713,
+     65.787,
+     60.671,
+     62.435
+    ]
+   },
+   "timestamp": "2026-11-21T19:05:23",
+   "query_key": "Q1",
+   "mode": "count",
+   "method": "FTS"
+  },
+  {
+   "engine": "solr",
+   "label": "Q1 Solr count (cache=false)",
+   "size": "50",
+   "query": "http://localhost:8983/solr/papers_50/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3Asimulate&rows=0&wt=json",
+   "result_count": 60004,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "runs": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 2.521,
+    "min": 2.414,
+    "max": 2.896,
+    "runs": [
+     2.454,
+     2.414,
+     2.564,
+     2.896,
+     2.521
+    ]
+   },
+   "timestamp": "2026-11-21T19:05:23",
+   "query_key": "Q1",
+   "mode": "count",
+   "method": "Solr"
+  },
+  {
+   "engine": "solr",
+   "label": "Q1 Solr count (queryResultCache)",
+   "size": "50",
+   "query": "http://localhost:8983/solr/papers_50/select?q=text_all%3Asimulate&rows=0&wt=json",
+   "result_count": 60004,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "runs": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 2.164,
+    "min": 2.109,
+    "max": 2.435,
+    "runs": [
+     2.115,
+     2.109,
+     2.164,
+     2.224,
+     2.435
+    ]
+   },
+   "timestamp": "2026-11-21T19:05:23",
+   "query_key": "Q1",
+   "mode": "count",
+   "method": "Solr+cache"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q1 FTS top10",
+   "size": "50",
+   "query": "SELECT id, title, year, primary_category, ts_rank_cd(tsv, s.q) AS rank FROM papers_50, (SELECT plainto_tsquery('english', 'simulate') AS q) s WHERE tsv @@ s.q ORDER BY rank DESC, id ASC LIMIT 10",
+   "result_count": 10,
+   "exec_ms": {
+    "median": 271.957,
+    "min": 263.873,
+    "max": 274.903,
+    "runs": [
+     263.873,
+     266.848,
+     271.957,
+     274.903,
+     273.914
+    ]
+   },
+   "client_ms": {
+    "median": 276.315,
+    "min": 263.198,
+    "max": 329.934,
+    "runs": [
+     329.934,
+     276.315,
+     263.198,
+     283.555,
+     272.777
+    ]
+   },
+   "timestamp": "2026-11-21T19:05:27",
+   "query_key": "Q1",
+   "mode": "top10",
+   "method": "FTS"
+  },
+  {
+   "engine": "solr",
+   "label": "Q1 Solr top10 (cache=false)",
+   "size": "50",
+   "query": "http://localhost:8983/solr/papers_50/select?q=%7B%21edismax+qf%3D%22title%5E3+abstract%22+cache%3Dfalse%7Dsimulate&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&wt=json",
+   "result_count": 60004,
+   "qtime_ms": {
+    "median": 4.0,
+    "min": 4.0,
+    "max": 5.0,
+    "runs": [
+     4.0,
+     4.0,
+     4.0,
+     4.0,
+     5.0
+    ]
+   },
+   "client_ms": {
+    "median": 7.25,
+    "min": 7.018,
+    "max": 7.929,
+    "runs": [
+     7.018,
+     7.25,
+     7.149,
+     7.616,
+     7.929
+    ]
+   },
+   "timestamp": "2026-11-21T19:05:27",
+   "query_key": "Q1",
+   "mode": "top10",
+   "method": "Solr"
+  },
+  {
+   "engine": "solr",
+   "label": "Q1 Solr top10 (queryResultCache)",
+   "size": "50",
+   "query": "http://localhost:8983/solr/papers_50/select?defType=edismax&q=simulate&qf=title%5E3+abstract&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&wt=json",
+   "result_count": 60004,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "runs": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 2.673,
+    "min": 2.526,
+    "max": 3.179,
+    "runs": [
+     2.673,
+     3.179,
+     3.014,
+     2.526,
+     2.644
+    ]
+   },
+   "timestamp": "2026-11-21T19:05:27",
+   "query_key": "Q1",
+   "mode": "top10",
+   "method": "Solr+cache"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q2 LIKE count",
+   "size": "50",
+   "query": "SELECT count(*) FROM papers_50 WHERE (title || ' ' || abstract) ILIKE '%dark matter%'",
+   "result_count": 7327,
+   "exec_ms": {
+    "median": 2251.285,
+    "min": 2190.091,
+    "max": 2274.036,
+    "runs": [
+     2190.091,
+     2274.036,
+     2222.425,
+     2251.285,
+     2252.354
+    ]
+   },
+   "client_ms": {
+    "median": 2257.485,
+    "min": 2246.627,
+    "max": 2484.276,
+    "runs": [
+     2257.485,
+     2246.627,
+     2484.276,
+     2251.203,
+     2262.458
+    ]
+   },
+   "timestamp": "2026-11-21T19:05:52",
+   "query_key": "Q2",
+   "mode": "count",
+   "method": "LIKE"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q2 FTS count",
+   "size": "50",
+   "query": "SELECT count(*) FROM papers_50 WHERE tsv @@ phraseto_tsquery('english', 'dark matter')",
+   "result_count": 7470,
+   "exec_ms": {
+    "median": 34.113,
+    "min": 32.645,
+    "max": 37.001,
+    "runs": [
+     33.11,
+     32.645,
+     35.013,
+     37.001,
+     34.113
+    ]
+   },
+   "client_ms": {
+    "median": 33.315,
+    "min": 33.039,
+    "max": 37.005,
+    "runs": [
+     33.315,
+     33.29,
+     33.33,
+     33.039,
+     37.005
+    ]
+   },
+   "timestamp": "2026-11-21T19:05:52",
+   "query_key": "Q2",
+   "mode": "count",
+   "method": "FTS"
+  },
+  {
+   "engine": "solr",
+   "label": "Q2 Solr count (cache=false)",
+   "size": "50",
+   "query": "http://localhost:8983/solr/papers_50/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3A%22dark+matter%22&rows=0&wt=json",
+   "result_count": 7510,
+   "qtime_ms": {
+    "median": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "runs": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ]
+   },
+   "client_ms": {
+    "median": 3.957,
+    "min": 3.679,
+    "max": 4.201,
+    "runs": [
+     3.957,
+     3.805,
+     3.679,
+     4.165,
+     4.201
+    ]
+   },
+   "timestamp": "2026-11-21T19:05:52",
+   "query_key": "Q2",
+   "mode": "count",
+   "method": "Solr"
+  },
+  {
+   "engine": "solr",
+   "label": "Q2 Solr count (queryResultCache)",
+   "size": "50",
+   "query": "http://localhost:8983/solr/papers_50/select?q=text_all%3A%22dark+matter%22&rows=0&wt=json",
+   "result_count": 7510,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "runs": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 2.539,
+    "min": 2.309,
+    "max": 2.673,
+    "runs": [
+     2.309,
+     2.338,
+     2.539,
+     2.654,
+     2.673
+    ]
+   },
+   "timestamp": "2026-11-21T19:05:52",
+   "query_key": "Q2",
+   "mode": "count",
+   "method": "Solr+cache"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q2 FTS top10",
+   "size": "50",
+   "query": "SELECT id, title, year, primary_category, ts_rank_cd(tsv, s.q) AS rank FROM papers_50, (SELECT phraseto_tsquery('english', 'dark matter') AS q) s WHERE tsv @@ s.q ORDER BY rank DESC, id ASC LIMIT 10",
+   "result_count": 10,
+   "exec_ms": {
+    "median": 63.777,
+    "min": 61.464,
+    "max": 70.077,
+    "runs": [
+     63.777,
+     61.464,
+     63.035,
+     64.706,
+     70.077
+    ]
+   },
+   "client_ms": {
+    "median": 64.908,
+    "min": 62.723,
+    "max": 66.355,
+    "runs": [
+     62.723,
+     64.823,
+     66.355,
+     65.231,
+     64.908
+    ]
+   },
+   "timestamp": "2026-11-21T19:05:53",
+   "query_key": "Q2",
+   "mode": "top10",
+   "method": "FTS"
+  },
+  {
+   "engine": "solr",
+   "label": "Q2 Solr top10 (cache=false)",
+   "size": "50",
+   "query": "http://localhost:8983/solr/papers_50/select?q=%7B%21edismax+qf%3D%22title%5E3+abstract%22+pf%3D%22title%5E3+abstract%22+cache%3Dfalse%7D%22dark+matter%22&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&wt=json",
+   "result_count": 7510,
+   "qtime_ms": {
+    "median": 4.0,
+    "min": 4.0,
+    "max": 4.0,
+    "runs": [
+     4.0,
+     4.0,
+     4.0,
+     4.0,
+     4.0
+    ]
+   },
+   "client_ms": {
+    "median": 7.207,
+    "min": 7.133,
+    "max": 7.603,
+    "runs": [
+     7.207,
+     7.133,
+     7.497,
+     7.14,
+     7.603
+    ]
+   },
+   "timestamp": "2026-11-21T19:05:53",
+   "query_key": "Q2",
+   "mode": "top10",
+   "method": "Solr"
+  },
+  {
+   "engine": "solr",
+   "label": "Q2 Solr top10 (queryResultCache)",
+   "size": "50",
+   "query": "http://localhost:8983/solr/papers_50/select?defType=edismax&q=%22dark+matter%22&qf=title%5E3+abstract&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&pf=title%5E3+abstract&wt=json",
+   "result_count": 7510,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 1.0,
+    "runs": [
+     1.0,
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 3.066,
+    "min": 2.686,
+    "max": 3.57,
+    "runs": [
+     3.57,
+     3.047,
+     3.361,
+     2.686,
+     3.066
+    ]
+   },
+   "timestamp": "2026-11-21T19:05:53",
+   "query_key": "Q2",
+   "mode": "top10",
+   "method": "Solr+cache"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q3 LIKE count",
+   "size": "50",
+   "query": "SELECT count(*) FROM papers_50 WHERE ((title || ' ' || abstract) ILIKE '%galaxy%' AND ((title || ' ' || abstract) ILIKE '%cluster%' OR (title || ' ' || abstract) ILIKE '%merger%') AND NOT (title || ' ' || abstract) ILIKE '%simulation%')",
+   "result_count": 3615,
+   "exec_ms": {
+    "median": 2449.1,
+    "min": 2342.529,
+    "max": 2470.126,
+    "runs": [
+     2440.756,
+     2470.126,
+     2463.767,
+     2449.1,
+     2342.529
+    ]
+   },
+   "client_ms": {
+    "median": 2397.307,
+    "min": 2342.163,
+    "max": 2488.691,
+    "runs": [
+     2397.307,
+     2488.691,
+     2421.452,
+     2342.163,
+     2367.728
+    ]
+   },
+   "timestamp": "2026-11-21T19:06:19",
+   "query_key": "Q3",
+   "mode": "count",
+   "method": "LIKE"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q3 FTS count",
+   "size": "50",
+   "query": "SELECT count(*) FROM papers_50 WHERE tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation')",
+   "result_count": 4430,
+   "exec_ms": {
+    "median": 6.806,
+    "min": 6.478,
+    "max": 8.211,
+    "runs": [
+     8.211,
+     8.192,
+     6.651,
+     6.478,
+     6.806
+    ]
+   },
+   "client_ms": {
+    "median": 7.688,
+    "min": 7.152,
+    "max": 9.037,
+    "runs": [
+     8.16,
+     9.037,
+     7.688,
+     7.152,
+     7.495
+    ]
+   },
+   "timestamp": "2026-11-21T19:06:20",
+   "query_key": "Q3",
+   "mode": "count",
+   "method": "FTS"
+  },
+  {
+   "engine": "solr",
+   "label": "Q3 Solr count (cache=false)",
+   "size": "50",
+   "query": "http://localhost:8983/solr/papers_50/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3Agalaxy+AND+%28text_all%3Acluster+OR+text_all%3Amerger%29+AND+NOT+text_all%3Asimulation&rows=0&wt=json",
+   "result_count": 4444,
+   "qtime_ms": {
+    "median": 4.0,
+    "min": 3.0,
+    "max": 4.0,
+    "runs": [
+     3.0,
+     4.0,
+     4.0,
+     4.0,
+     4.0
+    ]
+   },
+   "client_ms": {
+    "median": 6.309,
+    "min": 5.398,
+    "max": 7.2,
+    "runs": [
+     5.398,
+     6.22,
+     6.309,
+     7.2,
+     7.176
+    ]
+   },
+   "timestamp": "2026-11-21T19:06:20",
+   "query_key": "Q3",
+   "mode": "count",
+   "method": "Solr"
+  },
+  {
+   "engine": "solr",
+   "label": "Q3 Solr count (queryResultCache)",
+   "size": "50",
+   "query": "http://localhost:8983/solr/papers_50/select?q=text_all%3Agalaxy+AND+%28text_all%3Acluster+OR+text_all%3Amerger%29+AND+NOT+text_all%3Asimulation&rows=0&wt=json",
+   "result_count": 4444,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "runs": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 2.594,
+    "min": 2.376,
+    "max": 2.985,
+    "runs": [
+     2.82,
+     2.441,
+     2.594,
+     2.376,
+     2.985
+    ]
+   },
+   "timestamp": "2026-11-21T19:06:20",
+   "query_key": "Q3",
+   "mode": "count",
+   "method": "Solr+cache"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q3 FTS top10",
+   "size": "50",
+   "query": "SELECT id, title, year, primary_category, ts_rank_cd(tsv, s.q) AS rank FROM papers_50, (SELECT to_tsquery('english', 'galaxy & (cluster | merger) & !simulation') AS q) s WHERE tsv @@ s.q ORDER BY rank DESC, id ASC LIMIT 10",
+   "result_count": 10,
+   "exec_ms": {
+    "median": 42.795,
+    "min": 41.893,
+    "max": 56.849,
+    "runs": [
+     42.795,
+     56.849,
+     44.042,
+     41.893,
+     42.2
+    ]
+   },
+   "client_ms": {
+    "median": 43.222,
+    "min": 42.982,
+    "max": 51.195,
+    "runs": [
+     42.982,
+     43.108,
+     51.195,
+     43.222,
+     43.998
+    ]
+   },
+   "timestamp": "2026-11-21T19:06:20",
+   "query_key": "Q3",
+   "mode": "top10",
+   "method": "FTS"
+  },
+  {
+   "engine": "solr",
+   "label": "Q3 Solr top10 (cache=false)",
+   "size": "50",
+   "query": "http://localhost:8983/solr/papers_50/select?q=%7B%21edismax+qf%3D%22title%5E3+abstract%22+cache%3Dfalse%7Dgalaxy+AND+%28cluster+OR+merger%29+AND+NOT+simulation&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&wt=json",
+   "result_count": 4444,
+   "qtime_ms": {
+    "median": 5.0,
+    "min": 4.0,
+    "max": 5.0,
+    "runs": [
+     5.0,
+     5.0,
+     5.0,
+     4.0,
+     5.0
+    ]
+   },
+   "client_ms": {
+    "median": 7.474,
+    "min": 7.062,
+    "max": 7.992,
+    "runs": [
+     7.992,
+     7.776,
+     7.474,
+     7.062,
+     7.408
+    ]
+   },
+   "timestamp": "2026-11-21T19:06:20",
+   "query_key": "Q3",
+   "mode": "top10",
+   "method": "Solr"
+  },
+  {
+   "engine": "solr",
+   "label": "Q3 Solr top10 (queryResultCache)",
+   "size": "50",
+   "query": "http://localhost:8983/solr/papers_50/select?defType=edismax&q=galaxy+AND+%28cluster+OR+merger%29+AND+NOT+simulation&qf=title%5E3+abstract&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&wt=json",
+   "result_count": 4444,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "runs": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 2.642,
+    "min": 2.195,
+    "max": 2.869,
+    "runs": [
+     2.644,
+     2.869,
+     2.642,
+     2.195,
+     2.232
+    ]
+   },
+   "timestamp": "2026-11-21T19:06:20",
+   "query_key": "Q3",
+   "mode": "top10",
+   "method": "Solr+cache"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q1 LIKE count",
+   "size": "100",
+   "query": "SELECT count(*) FROM papers_100 WHERE (title || ' ' || abstract) ILIKE '%simulate%'",
+   "result_count": 24333,
+   "exec_ms": {
+    "median": 4631.815,
+    "min": 4562.724,
+    "max": 4719.723,
+    "runs": [
+     4595.351,
+     4653.28,
+     4631.815,
+     4562.724,
+     4719.723
+    ]
+   },
+   "client_ms": {
+    "median": 4674.102,
+    "min": 4636.1,
+    "max": 4748.242,
+    "runs": [
+     4748.242,
+     4674.102,
+     4636.1,
+     4675.606,
+     4670.732
+    ]
+   },
+   "timestamp": "2026-11-21T19:07:11",
+   "query_key": "Q1",
+   "mode": "count",
+   "method": "LIKE"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q1 FTS count",
+   "size": "100",
+   "query": "SELECT count(*) FROM papers_100 WHERE tsv @@ plainto_tsquery('english', 'simulate')",
+   "result_count": 119222,
+   "exec_ms": {
+    "median": 113.271,
+    "min": 106.721,
+    "max": 121.048,
+    "runs": [
+     121.048,
+     113.271,
+     106.721,
+     107.338,
+     117.524
+    ]
+   },
+   "client_ms": {
+    "median": 111.634,
+    "min": 101.305,
+    "max": 317.236,
+    "runs": [
+     317.236,
+     116.339,
+     101.305,
+     102.884,
+     111.634
+    ]
+   },
+   "timestamp": "2026-11-21T19:07:13",
+   "query_key": "Q1",
+   "mode": "count",
+   "method": "FTS"
+  },
+  {
+   "engine": "solr",
+   "label": "Q1 Solr count (cache=false)",
+   "size": "100",
+   "query": "http://localhost:8983/solr/papers_100/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3Asimulate&rows=0&wt=json",
+   "result_count": 119255,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "runs": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 2.116,
+    "min": 1.903,
+    "max": 2.339,
+    "runs": [
+     2.339,
+     2.116,
+     2.085,
+     1.903,
+     2.159
+    ]
+   },
+   "timestamp": "2026-11-21T19:07:13",
+   "query_key": "Q1",
+   "mode": "count",
+   "method": "Solr"
+  },
+  {
+   "engine": "solr",
+   "label": "Q1 Solr count (queryResultCache)",
+   "size": "100",
+   "query": "http://localhost:8983/solr/papers_100/select?q=text_all%3Asimulate&rows=0&wt=json",
+   "result_count": 119255,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "runs": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 2.014,
+    "min": 1.842,
+    "max": 2.12,
+    "runs": [
+     2.12,
+     1.916,
+     2.014,
+     1.842,
+     2.118
+    ]
+   },
+   "timestamp": "2026-11-21T19:07:13",
+   "query_key": "Q1",
+   "mode": "count",
+   "method": "Solr+cache"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q1 FTS top10",
+   "size": "100",
+   "query": "SELECT id, title, year, primary_category, ts_rank_cd(tsv, s.q) AS rank FROM papers_100, (SELECT plainto_tsquery('english', 'simulate') AS q) s WHERE tsv @@ s.q ORDER BY rank DESC, id ASC LIMIT 10",
+   "result_count": 10,
+   "exec_ms": {
+    "median": 952.494,
+    "min": 932.182,
+    "max": 1002.081,
+    "runs": [
+     932.182,
+     942.161,
+     986.043,
+     1002.081,
+     952.494
+    ]
+   },
+   "client_ms": {
+    "median": 963.833,
+    "min": 790.778,
+    "max": 1009.852,
+    "runs": [
+     790.778,
+     963.833,
+     960.181,
+     1009.852,
+     997.354
+    ]
+   },
+   "timestamp": "2026-11-21T19:07:23",
+   "query_key": "Q1",
+   "mode": "top10",
+   "method": "FTS"
+  },
+  {
+   "engine": "solr",
+   "label": "Q1 Solr top10 (cache=false)",
+   "size": "100",
+   "query": "http://localhost:8983/solr/papers_100/select?q=%7B%21edismax+qf%3D%22title%5E3+abstract%22+cache%3Dfalse%7Dsimulate&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&wt=json",
+   "result_count": 119255,
+   "qtime_ms": {
+    "median": 7.0,
+    "min": 7.0,
+    "max": 7.0,
+    "runs": [
+     7.0,
+     7.0,
+     7.0,
+     7.0,
+     7.0
+    ]
+   },
+   "client_ms": {
+    "median": 10.111,
+    "min": 9.567,
+    "max": 10.458,
+    "runs": [
+     9.675,
+     10.111,
+     10.116,
+     9.567,
+     10.458
+    ]
+   },
+   "timestamp": "2026-11-21T19:07:24",
+   "query_key": "Q1",
+   "mode": "top10",
+   "method": "Solr"
+  },
+  {
+   "engine": "solr",
+   "label": "Q1 Solr top10 (queryResultCache)",
+   "size": "100",
+   "query": "http://localhost:8983/solr/papers_100/select?defType=edismax&q=simulate&qf=title%5E3+abstract&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&wt=json",
+   "result_count": 119255,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "runs": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 3.257,
+    "min": 2.568,
+    "max": 3.548,
+    "runs": [
+     3.548,
+     3.455,
+     3.11,
+     3.257,
+     2.568
+    ]
+   },
+   "timestamp": "2026-11-21T19:07:24",
+   "query_key": "Q1",
+   "mode": "top10",
+   "method": "Solr+cache"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q2 LIKE count",
+   "size": "100",
+   "query": "SELECT count(*) FROM papers_100 WHERE (title || ' ' || abstract) ILIKE '%dark matter%'",
+   "result_count": 14655,
+   "exec_ms": {
+    "median": 4579.154,
+    "min": 4504.708,
+    "max": 4674.204,
+    "runs": [
+     4674.204,
+     4504.708,
+     4579.154,
+     4639.441,
+     4543.479
+    ]
+   },
+   "client_ms": {
+    "median": 4553.245,
+    "min": 4538.843,
+    "max": 4686.597,
+    "runs": [
+     4538.843,
+     4553.245,
+     4597.181,
+     4686.597,
+     4552.778
+    ]
+   },
+   "timestamp": "2026-11-21T19:08:14",
+   "query_key": "Q2",
+   "mode": "count",
+   "method": "LIKE"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q2 FTS count",
+   "size": "100",
+   "query": "SELECT count(*) FROM papers_100 WHERE tsv @@ phraseto_tsquery('english', 'dark matter')",
+   "result_count": 14955,
+   "exec_ms": {
+    "median": 70.263,
+    "min": 66.488,
+    "max": 72.736,
+    "runs": [
+     69.156,
+     72.736,
+     70.263,
+     66.488,
+     71.801
+    ]
+   },
+   "client_ms": {
+    "median": 70.404,
+    "min": 68.181,
+    "max": 71.54,
+    "runs": [
+     71.54,
+     70.462,
+     70.404,
+     69.308,
+     68.181
+    ]
+   },
+   "timestamp": "2026-11-21T19:08:15",
+   "query_key": "Q2",
+   "mode": "count",
+   "method": "FTS"
+  },
+  {
+   "engine": "solr",
+   "label": "Q2 Solr count (cache=false)",
+   "size": "100",
+   "query": "http://localhost:8983/solr/papers_100/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3A%22dark+matter%22&rows=0&wt=json",
+   "result_count": 15025,
+   "qtime_ms": {
+    "median": 2.0,
+    "min": 2.0,
+    "max": 3.0,
+    "runs": [
+     3.0,
+     2.0,
+     2.0,
+     2.0,
+     2.0
+    ]
+   },
+   "client_ms": {
+    "median": 4.538,
+    "min": 4.004,
+    "max": 5.442,
+    "runs": [
+     5.442,
+     4.634,
+     4.538,
+     4.428,
+     4.004
+    ]
+   },
+   "timestamp": "2026-11-21T19:08:15",
+   "query_key": "Q2",
+   "mode": "count",
+   "method": "Solr"
+  },
+  {
+   "engine": "solr",
+   "label": "Q2 Solr count (queryResultCache)",
+   "size": "100",
+   "query": "http://localhost:8983/solr/papers_100/select?q=text_all%3A%22dark+matter%22&rows=0&wt=json",
+   "result_count": 15025,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "runs": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 2.168,
+    "min": 2.09,
+    "max": 2.303,
+    "runs": [
+     2.303,
+     2.09,
+     2.121,
+     2.168,
+     2.241
+    ]
+   },
+   "timestamp": "2026-11-21T19:08:15",
+   "query_key": "Q2",
+   "mode": "count",
+   "method": "Solr+cache"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q2 FTS top10",
+   "size": "100",
+   "query": "SELECT id, title, year, primary_category, ts_rank_cd(tsv, s.q) AS rank FROM papers_100, (SELECT phraseto_tsquery('english', 'dark matter') AS q) s WHERE tsv @@ s.q ORDER BY rank DESC, id ASC LIMIT 10",
+   "result_count": 10,
+   "exec_ms": {
+    "median": 131.654,
+    "min": 127.843,
+    "max": 148.641,
+    "runs": [
+     148.641,
+     129.11,
+     127.843,
+     131.654,
+     136.584
+    ]
+   },
+   "client_ms": {
+    "median": 129.586,
+    "min": 126.638,
+    "max": 137.38,
+    "runs": [
+     129.318,
+     132.373,
+     129.586,
+     126.638,
+     137.38
+    ]
+   },
+   "timestamp": "2026-11-21T19:08:16",
+   "query_key": "Q2",
+   "mode": "top10",
+   "method": "FTS"
+  },
+  {
+   "engine": "solr",
+   "label": "Q2 Solr top10 (cache=false)",
+   "size": "100",
+   "query": "http://localhost:8983/solr/papers_100/select?q=%7B%21edismax+qf%3D%22title%5E3+abstract%22+pf%3D%22title%5E3+abstract%22+cache%3Dfalse%7D%22dark+matter%22&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&wt=json",
+   "result_count": 15025,
+   "qtime_ms": {
+    "median": 6.0,
+    "min": 5.0,
+    "max": 6.0,
+    "runs": [
+     5.0,
+     6.0,
+     5.0,
+     6.0,
+     6.0
+    ]
+   },
+   "client_ms": {
+    "median": 8.393,
+    "min": 8.266,
+    "max": 9.324,
+    "runs": [
+     8.266,
+     8.393,
+     8.327,
+     8.824,
+     9.324
+    ]
+   },
+   "timestamp": "2026-11-21T19:08:16",
+   "query_key": "Q2",
+   "mode": "top10",
+   "method": "Solr"
+  },
+  {
+   "engine": "solr",
+   "label": "Q2 Solr top10 (queryResultCache)",
+   "size": "100",
+   "query": "http://localhost:8983/solr/papers_100/select?defType=edismax&q=%22dark+matter%22&qf=title%5E3+abstract&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&pf=title%5E3+abstract&wt=json",
+   "result_count": 15025,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 1.0,
+    "runs": [
+     0.0,
+     1.0,
+     1.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 3.197,
+    "min": 3.001,
+    "max": 3.719,
+    "runs": [
+     3.168,
+     3.711,
+     3.719,
+     3.197,
+     3.001
+    ]
+   },
+   "timestamp": "2026-11-21T19:08:16",
+   "query_key": "Q2",
+   "mode": "top10",
+   "method": "Solr+cache"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q3 LIKE count",
+   "size": "100",
+   "query": "SELECT count(*) FROM papers_100 WHERE ((title || ' ' || abstract) ILIKE '%galaxy%' AND ((title || ' ' || abstract) ILIKE '%cluster%' OR (title || ' ' || abstract) ILIKE '%merger%') AND NOT (title || ' ' || abstract) ILIKE '%simulation%')",
+   "result_count": 7259,
+   "exec_ms": {
+    "median": 4817.102,
+    "min": 4769.962,
+    "max": 4886.33,
+    "runs": [
+     4814.121,
+     4886.33,
+     4817.102,
+     4769.962,
+     4866.004
+    ]
+   },
+   "client_ms": {
+    "median": 4818.135,
+    "min": 4785.227,
+    "max": 4904.922,
+    "runs": [
+     4817.527,
+     4818.135,
+     4902.932,
+     4785.227,
+     4904.922
+    ]
+   },
+   "timestamp": "2026-11-21T19:09:10",
+   "query_key": "Q3",
+   "mode": "count",
+   "method": "LIKE"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q3 FTS count",
+   "size": "100",
+   "query": "SELECT count(*) FROM papers_100 WHERE tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation')",
+   "result_count": 8887,
+   "exec_ms": {
+    "median": 15.178,
+    "min": 14.902,
+    "max": 16.278,
+    "runs": [
+     15.103,
+     14.902,
+     15.8,
+     16.278,
+     15.178
+    ]
+   },
+   "client_ms": {
+    "median": 16.14,
+    "min": 16.042,
+    "max": 16.824,
+    "runs": [
+     16.296,
+     16.081,
+     16.14,
+     16.824,
+     16.042
+    ]
+   },
+   "timestamp": "2026-11-21T19:09:10",
+   "query_key": "Q3",
+   "mode": "count",
+   "method": "FTS"
+  },
+  {
+   "engine": "solr",
+   "label": "Q3 Solr count (cache=false)",
+   "size": "100",
+   "query": "http://localhost:8983/solr/papers_100/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3Agalaxy+AND+%28text_all%3Acluster+OR+text_all%3Amerger%29+AND+NOT+text_all%3Asimulation&rows=0&wt=json",
+   "result_count": 8918,
+   "qtime_ms": {
+    "median": 3.0,
+    "min": 3.0,
+    "max": 3.0,
+    "runs": [
+     3.0,
+     3.0,
+     3.0,
+     3.0,
+     3.0
+    ]
+   },
+   "client_ms": {
+    "median": 5.666,
+    "min": 5.399,
+    "max": 5.999,
+    "runs": [
+     5.64,
+     5.666,
+     5.999,
+     5.399,
+     5.997
+    ]
+   },
+   "timestamp": "2026-11-21T19:09:10",
+   "query_key": "Q3",
+   "mode": "count",
+   "method": "Solr"
+  },
+  {
+   "engine": "solr",
+   "label": "Q3 Solr count (queryResultCache)",
+   "size": "100",
+   "query": "http://localhost:8983/solr/papers_100/select?q=text_all%3Agalaxy+AND+%28text_all%3Acluster+OR+text_all%3Amerger%29+AND+NOT+text_all%3Asimulation&rows=0&wt=json",
+   "result_count": 8918,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "runs": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 3.017,
+    "min": 2.787,
+    "max": 3.345,
+    "runs": [
+     3.345,
+     3.054,
+     3.017,
+     2.787,
+     2.912
+    ]
+   },
+   "timestamp": "2026-11-21T19:09:10",
+   "query_key": "Q3",
+   "mode": "count",
+   "method": "Solr+cache"
+  },
+  {
+   "engine": "postgres",
+   "label": "Q3 FTS top10",
+   "size": "100",
+   "query": "SELECT id, title, year, primary_category, ts_rank_cd(tsv, s.q) AS rank FROM papers_100, (SELECT to_tsquery('english', 'galaxy & (cluster | merger) & !simulation') AS q) s WHERE tsv @@ s.q ORDER BY rank DESC, id ASC LIMIT 10",
+   "result_count": 10,
+   "exec_ms": {
+    "median": 90.104,
+    "min": 87.964,
+    "max": 105.412,
+    "runs": [
+     90.104,
+     88.854,
+     87.964,
+     105.271,
+     105.412
+    ]
+   },
+   "client_ms": {
+    "median": 91.472,
+    "min": 90.64,
+    "max": 109.384,
+    "runs": [
+     95.3,
+     91.472,
+     90.818,
+     90.64,
+     109.384
+    ]
+   },
+   "timestamp": "2026-11-21T19:09:11",
+   "query_key": "Q3",
+   "mode": "top10",
+   "method": "FTS"
+  },
+  {
+   "engine": "solr",
+   "label": "Q3 Solr top10 (cache=false)",
+   "size": "100",
+   "query": "http://localhost:8983/solr/papers_100/select?q=%7B%21edismax+qf%3D%22title%5E3+abstract%22+cache%3Dfalse%7Dgalaxy+AND+%28cluster+OR+merger%29+AND+NOT+simulation&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&wt=json",
+   "result_count": 8918,
+   "qtime_ms": {
+    "median": 9.0,
+    "min": 8.0,
+    "max": 9.0,
+    "runs": [
+     9.0,
+     8.0,
+     9.0,
+     8.0,
+     9.0
+    ]
+   },
+   "client_ms": {
+    "median": 12.395,
+    "min": 11.222,
+    "max": 12.898,
+    "runs": [
+     12.362,
+     12.395,
+     12.681,
+     11.222,
+     12.898
+    ]
+   },
+   "timestamp": "2026-11-21T19:09:11",
+   "query_key": "Q3",
+   "mode": "top10",
+   "method": "Solr"
+  },
+  {
+   "engine": "solr",
+   "label": "Q3 Solr top10 (queryResultCache)",
+   "size": "100",
+   "query": "http://localhost:8983/solr/papers_100/select?defType=edismax&q=galaxy+AND+%28cluster+OR+merger%29+AND+NOT+simulation&qf=title%5E3+abstract&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&wt=json",
+   "result_count": 8918,
+   "qtime_ms": {
+    "median": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "runs": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "client_ms": {
+    "median": 2.951,
+    "min": 2.768,
+    "max": 3.056,
+    "runs": [
+     2.951,
+     2.904,
+     2.768,
+     3.056,
+     3.049
+    ]
+   },
+   "timestamp": "2026-11-21T19:09:11",
+   "query_key": "Q3",
+   "mode": "top10",
+   "method": "Solr+cache"
+  }
+ ]
+}

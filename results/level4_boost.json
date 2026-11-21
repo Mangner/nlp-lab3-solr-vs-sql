@@ -1,0 +1,1167 @@
+{
+ "size": "100",
+ "timestamp": "2026-11-21T19:13:13",
+ "queries": {
+  "Q1": {
+   "title": "słowo w dowolnej formie: simulate (simulated, simulates, simulating, simulation…)",
+   "pg_before": [
+    {
+     "id": "2306.00223",
+     "title": "Customized Co-Simulation Environment for Autonomous Driving Algorithm Development and Evaluation",
+     "year": 2023,
+     "primary_category": "cs.RO",
+     "score": 9.0
+    },
+    {
+     "id": "1712.07612",
+     "title": "Advanced EMT and Phasor-Domain Hybrid Simulation with Simulation Mode Switching Capability for Transmission and Distribution Systems",
+     "year": 2017,
+     "primary_category": "eess.SY",
+     "score": 8.4
+    },
+    {
+     "id": "2503.08936",
+     "title": "Simulator Ensembles for Trustworthy Autonomous Driving Systems Testing",
+     "year": 2025,
+     "primary_category": "cs.SE",
+     "score": 8.2
+    },
+    {
+     "id": "1712.02806",
+     "title": "From estimation of quantum probabilities to simulation of quantum circuits",
+     "year": 2017,
+     "primary_category": "quant-ph",
+     "score": 7.4
+    },
+    {
+     "id": "2204.00763",
+     "title": "Metaphorical User Simulators for Evaluating Task-oriented Dialogue Systems",
+     "year": 2022,
+     "primary_category": "cs.CL",
+     "score": 7.0
+    },
+    {
+     "id": "2211.05892",
+     "title": "The electron cyclotron drift instability: a comparison of particle-in-cell and continuum Vlasov simulations",
+     "year": 2022,
+     "primary_category": "physics.plasm-ph",
+     "score": 7.0
+    },
+    {
+     "id": "2410.00185",
+     "title": "The Patterns of Life Human Mobility Simulation",
+     "year": 2024,
+     "primary_category": "cs.MA",
+     "score": 7.0
+    },
+    {
+     "id": "2404.19356",
+     "title": "A Concept for Semi-Automatic Configuration of Sufficiently Valid Simulation Setups for Automated Driving Systems",
+     "year": 2024,
+     "primary_category": "eess.SY",
+     "score": 6.6
+    },
+    {
+     "id": "2605.09808",
+     "title": "Quantifying the Utility of User Simulators for Building Collaborative LLM Assistants",
+     "year": 2026,
+     "primary_category": "cs.CL",
+     "score": 6.6
+    },
+    {
+     "id": "1205.2523",
+     "title": "Simulated Tempering and Magnetizing: An Application of Two-Dimensional Simulated Tempering to Two-Dimensional Ising Model and Its Crossover",
+     "year": 2012,
+     "primary_category": "cond-mat.stat-mech",
+     "score": 6.4
+    }
+   ],
+   "pg_after": [
+    {
+     "id": "2503.08936",
+     "title": "Simulator Ensembles for Trustworthy Autonomous Driving Systems Testing",
+     "year": 2025,
+     "primary_category": "cs.SE",
+     "score": 8.199999809265137
+    },
+    {
+     "id": "2306.00223",
+     "title": "Customized Co-Simulation Environment for Autonomous Driving Algorithm Development and Evaluation",
+     "year": 2023,
+     "primary_category": "cs.RO",
+     "score": 7.669294100695902
+    },
+    {
+     "id": "2605.09808",
+     "title": "Quantifying the Utility of User Simulators for Building Collaborative LLM Assistants",
+     "year": 2026,
+     "primary_category": "cs.CL",
+     "score": 7.149694543344421
+    },
+    {
+     "id": "2605.16897",
+     "title": "Escape from Callback Hell! A New Programming Paradigm for Network Simulation",
+     "year": 2026,
+     "primary_category": "cs.NI",
+     "score": 6.7163801295156595
+    },
+    {
+     "id": "2601.05229",
+     "title": "Mitigating Simulator Dependence in AI Parameter Inference for the Epoch of Reionization: The Importance of Simulation Diversity",
+     "year": 2026,
+     "primary_category": "astro-ph.CO",
+     "score": 6.499722406049752
+    },
+    {
+     "id": "2608.12253",
+     "title": "One Frozen Simulator Is Not Enough: Simulator Collapse in Multi-Agent RL",
+     "year": 2026,
+     "primary_category": "cs.CL",
+     "score": 6.499722406049752
+    },
+    {
+     "id": "2410.00185",
+     "title": "The Patterns of Life Human Mobility Simulation",
+     "year": 2024,
+     "primary_category": "cs.MA",
+     "score": 6.46181442470645
+    },
+    {
+     "id": "2610.15873",
+     "title": "Integration, Enhancements and Evaluation of Memory Simulators",
+     "year": 2026,
+     "primary_category": "cs.AR",
+     "score": 6.283065199135371
+    },
+    {
+     "id": "2502.14691",
+     "title": "Parallelizing a modern GPU simulator",
+     "year": 2025,
+     "primary_category": "cs.DC",
+     "score": 6.200000286102295
+    },
+    {
+     "id": "2506.10869",
+     "title": "MultiCoSim: A Python-based Multi-Fidelity Co-Simulation Framework",
+     "year": 2025,
+     "primary_category": "cs.SE",
+     "score": 6.200000286102295
+    }
+   ],
+   "solr_before": [
+    {
+     "id": "2308.07176",
+     "title": "Perfect simulation from unbiased simulation",
+     "primary_category": "stat.CO",
+     "archive": "stat",
+     "year": 2023,
+     "score": 8.9354
+    },
+    {
+     "id": "2506.06958",
+     "title": "Simulating Society Requires Simulating Thought",
+     "primary_category": "cs.CY",
+     "archive": "cs",
+     "year": 2025,
+     "score": 8.9354
+    },
+    {
+     "id": "2106.07901",
+     "title": "FIGARO Simulation: FIlaments & GAlactic RadiO Simulation",
+     "primary_category": "astro-ph.CO",
+     "archive": "astro-ph",
+     "year": 2021,
+     "score": 8.610136
+    },
+    {
+     "id": "2210.14324",
+     "title": "The Championship Simulator: Architectural Simulation for Education and Competition",
+     "primary_category": "cs.AR",
+     "archive": "cs",
+     "year": 2022,
+     "score": 8.610136
+    },
+    {
+     "id": "cond-mat/9402049",
+     "title": "Simulated-tempering approach to spin-glass simulations",
+     "primary_category": "cond-mat",
+     "archive": "cond-mat",
+     "year": 1994,
+     "score": 8.610136
+    },
+    {
+     "id": "quant-ph/0403082",
+     "title": "Gate simulation and lower bounds on the simulation time",
+     "primary_category": "quant-ph",
+     "archive": "quant-ph",
+     "year": 2004,
+     "score": 8.610136
+    },
+    {
+     "id": "2308.07842",
+     "title": "How to Simulate Realistic Survival Data? A Simulation Study to Compare Realistic Simulation Models",
+     "primary_category": "stat.AP",
+     "archive": "stat",
+     "year": 2023,
+     "score": 8.486626
+    },
+    {
+     "id": "0708.1051",
+     "title": "Deconvolution by simulation",
+     "primary_category": "stat.CO",
+     "archive": "stat",
+     "year": 2007,
+     "score": 8.366318
+    },
+    {
+     "id": "1002.2281",
+     "title": "Regulation Simulation",
+     "primary_category": "q-fin.GN",
+     "archive": "q-fin",
+     "year": 2010,
+     "score": 8.366318
+    },
+    {
+     "id": "1110.1274",
+     "title": "Simulations of the Hyades",
+     "primary_category": "astro-ph.GA",
+     "archive": "astro-ph",
+     "year": 2011,
+     "score": 8.366318
+    }
+   ],
+   "solr_after": [
+    {
+     "id": "2506.06958",
+     "title": "Simulating Society Requires Simulating Thought",
+     "primary_category": "cs.CY",
+     "archive": "cs",
+     "year": 2025,
+     "score": 8.9354
+    },
+    {
+     "id": "2609.07573",
+     "title": "From Simulated Citizens to Simulated Deliberation: Challenges in Representation and Interaction",
+     "primary_category": "cs.AI",
+     "archive": "cs",
+     "year": 2026,
+     "score": 8.694275
+    },
+    {
+     "id": "2601.02043",
+     "title": "Simulated Reasoning is Reasoning",
+     "primary_category": "cs.AI",
+     "archive": "cs",
+     "year": 2026,
+     "score": 8.46434
+    },
+    {
+     "id": "2605.11519",
+     "title": "Controllable User Simulation",
+     "primary_category": "cs.AI",
+     "archive": "cs",
+     "year": 2026,
+     "score": 8.46434
+    },
+    {
+     "id": "2610.31593",
+     "title": "Simulated Control Evals",
+     "primary_category": "cs.AI",
+     "archive": "cs",
+     "year": 2026,
+     "score": 8.46434
+    },
+    {
+     "id": "2608.12253",
+     "title": "One Frozen Simulator Is Not Enough: Simulator Collapse in Multi-Agent RL",
+     "primary_category": "cs.CL",
+     "archive": "cs",
+     "year": 2026,
+     "score": 8.408947
+    },
+    {
+     "id": "2608.04145",
+     "title": "Simulation-Based Imaging: Learning Acoustic Inverse Problems from Simulated Data",
+     "primary_category": "cs.CE",
+     "archive": "cs",
+     "year": 2026,
+     "score": 8.141752
+    },
+    {
+     "id": "2511.22516",
+     "title": "Accurate simulations of magnetic excitations in the neutron simulation package McStas",
+     "primary_category": "physics.ins-det",
+     "archive": "physics",
+     "year": 2025,
+     "score": 8.025827
+    },
+    {
+     "id": "2601.04436",
+     "title": "Learning to Simulate Human Dialogue",
+     "primary_category": "cs.CL",
+     "archive": "cs",
+     "year": 2026,
+     "score": 7.939773
+    },
+    {
+     "id": "2601.10947",
+     "title": "Faithful Simulation of Broadcast Measurements",
+     "primary_category": "quant-ph",
+     "archive": "quant-ph",
+     "year": 2026,
+     "score": 7.939773
+    }
+   ],
+   "pg_sql_boosted": "SELECT id, title, year, primary_category, ts_rank_cd(tsv, s.q) * exp(0.08 * (year - 2025)) AS rank FROM papers_100, (SELECT plainto_tsquery('english', 'simulate') AS q) s WHERE tsv @@ s.q ORDER BY rank DESC, id ASC LIMIT 10",
+   "solr_url_boosted": "http://localhost:8983/solr/papers_100/select?defType=edismax&q=simulate&qf=title%5E3+abstract&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&boost=exp%28mul%280.08%2Csub%28year%2C2025%29%29%29&wt=json",
+   "year_stats": {
+    "pg_before": {
+     "top10_mean_year": 2021.2,
+     "top10_median_year": 2022.5,
+     "top100_mean_year": 2021.15,
+     "top10_hist_5y": {
+      "2010": 1,
+      "2015": 2,
+      "2020": 5,
+      "2025": 2
+     },
+     "top100_hist_5y": {
+      "2000": 2,
+      "2010": 7,
+      "2015": 16,
+      "2020": 55,
+      "2025": 20
+     }
+    },
+    "pg_after": {
+     "top10_mean_year": 2025.2,
+     "top10_median_year": 2025.5,
+     "top100_mean_year": 2024.63,
+     "top10_hist_5y": {
+      "2020": 2,
+      "2025": 8
+     },
+     "top100_hist_5y": {
+      "2015": 1,
+      "2020": 41,
+      "2025": 58
+     }
+    },
+    "solr_before": {
+     "top10_mean_year": 2014.0,
+     "top10_median_year": 2016.0,
+     "top100_mean_year": 2015.65,
+     "top10_hist_5y": {
+      "1990": 1,
+      "2000": 1,
+      "2005": 1,
+      "2010": 2,
+      "2020": 4,
+      "2025": 1
+     },
+     "top100_hist_5y": {
+      "1990": 2,
+      "1995": 4,
+      "2000": 6,
+      "2005": 13,
+      "2010": 11,
+      "2015": 17,
+      "2020": 37,
+      "2025": 10
+     }
+    },
+    "solr_after": {
+     "top10_mean_year": 2025.8,
+     "top10_median_year": 2026.0,
+     "top100_mean_year": 2025.46,
+     "top10_hist_5y": {
+      "2025": 10
+     },
+     "top100_hist_5y": {
+      "2020": 12,
+      "2025": 88
+     }
+    }
+   },
+   "overlap_top10_after": 1,
+   "overlap_top10_pg_before_after": 4,
+   "overlap_top10_solr_before_after": 1
+  },
+  "Q2": {
+   "title": "fraza \"dark matter\" (słowa obok siebie, w tej kolejności)",
+   "pg_before": [
+    {
+     "id": "2604.03907",
+     "title": "Intracluster Light as a Probe for Dark Matter: Exploring Self-interacting Dark Matter and Cold Dark Matter with C-EAGLE Sims",
+     "year": 2026,
+     "primary_category": "astro-ph.CO",
+     "score": 7.8
+    },
+    {
+     "id": "1201.2400",
+     "title": "On the capture of dark matter by neutron stars",
+     "year": 2012,
+     "primary_category": "hep-ph",
+     "score": 7.4
+    },
+    {
+     "id": "2210.06498",
+     "title": "The local dark matter distribution in self-interacting dark matter halos",
+     "year": 2022,
+     "primary_category": "astro-ph.CO",
+     "score": 6.8
+    },
+    {
+     "id": "2010.02219",
+     "title": "Dark-matter-deficient dwarf galaxies form via tidal stripping of dark matter in interactions with massive companions",
+     "year": 2020,
+     "primary_category": "astro-ph.GA",
+     "score": 6.4
+    },
+    {
+     "id": "2205.12950",
+     "title": "Searches for Connections between Dark Matter and High-Energy Neutrinos with IceCube",
+     "year": 2022,
+     "primary_category": "hep-ex",
+     "score": 6.2000003
+    },
+    {
+     "id": "2404.02646",
+     "title": "Ultralight scalar dark matter versus nonadiabatic perfect fluid dark matter in pulsar timing",
+     "year": 2024,
+     "primary_category": "gr-qc",
+     "score": 6.0
+    },
+    {
+     "id": "2411.10149",
+     "title": "Directional Direct Detection of MeV Scale Boosted Dark Matter in Two Component Dark Matter Scenario via Dark Photon Interaction",
+     "year": 2024,
+     "primary_category": "hep-ph",
+     "score": 6.0
+    },
+    {
+     "id": "1101.4936",
+     "title": "Asymmetric Dark Matter from Leptogenesis",
+     "year": 2011,
+     "primary_category": "hep-ph",
+     "score": 5.8
+    },
+    {
+     "id": "1510.06275",
+     "title": "Testing the Bose-Einstein Condensate dark matter model at galactic cluster scale",
+     "year": 2015,
+     "primary_category": "gr-qc",
+     "score": 5.8
+    },
+    {
+     "id": "1912.08468",
+     "title": "DUNE potential for sub-GeV dark matter in proton beam dump mode",
+     "year": 2019,
+     "primary_category": "hep-ph",
+     "score": 5.8
+    }
+   ],
+   "pg_after": [
+    {
+     "id": "2604.03907",
+     "title": "Intracluster Light as a Probe for Dark Matter: Exploring Self-interacting Dark Matter and Cold Dark Matter with C-EAGLE Sims",
+     "year": 2026,
+     "primary_category": "astro-ph.CO",
+     "score": 8.449639334485289
+    },
+    {
+     "id": "2602.07902",
+     "title": "Dark Matter as Screened Ordinary Matter",
+     "year": 2026,
+     "primary_category": "hep-ph",
+     "score": 6.283065199135371
+    },
+    {
+     "id": "2609.32086",
+     "title": "Galaxy and Halo Assembly Bias in Alternative Dark Matter Models",
+     "year": 2026,
+     "primary_category": "astro-ph.CO",
+     "score": 5.849750268755082
+    },
+    {
+     "id": "2602.15940",
+     "title": "The large cores of dark matter and globular clusters in AS1063. Possible evidence of self-interacting dark matter. Or not",
+     "year": 2026,
+     "primary_category": "astro-ph.GA",
+     "score": 5.633092545289174
+    },
+    {
+     "id": "2404.02646",
+     "title": "Ultralight scalar dark matter versus nonadiabatic perfect fluid dark matter in pulsar timing",
+     "year": 2024,
+     "primary_category": "gr-qc",
+     "score": 5.538698078319815
+    },
+    {
+     "id": "2411.10149",
+     "title": "Directional Direct Detection of MeV Scale Boosted Dark Matter in Two Component Dark Matter Scenario via Dark Photon Interaction",
+     "year": 2024,
+     "primary_category": "hep-ph",
+     "score": 5.538698078319815
+    },
+    {
+     "id": "2407.14827",
+     "title": "How does the velocity anisotropy of halo stars, dark matter and satellite galaxies depend on host halo properties?",
+     "year": 2024,
+     "primary_category": "astro-ph.GA",
+     "score": 5.354074985112957
+    },
+    {
+     "id": "2210.06498",
+     "title": "The local dark matter distribution in self-interacting dark matter halos",
+     "year": 2022,
+     "primary_category": "astro-ph.CO",
+     "score": 5.3490696052899205
+    },
+    {
+     "id": "2605.18205",
+     "title": "Kerr-like black holes shadow surrounded by dark matter halos: Comparison between various dark matter profiles",
+     "year": 2026,
+     "primary_category": "gr-qc",
+     "score": 5.199778131460413
+    },
+    {
+     "id": "2501.17362",
+     "title": "Dark Matter Substructure: A Lensing Perspective",
+     "year": 2025,
+     "primary_category": "astro-ph.GA",
+     "score": 5.0
+    }
+   ],
+   "solr_before": [
+    {
+     "id": "1110.5718",
+     "title": "The dark-matter world: Are there dark-matter galaxies?",
+     "primary_category": "hep-ph",
+     "archive": "hep-ph",
+     "year": 2011,
+     "score": 18.354088
+    },
+    {
+     "id": "1109.5580",
+     "title": "Dark matter",
+     "primary_category": "astro-ph.CO",
+     "archive": "astro-ph",
+     "year": 2011,
+     "score": 17.834343
+    },
+    {
+     "id": "2410.10424",
+     "title": "Dark Matter",
+     "primary_category": "gr-qc",
+     "archive": "gr-qc",
+     "year": 2024,
+     "score": 17.834343
+    },
+    {
+     "id": "physics/9908015",
+     "title": "Dark Matter",
+     "primary_category": "physics.gen-ph",
+     "archive": "physics",
+     "year": 1999,
+     "score": 17.834343
+    },
+    {
+     "id": "2608.25954",
+     "title": "Dark Matters of Principle: Principles in the Dark Matter Paradigm",
+     "primary_category": "physics.hist-ph",
+     "archive": "physics",
+     "year": 2026,
+     "score": 17.709433
+    },
+    {
+     "id": "hep-ph/9406376",
+     "title": "Sensitivity Of Dark Matter Dectectors To Susy Dark Matter",
+     "primary_category": "hep-ph",
+     "archive": "hep-ph",
+     "year": 1994,
+     "score": 17.709433
+    },
+    {
+     "id": "2412.16283",
+     "title": "Dark Matter-Electron Detectors for Dark Matter-Nucleon Interactions",
+     "primary_category": "hep-ph",
+     "archive": "hep-ph",
+     "year": 2024,
+     "score": 17.108524
+    },
+    {
+     "id": "2502.12030",
+     "title": "Fuzzy dark matter fails to explain the dark matter cores",
+     "primary_category": "astro-ph.CO",
+     "archive": "astro-ph",
+     "year": 2025,
+     "score": 17.108524
+    },
+    {
+     "id": "0810.0713",
+     "title": "A Theory of Dark Matter",
+     "primary_category": "hep-ph",
+     "archive": "hep-ph",
+     "year": 2008,
+     "score": 16.656063
+    },
+    {
+     "id": "0907.1912",
+     "title": "Dark Matter Astrophysics",
+     "primary_category": "astro-ph.CO",
+     "archive": "astro-ph",
+     "year": 2009,
+     "score": 16.656063
+    }
+   ],
+   "solr_after": [
+    {
+     "id": "2608.25954",
+     "title": "Dark Matters of Principle: Principles in the Dark Matter Paradigm",
+     "primary_category": "physics.hist-ph",
+     "archive": "physics",
+     "year": 2026,
+     "score": 19.184399
+    },
+    {
+     "id": "2602.13393",
+     "title": "Holographic Dark Matter",
+     "primary_category": "hep-th",
+     "archive": "hep-th",
+     "year": 2026,
+     "score": 18.043297
+    },
+    {
+     "id": "2606.19837",
+     "title": "Is dark matter decaying ?",
+     "primary_category": "astro-ph.CO",
+     "archive": "astro-ph",
+     "year": 2026,
+     "score": 18.043297
+    },
+    {
+     "id": "2604.03907",
+     "title": "Intracluster Light as a Probe for Dark Matter: Exploring Self-interacting Dark Matter and Cold Dark Matter with C-EAGLE Sims",
+     "primary_category": "astro-ph.CO",
+     "archive": "astro-ph",
+     "year": 2026,
+     "score": 17.504068
+    },
+    {
+     "id": "2608.04362",
+     "title": "Cold Dark Matter and Self-Interacting Dark Matter Interpretations of Cloud-9",
+     "primary_category": "astro-ph.GA",
+     "archive": "astro-ph",
+     "year": 2026,
+     "score": 17.355642
+    },
+    {
+     "id": "2502.12030",
+     "title": "Fuzzy dark matter fails to explain the dark matter cores",
+     "primary_category": "astro-ph.CO",
+     "archive": "astro-ph",
+     "year": 2025,
+     "score": 17.108524
+    },
+    {
+     "id": "2602.08338",
+     "title": "Dark Matter from Eternity",
+     "primary_category": "astro-ph.CO",
+     "archive": "astro-ph",
+     "year": 2026,
+     "score": 16.925087
+    },
+    {
+     "id": "2608.04763",
+     "title": "Is Dark Matter Really Matter?",
+     "primary_category": "astro-ph.CO",
+     "archive": "astro-ph",
+     "year": 2026,
+     "score": 16.925087
+    },
+    {
+     "id": "2608.20745",
+     "title": "Qubits for Dark Matter Hunting",
+     "primary_category": "hep-ph",
+     "archive": "hep-ph",
+     "year": 2026,
+     "score": 16.925087
+    },
+    {
+     "id": "2609.10671",
+     "title": "Ultralight Axial Dark Matter",
+     "primary_category": "hep-ph",
+     "archive": "hep-ph",
+     "year": 2026,
+     "score": 16.925087
+    }
+   ],
+   "pg_sql_boosted": "SELECT id, title, year, primary_category, ts_rank_cd(tsv, s.q) * exp(0.08 * (year - 2025)) AS rank FROM papers_100, (SELECT phraseto_tsquery('english', 'dark matter') AS q) s WHERE tsv @@ s.q ORDER BY rank DESC, id ASC LIMIT 10",
+   "solr_url_boosted": "http://localhost:8983/solr/papers_100/select?defType=edismax&q=%22dark+matter%22&qf=title%5E3+abstract&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&pf=title%5E3+abstract&boost=exp%28mul%280.08%2Csub%28year%2C2025%29%29%29&wt=json",
+   "year_stats": {
+    "pg_before": {
+     "top10_mean_year": 2019.5,
+     "top10_median_year": 2021.0,
+     "top100_mean_year": 2017.78,
+     "top10_hist_5y": {
+      "2010": 2,
+      "2015": 2,
+      "2020": 5,
+      "2025": 1
+     },
+     "top100_hist_5y": {
+      "2000": 3,
+      "2005": 4,
+      "2010": 25,
+      "2015": 23,
+      "2020": 34,
+      "2025": 11
+     }
+    },
+    "pg_after": {
+     "top10_mean_year": 2024.9,
+     "top10_median_year": 2025.5,
+     "top100_mean_year": 2024.53,
+     "top10_hist_5y": {
+      "2020": 4,
+      "2025": 6
+     },
+     "top100_hist_5y": {
+      "2015": 1,
+      "2020": 44,
+      "2025": 55
+     }
+    },
+    "solr_before": {
+     "top10_mean_year": 2013.1,
+     "top10_median_year": 2011.0,
+     "top100_mean_year": 2011.92,
+     "top10_hist_5y": {
+      "1990": 1,
+      "1995": 1,
+      "2005": 2,
+      "2010": 2,
+      "2020": 2,
+      "2025": 2
+     },
+     "top100_hist_5y": {
+      "1990": 1,
+      "1995": 8,
+      "2000": 8,
+      "2005": 29,
+      "2010": 14,
+      "2015": 21,
+      "2020": 12,
+      "2025": 7
+     }
+    },
+    "solr_after": {
+     "top10_mean_year": 2025.9,
+     "top10_median_year": 2026.0,
+     "top100_mean_year": 2025.57,
+     "top10_hist_5y": {
+      "2025": 10
+     },
+     "top100_hist_5y": {
+      "2020": 10,
+      "2025": 90
+     }
+    }
+   },
+   "overlap_top10_after": 1,
+   "overlap_top10_pg_before_after": 4,
+   "overlap_top10_solr_before_after": 2
+  },
+  "Q3": {
+   "title": "galaxy AND (cluster OR merger) AND NOT simulation",
+   "pg_before": [
+    {
+     "id": "1811.04958",
+     "title": "Detection of a Star Forming Galaxy in the Center of a Low-Mass Galaxy Cluster",
+     "year": 2018,
+     "primary_category": "astro-ph.GA",
+     "score": 5.162264
+    },
+    {
+     "id": "2404.06539",
+     "title": "First Search for High-Energy Neutrino Emission from Galaxy Mergers",
+     "year": 2024,
+     "primary_category": "astro-ph.HE",
+     "score": 4.7558765
+    },
+    {
+     "id": "1606.02362",
+     "title": "Recent galaxy mergers and residual star formation of red sequence galaxies in galaxy clusters",
+     "year": 2016,
+     "primary_category": "astro-ph.GA",
+     "score": 4.638145
+    },
+    {
+     "id": "1609.08339",
+     "title": "Tracing low-mass galaxy clusters with radio relics: the discovery of Abell 3527-bis",
+     "year": 2016,
+     "primary_category": "astro-ph.CO",
+     "score": 4.481758
+    },
+    {
+     "id": "0712.1819",
+     "title": "The Angular Clustering of Distant Galaxy Clusters",
+     "year": 2007,
+     "primary_category": "astro-ph",
+     "score": 4.4684286
+    },
+    {
+     "id": "1708.02449",
+     "title": "The extended ROSAT-ESO Flux-Limited X-ray Galaxy Cluster Survey (REFLEX II) VII The Mass Function of Galaxy Clusters",
+     "year": 2017,
+     "primary_category": "astro-ph.CO",
+     "score": 4.307957
+    },
+    {
+     "id": "2609.19509",
+     "title": "The extreme Disturbed Galaxy Cluster Sample (eDGeS): Spectroscopy and Dynamical Analysis of the eROSITA-Selected Merging Galaxy Cluster Candidate 1eRASS J025859.4-193727",
+     "year": 2026,
+     "primary_category": "astro-ph.GA",
+     "score": 4.1188974
+    },
+    {
+     "id": "astro-ph/0503089",
+     "title": "Velocity Dispersion of 335 Galaxy Clusters Selected from the Sloan Digital Sky Survey: Statistical Evidence for Dynamical Interaction, and Against Ram-Pressure Stripping",
+     "year": 2005,
+     "primary_category": "astro-ph",
+     "score": 3.9014416
+    },
+    {
+     "id": "2603.06821",
+     "title": "Caught in the web: galaxy mergers along cosmic filaments",
+     "year": 2026,
+     "primary_category": "astro-ph.GA",
+     "score": 3.8966122
+    },
+    {
+     "id": "1104.3530",
+     "title": "Dark matter searches with Cherenkov telescopes: nearby dwarf galaxies or local galaxy clusters?",
+     "year": 2011,
+     "primary_category": "astro-ph.HE",
+     "score": 3.749888
+    }
+   ],
+   "pg_after": [
+    {
+     "id": "2609.19509",
+     "title": "The extreme Disturbed Galaxy Cluster Sample (eDGeS): Spectroscopy and Dynamical Analysis of the eROSITA-Selected Merging Galaxy Cluster Candidate 1eRASS J025859.4-193727",
+     "year": 2026,
+     "primary_category": "astro-ph.GA",
+     "score": 4.461948327718344
+    },
+    {
+     "id": "2404.06539",
+     "title": "First Search for High-Energy Neutrino Emission from Galaxy Mergers",
+     "year": 2024,
+     "primary_category": "astro-ph.HE",
+     "score": 4.39022737652094
+    },
+    {
+     "id": "2603.06821",
+     "title": "Caught in the web: galaxy mergers along cosmic filaments",
+     "year": 2026,
+     "primary_category": "astro-ph.GA",
+     "score": 4.221149568644244
+    },
+    {
+     "id": "2605.20352",
+     "title": "On the correlation between globular clusters and the distribution of dark matter in galaxy clusters: the case of Abell 2744",
+     "year": 2026,
+     "primary_category": "astro-ph.GA",
+     "score": 4.061448107909655
+    },
+    {
+     "id": "2602.07114",
+     "title": "AMICO galaxy clusters in KiDS-1000: Splashback radius from weak lensing and cluster-galaxy correlation function",
+     "year": 2026,
+     "primary_category": "astro-ph.CO",
+     "score": 3.6829643472791487
+    },
+    {
+     "id": "2610.11045",
+     "title": "Galaxy Clustering Can Reveal Host-Galaxy Properties of Binary Black Hole Mergers",
+     "year": 2026,
+     "primary_category": "astro-ph.CO",
+     "score": 3.485433235474358
+    },
+    {
+     "id": "2504.13337",
+     "title": "The effect of dynamical states on galaxy clusters populations. II. Comparison of galaxy properties and fundamental relations",
+     "year": 2025,
+     "primary_category": "astro-ph.GA",
+     "score": 3.3109965324401855
+    },
+    {
+     "id": "2403.18608",
+     "title": "Optical Identification of Galaxy Clusters among SRG/eROSITA X-ray Sources Based on Photometric Redshift Estimates for Galaxies",
+     "year": 2024,
+     "primary_category": "astro-ph.GA",
+     "score": 3.274200960163127
+    },
+    {
+     "id": "2604.27888",
+     "title": "A New Perspective on Galactic Evolution: Studying the Outskirts of the Abell S1063 Galaxy Cluster",
+     "year": 2026,
+     "primary_category": "astro-ph.GA",
+     "score": 3.1031156294114344
+    },
+    {
+     "id": "2511.09858",
+     "title": "Galaxy clusters from the DESI Legacy Imaging Surveys -- III. Star-forming fraction of brightest cluster galaxies",
+     "year": 2025,
+     "primary_category": "astro-ph.GA",
+     "score": 3.0182087421417236
+    }
+   ],
+   "solr_before": [
+    {
+     "id": "astro-ph/0305512",
+     "title": "Interactions and Mergers of Cluster Galaxies",
+     "primary_category": "astro-ph",
+     "archive": "astro-ph",
+     "year": 2003,
+     "score": 25.607769
+    },
+    {
+     "id": "astro-ph/0612185",
+     "title": "Radio Observations of Galaxy Clusters: Connection to Cluster Mergers",
+     "primary_category": "astro-ph",
+     "archive": "astro-ph",
+     "year": 2006,
+     "score": 23.72799
+    },
+    {
+     "id": "astro-ph/0105458",
+     "title": "Merger Shocks and Nonthermal Processes in Clusters of Galaxies",
+     "primary_category": "astro-ph",
+     "archive": "astro-ph",
+     "year": 2001,
+     "score": 22.78378
+    },
+    {
+     "id": "astro-ph/0406181",
+     "title": "Mergers and Non-Thermal Processes in Clusters of Galaxies",
+     "primary_category": "astro-ph",
+     "archive": "astro-ph",
+     "year": 2004,
+     "score": 22.78378
+    },
+    {
+     "id": "astro-ph/9909243",
+     "title": "Reconstructing the Merger History of the A3266 Galaxy Cluster",
+     "primary_category": "astro-ph",
+     "archive": "astro-ph",
+     "year": 1999,
+     "score": 22.78378
+    },
+    {
+     "id": "astro-ph/9609095",
+     "title": "Mergers of Globular Clusters",
+     "primary_category": "astro-ph",
+     "archive": "astro-ph",
+     "year": 1996,
+     "score": 21.604225
+    },
+    {
+     "id": "1408.0666",
+     "title": "Abell 2384: the galaxy population of a cluster post-merger",
+     "primary_category": "astro-ph.GA",
+     "archive": "astro-ph",
+     "year": 2014,
+     "score": 21.59315
+    },
+    {
+     "id": "1806.05186",
+     "title": "KYDISC: Galaxy Morphology, Quenching, and Mergers in the Cluster Environment",
+     "primary_category": "astro-ph.GA",
+     "archive": "astro-ph",
+     "year": 2018,
+     "score": 21.59315
+    },
+    {
+     "id": "2407.18075",
+     "title": "Merger Shocks Enhance Quenching in Local Galaxy Clusters",
+     "primary_category": "astro-ph.GA",
+     "archive": "astro-ph",
+     "year": 2024,
+     "score": 21.59315
+    },
+    {
+     "id": "astro-ph/0312454",
+     "title": "The Off-Axis Galaxy Cluster Merger Abell 115",
+     "primary_category": "astro-ph",
+     "archive": "astro-ph",
+     "year": 2003,
+     "score": 21.59315
+    }
+   ],
+   "solr_after": [
+    {
+     "id": "2610.11045",
+     "title": "Galaxy Clustering Can Reveal Host-Galaxy Properties of Binary Black Hole Mergers",
+     "primary_category": "astro-ph.CO",
+     "archive": "astro-ph",
+     "year": 2026,
+     "score": 21.659128
+    },
+    {
+     "id": "2407.18075",
+     "title": "Merger Shocks Enhance Quenching in Local Galaxy Clusters",
+     "primary_category": "astro-ph.GA",
+     "archive": "astro-ph",
+     "year": 2024,
+     "score": 19.93299
+    },
+    {
+     "id": "2603.06821",
+     "title": "Caught in the web: galaxy mergers along cosmic filaments",
+     "primary_category": "astro-ph.GA",
+     "archive": "astro-ph",
+     "year": 2026,
+     "score": 19.58386
+    },
+    {
+     "id": "2603.10849",
+     "title": "Spectroscopic galaxy redshifts in the Peanut cluster -- a massive nearly head-on cluster merger shortly after pericenter passage",
+     "primary_category": "astro-ph.GA",
+     "archive": "astro-ph",
+     "year": 2026,
+     "score": 19.456411
+    },
+    {
+     "id": "2608.18621",
+     "title": "Hector Galaxy Survey: Falling in Between - Infalling Galaxies in the Midst of the Abell 3667 Merger",
+     "primary_category": "astro-ph.GA",
+     "archive": "astro-ph",
+     "year": 2026,
+     "score": 18.60297
+    },
+    {
+     "id": "2403.11615",
+     "title": "Effects of galaxy environment on merger fraction",
+     "primary_category": "astro-ph.GA",
+     "archive": "astro-ph",
+     "year": 2024,
+     "score": 18.17839
+    },
+    {
+     "id": "2502.00584",
+     "title": "Unions with UNIONS: Using galaxy-galaxy lensing to probe galaxy mergers",
+     "primary_category": "astro-ph.GA",
+     "archive": "astro-ph",
+     "year": 2025,
+     "score": 17.193615
+    },
+    {
+     "id": "2602.19227",
+     "title": "Feedback shaped the galaxy morphological sequence in presence of mergers",
+     "primary_category": "astro-ph.GA",
+     "archive": "astro-ph",
+     "year": 2026,
+     "score": 16.673233
+    },
+    {
+     "id": "2603.05596",
+     "title": "X-SORTER (X-ray Survey Of meRging clusTErs in Redmapper): X-ray and Spectroscopic Characterization of 12 Optically Selected Galaxy Cluster Merger Candidates",
+     "primary_category": "astro-ph.CO",
+     "archive": "astro-ph",
+     "year": 2026,
+     "score": 16.600485
+    },
+    {
+     "id": "2609.19509",
+     "title": "The extreme Disturbed Galaxy Cluster Sample (eDGeS): Spectroscopy and Dynamical Analysis of the eROSITA-Selected Merging Galaxy Cluster Candidate 1eRASS J025859.4-193727",
+     "primary_category": "astro-ph.GA",
+     "archive": "astro-ph",
+     "year": 2026,
+     "score": 15.867996
+    }
+   ],
+   "pg_sql_boosted": "SELECT id, title, year, primary_category, ts_rank_cd(tsv, s.q) * exp(0.08 * (year - 2025)) AS rank FROM papers_100, (SELECT to_tsquery('english', 'galaxy & (cluster | merger) & !simulation') AS q) s WHERE tsv @@ s.q ORDER BY rank DESC, id ASC LIMIT 10",
+   "solr_url_boosted": "http://localhost:8983/solr/papers_100/select?defType=edismax&q=galaxy+AND+%28cluster+OR+merger%29+AND+NOT+simulation&qf=title%5E3+abstract&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&rows=10&sort=score+desc%2C+id+asc&boost=exp%28mul%280.08%2Csub%28year%2C2025%29%29%29&wt=json",
+   "year_stats": {
+    "pg_before": {
+     "top10_mean_year": 2016.6,
+     "top10_median_year": 2016.5,
+     "top100_mean_year": 2016.51,
+     "top10_hist_5y": {
+      "2005": 2,
+      "2010": 1,
+      "2015": 4,
+      "2020": 1,
+      "2025": 2
+     },
+     "top100_hist_5y": {
+      "1995": 4,
+      "2000": 3,
+      "2005": 10,
+      "2010": 19,
+      "2015": 24,
+      "2020": 28,
+      "2025": 12
+     }
+    },
+    "pg_after": {
+     "top10_mean_year": 2025.4,
+     "top10_median_year": 2026.0,
+     "top100_mean_year": 2023.71,
+     "top10_hist_5y": {
+      "2020": 2,
+      "2025": 8
+     },
+     "top100_hist_5y": {
+      "2015": 7,
+      "2020": 46,
+      "2025": 47
+     }
+    },
+    "solr_before": {
+     "top10_mean_year": 2006.8,
+     "top10_median_year": 2003.5,
+     "top100_mean_year": 2009.23,
+     "top10_hist_5y": {
+      "1995": 2,
+      "2000": 4,
+      "2005": 1,
+      "2010": 1,
+      "2015": 1,
+      "2020": 1
+     },
+     "top100_hist_5y": {
+      "1990": 3,
+      "1995": 13,
+      "2000": 23,
+      "2005": 13,
+      "2010": 19,
+      "2015": 11,
+      "2020": 13,
+      "2025": 5
+     }
+    },
+    "solr_after": {
+     "top10_mean_year": 2025.5,
+     "top10_median_year": 2026.0,
+     "top100_mean_year": 2024.7,
+     "top10_hist_5y": {
+      "2020": 2,
+      "2025": 8
+     },
+     "top100_hist_5y": {
+      "2015": 1,
+      "2020": 36,
+      "2025": 63
+     }
+    }
+   },
+   "overlap_top10_after": 3,
+   "overlap_top10_pg_before_after": 3,
+   "overlap_top10_solr_before_after": 1
+  }
+ }
+}

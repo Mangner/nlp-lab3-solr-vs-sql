@@ -15,6 +15,25 @@ import requests
 from lab3.config import config
 
 REPEATS = 5
+SESSION = requests.Session()  # keep-alive: bez ponownego łączenia TCP przy każdym zapytaniu
+
+
+def nocache(params: dict) -> dict:
+    """Wariant zapytania z pominięciem queryResultCache Solra (`cache=false` w local params).
+
+    Domyślnie powtórzone zapytanie wraca z cache wyników (QTime ≈ 0 ms), co nie mierzy kosztu dopasowania i rankingu.
+    """
+    p = dict(params)
+    if p.get("defType") == "edismax":
+        loc = ["edismax"]
+        for k in ("qf", "pf", "boost"):
+            if k in p:
+                loc.append(f'{k}="{p.pop(k)}"')
+        p.pop("defType")
+        p["q"] = "{!" + " ".join(loc) + " cache=false}" + p["q"]
+    else:
+        p["q"] = "{!lucene cache=false}" + p["q"]
+    return p
 
 
 def now() -> str:
@@ -68,7 +87,7 @@ def solr_url(collection: str, params: dict) -> str:
 def solr_run(collection: str, params: dict) -> dict:
     url = solr_url(collection, params)
     t0 = time.perf_counter()
-    r = requests.get(url, timeout=120)
+    r = SESSION.get(url, timeout=120)
     client_ms = (time.perf_counter() - t0) * 1000
     r.raise_for_status()
     js = r.json()

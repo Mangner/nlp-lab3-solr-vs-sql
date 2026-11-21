@@ -1,27 +1,27 @@
 -- Q1+fq FTS (100%)
 SELECT count(*) FROM papers_100 WHERE tsv @@ plainto_tsquery('english', 'simulate') AND archive = 'astro-ph' AND year BETWEEN 2010 AND 2020
 
-Aggregate  (cost=110863.89..110863.90 rows=1 width=8) (actual time=90.209..90.211 rows=1 loops=1)
+Aggregate  (cost=110863.89..110863.90 rows=1 width=8) (actual time=120.383..120.385 rows=1 loops=1)
   Buffers: shared hit=34363
-  ->  Bitmap Heap Scan on papers_100  (cost=5853.03..110851.79 rows=4841 width=0) (actual time=53.044..89.719 rows=9447 loops=1)
+  ->  Bitmap Heap Scan on papers_100  (cost=5853.03..110851.79 rows=4841 width=0) (actual time=70.671..119.661 rows=9447 loops=1)
         Recheck Cond: ((tsv @@ '''simul'''::tsquery) AND (year >= 2010) AND (year <= 2020))
         Filter: (archive = 'astro-ph'::text)
         Rows Removed by Filter: 34841
         Heap Blocks: exact=34005
         Buffers: shared hit=34363
-        ->  BitmapAnd  (cost=5853.03..5853.03 rows=44253 width=0) (actual time=44.014..44.015 rows=0 loops=1)
+        ->  BitmapAnd  (cost=5853.03..5853.03 rows=44253 width=0) (actual time=58.288..58.289 rows=0 loops=1)
               Buffers: shared hit=358
-              ->  Bitmap Index Scan on papers_100_tsv_gin  (cost=0.00..779.61 rows=117000 width=0) (actual time=23.284..23.284 rows=119222 loops=1)
+              ->  Bitmap Index Scan on papers_100_tsv_gin  (cost=0.00..779.61 rows=117000 width=0) (actual time=28.063..28.063 rows=119222 loops=1)
                     Index Cond: (tsv @@ '''simul'''::tsquery)
                     Buffers: shared hit=33
-              ->  Bitmap Index Scan on papers_100_year_idx  (cost=0.00..5070.76 rows=378233 width=0) (actual time=17.364..17.365 rows=382207 loops=1)
+              ->  Bitmap Index Scan on papers_100_year_idx  (cost=0.00..5070.76 rows=378233 width=0) (actual time=26.041..26.041 rows=382207 loops=1)
                     Index Cond: ((year >= 2010) AND (year <= 2020))
                     Buffers: shared hit=325
 Planning:
   Buffers: shared hit=1
-Planning Time: 0.140 ms
+Planning Time: 0.143 ms
 JIT:
   Functions: 7
   Options: Inlining false, Optimization false, Expressions true, Deforming true
-  Timing: Generation 0.381 ms (Deform 0.174 ms), Inlining 0.000 ms, Optimization 0.334 ms, Emission 3.486 ms, Total 4.201 ms
-Execution Time: 94.371 ms
+  Timing: Generation 0.428 ms (Deform 0.208 ms), Inlining 0.000 ms, Optimization 0.434 ms, Emission 5.449 ms, Total 6.312 ms
+Execution Time: 125.154 ms
