@@ -133,3 +133,8 @@ docs/                  Lab3.pdf, materiały do sprawozdania
 - Oddajemy **poziom 3.0**: README (instrukcja + tabela wyników) to główny dokument; sprawozdanie, ściąga ustna i skrypty 4.0/5.0 = materiał dodatkowy w repo.
 - Ścieżka 3.0: `prepare_data → load_pg → load_solr → level3`. Windows: przy blokadzie pyarrow (Application Control) dane przygotowujemy w kontenerze `python:3.13`.
 - `scripts/pack_zip.py`: archiwum = lab3/ + scripts/ (bez plików 5.0), sql/, solr/, README.md, docs/zapytania_solr.md, docker-compose.yml, .env.example, requirements.txt; bez results/ i PDF.
+
+## Oddanie: poziom 3.0 (2026-11-23)
+- README przerobiony na samodzielny dokument 3.0 (instrukcja, tabela z `results/level3_table.md`, podsumowanie); `level3` uruchomiony ponownie na papers_100 (PG i Solr: 1 000 000 rekordów).
+- `scripts/pack_zip.py`: jawna lista modułów 3.0 (`MODULES`) + sql/ (bez 03_sync.sql), solr/, README, docs/zapytania_solr.md, results/level3* (+explain/level3_*), docker-compose.yml, .env.example, requirements.txt. Bez scripts/.
+  Zweryfikowane: zip rozpakowany do katalogu tymczasowego, importy OK, `python -m lab3.level3` działa.

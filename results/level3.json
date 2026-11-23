@@ -1,7 +1,7 @@
 {
  "size": "100",
  "table": "papers_100",
- "timestamp": "2026-11-21T19:16:30",
+ "timestamp": "2026-11-23T17:29:45",
  "rows": [
   {
    "key": "Q1",
@@ -13,30 +13,30 @@
     "query": "SELECT count(*) FROM papers_100 WHERE (title || ' ' || abstract) ILIKE '%simulate%'",
     "result_count": 24333,
     "exec_ms": {
-     "median": 4754.939,
-     "min": 4706.869,
-     "max": 4810.99,
+     "median": 4631.713,
+     "min": 4346.418,
+     "max": 5519.079,
      "runs": [
-      4706.869,
-      4810.99,
-      4754.939,
-      4801.903,
-      4731.967
+      4346.418,
+      4868.004,
+      5519.079,
+      4631.713,
+      4565.733
      ]
     },
     "client_ms": {
-     "median": 4718.208,
-     "min": 4690.417,
-     "max": 4738.221,
+     "median": 4611.876,
+     "min": 4440.381,
+     "max": 4834.932,
      "runs": [
-      4718.208,
-      4738.221,
-      4732.255,
-      4694.575,
-      4690.417
+      4759.057,
+      4440.381,
+      4611.876,
+      4501.257,
+      4834.932
      ]
     },
-    "timestamp": "2026-11-21T19:14:11",
+    "timestamp": "2026-11-23T17:27:24",
     "plan_flags": {
      "parallel_seq_scan": true,
      "seq_scan": true,
@@ -50,30 +50,30 @@
     "query": "SELECT count(*) FROM papers_100 WHERE tsv @@ plainto_tsquery('english', 'simulate')",
     "result_count": 119222,
     "exec_ms": {
-     "median": 120.067,
-     "min": 115.005,
-     "max": 132.118,
+     "median": 99.07,
+     "min": 92.58,
+     "max": 183.283,
      "runs": [
-      115.687,
-      115.005,
-      120.067,
-      132.118,
-      120.718
+      92.58,
+      95.633,
+      99.07,
+      120.218,
+      183.283
      ]
     },
     "client_ms": {
-     "median": 112.627,
-     "min": 108.685,
-     "max": 127.739,
+     "median": 95.689,
+     "min": 90.411,
+     "max": 150.25,
      "runs": [
-      115.477,
-      110.083,
-      108.685,
-      112.627,
-      127.739
+      103.169,
+      90.411,
+      95.689,
+      94.741,
+      150.25
      ]
     },
-    "timestamp": "2026-11-21T19:14:13",
+    "timestamp": "2026-11-23T17:27:27",
     "plan_flags": {
      "parallel_seq_scan": false,
      "seq_scan": false,
@@ -87,30 +87,30 @@
     "query": "http://localhost:8983/solr/papers_100/select?q=text_all%3Asimulate&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&sort=score+desc%2C+id+asc&rows=10&wt=json",
     "result_count": 119255,
     "qtime_ms": {
-     "median": 0.0,
-     "min": 0.0,
-     "max": 0.0,
+     "median": 2.0,
+     "min": 1.0,
+     "max": 2.0,
      "runs": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
+      2.0,
+      2.0,
+      2.0,
+      1.0,
+      1.0
      ]
     },
     "client_ms": {
-     "median": 3.895,
-     "min": 3.408,
-     "max": 4.174,
+     "median": 8.305,
+     "min": 7.491,
+     "max": 11.839,
      "runs": [
-      4.174,
-      3.895,
-      3.711,
-      3.952,
-      3.408
+      8.305,
+      7.491,
+      9.275,
+      7.785,
+      11.839
      ]
     },
-    "timestamp": "2026-11-21T19:14:13"
+    "timestamp": "2026-11-23T17:27:28"
    },
    "solr_nocache": {
     "engine": "solr",
@@ -119,30 +119,30 @@
     "query": "http://localhost:8983/solr/papers_100/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3Asimulate&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&sort=score+desc%2C+id+asc&rows=10&wt=json",
     "result_count": 119255,
     "qtime_ms": {
-     "median": 6.0,
-     "min": 5.0,
-     "max": 6.0,
+     "median": 14.0,
+     "min": 12.0,
+     "max": 18.0,
      "runs": [
-      6.0,
-      5.0,
-      6.0,
-      6.0,
-      6.0
+      18.0,
+      15.0,
+      12.0,
+      13.0,
+      14.0
      ]
     },
     "client_ms": {
-     "median": 8.503,
-     "min": 8.234,
-     "max": 8.744,
+     "median": 20.391,
+     "min": 18.016,
+     "max": 24.149,
      "runs": [
-      8.744,
-      8.234,
-      8.35,
-      8.515,
-      8.503
+      24.149,
+      21.979,
+      18.016,
+      19.201,
+      20.391
      ]
     },
-    "timestamp": "2026-11-21T19:14:13"
+    "timestamp": "2026-11-23T17:27:28"
    }
   },
   {
@@ -155,30 +155,30 @@
     "query": "SELECT count(*) FROM papers_100 WHERE (title || ' ' || abstract) ILIKE '%dark matter%'",
     "result_count": 14655,
     "exec_ms": {
-     "median": 4629.645,
-     "min": 4620.356,
-     "max": 4709.745,
+     "median": 4398.25,
+     "min": 4264.958,
+     "max": 4534.899,
      "runs": [
-      4627.882,
-      4709.745,
-      4629.645,
-      4653.075,
-      4620.356
+      4478.74,
+      4534.899,
+      4264.958,
+      4385.647,
+      4398.25
      ]
     },
     "client_ms": {
-     "median": 4639.926,
-     "min": 4615.404,
-     "max": 4744.64,
+     "median": 4411.557,
+     "min": 4300.809,
+     "max": 4673.351,
      "runs": [
-      4615.404,
-      4637.404,
-      4639.926,
-      4672.526,
-      4744.64
+      4673.351,
+      4519.395,
+      4411.557,
+      4352.325,
+      4300.809
      ]
     },
-    "timestamp": "2026-11-21T19:15:14",
+    "timestamp": "2026-11-23T17:28:27",
     "plan_flags": {
      "parallel_seq_scan": true,
      "seq_scan": true,
@@ -192,30 +192,30 @@
     "query": "SELECT count(*) FROM papers_100 WHERE tsv @@ phraseto_tsquery('english', 'dark matter')",
     "result_count": 14955,
     "exec_ms": {
-     "median": 66.185,
-     "min": 64.294,
-     "max": 80.65,
+     "median": 64.652,
+     "min": 63.236,
+     "max": 66.037,
      "runs": [
-      67.282,
-      80.65,
-      64.294,
-      66.185,
-      65.802
+      64.907,
+      66.037,
+      63.813,
+      63.236,
+      64.652
      ]
     },
     "client_ms": {
-     "median": 69.83,
-     "min": 66.593,
-     "max": 88.464,
+     "median": 64.115,
+     "min": 62.936,
+     "max": 73.256,
      "runs": [
-      71.892,
-      69.83,
-      88.464,
-      66.593,
-      67.265
+      63.778,
+      62.936,
+      65.475,
+      64.115,
+      73.256
      ]
     },
-    "timestamp": "2026-11-21T19:15:15",
+    "timestamp": "2026-11-23T17:28:31",
     "plan_flags": {
      "parallel_seq_scan": false,
      "seq_scan": false,
@@ -229,30 +229,30 @@
     "query": "http://localhost:8983/solr/papers_100/select?q=text_all%3A%22dark+matter%22&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&sort=score+desc%2C+id+asc&rows=10&wt=json",
     "result_count": 15025,
     "qtime_ms": {
-     "median": 0.0,
-     "min": 0.0,
-     "max": 0.0,
+     "median": 1.0,
+     "min": 1.0,
+     "max": 1.0,
      "runs": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
      ]
     },
     "client_ms": {
-     "median": 3.5,
-     "min": 2.996,
-     "max": 3.818,
+     "median": 5.422,
+     "min": 4.979,
+     "max": 6.741,
      "runs": [
-      3.612,
-      3.375,
-      3.5,
-      3.818,
-      2.996
+      6.143,
+      5.422,
+      5.316,
+      4.979,
+      6.741
      ]
     },
-    "timestamp": "2026-11-21T19:15:15"
+    "timestamp": "2026-11-23T17:28:31"
    },
    "solr_nocache": {
     "engine": "solr",
@@ -261,30 +261,30 @@
     "query": "http://localhost:8983/solr/papers_100/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3A%22dark+matter%22&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&sort=score+desc%2C+id+asc&rows=10&wt=json",
     "result_count": 15025,
     "qtime_ms": {
-     "median": 3.0,
-     "min": 3.0,
-     "max": 4.0,
+     "median": 5.0,
+     "min": 5.0,
+     "max": 11.0,
      "runs": [
-      4.0,
-      4.0,
-      3.0,
-      3.0,
-      3.0
+      11.0,
+      10.0,
+      5.0,
+      5.0,
+      5.0
      ]
     },
     "client_ms": {
-     "median": 6.433,
-     "min": 6.121,
-     "max": 7.679,
+     "median": 10.131,
+     "min": 9.527,
+     "max": 16.58,
      "runs": [
-      7.679,
-      6.794,
-      6.433,
-      6.121,
-      6.125
+      16.51,
+      16.58,
+      10.131,
+      10.067,
+      9.527
      ]
     },
-    "timestamp": "2026-11-21T19:15:15"
+    "timestamp": "2026-11-23T17:28:31"
    }
   },
   {
@@ -297,30 +297,30 @@
     "query": "SELECT count(*) FROM papers_100 WHERE ((title || ' ' || abstract) ILIKE '%galaxy%' AND ((title || ' ' || abstract) ILIKE '%cluster%' OR (title || ' ' || abstract) ILIKE '%merger%') AND NOT (title || ' ' || abstract) ILIKE '%simulation%')",
     "result_count": 7259,
     "exec_ms": {
-     "median": 4856.824,
-     "min": 4821.198,
-     "max": 4880.671,
+     "median": 4653.637,
+     "min": 4620.75,
+     "max": 5049.481,
      "runs": [
-      4859.442,
-      4880.671,
-      4825.352,
-      4856.824,
-      4821.198
+      4620.75,
+      4653.637,
+      4637.562,
+      5049.481,
+      4843.997
      ]
     },
     "client_ms": {
-     "median": 4908.906,
-     "min": 4765.215,
-     "max": 4942.134,
+     "median": 4916.348,
+     "min": 4574.079,
+     "max": 5159.674,
      "runs": [
-      4765.215,
-      4913.028,
-      4908.906,
-      4887.078,
-      4942.134
+      4574.079,
+      4597.382,
+      4934.244,
+      5159.674,
+      4916.348
      ]
     },
-    "timestamp": "2026-11-21T19:16:18",
+    "timestamp": "2026-11-23T17:29:33",
     "plan_flags": {
      "parallel_seq_scan": true,
      "seq_scan": true,
@@ -334,30 +334,30 @@
     "query": "SELECT count(*) FROM papers_100 WHERE tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation')",
     "result_count": 8887,
     "exec_ms": {
-     "median": 15.126,
-     "min": 14.663,
-     "max": 16.531,
+     "median": 15.16,
+     "min": 14.467,
+     "max": 15.821,
      "runs": [
-      14.663,
-      14.677,
-      16.531,
-      16.049,
-      15.126
+      15.562,
+      15.075,
+      15.821,
+      15.16,
+      14.467
      ]
     },
     "client_ms": {
-     "median": 15.694,
-     "min": 15.206,
-     "max": 16.651,
+     "median": 16.372,
+     "min": 15.913,
+     "max": 19.322,
      "runs": [
-      15.694,
-      15.206,
-      15.678,
-      16.651,
-      16.032
+      15.913,
+      16.372,
+      19.322,
+      17.244,
+      16.107
      ]
     },
-    "timestamp": "2026-11-21T19:16:19",
+    "timestamp": "2026-11-23T17:29:33",
     "plan_flags": {
      "parallel_seq_scan": false,
      "seq_scan": false,
@@ -371,30 +371,30 @@
     "query": "http://localhost:8983/solr/papers_100/select?q=text_all%3Agalaxy+AND+%28text_all%3Acluster+OR+text_all%3Amerger%29+AND+NOT+text_all%3Asimulation&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&sort=score+desc%2C+id+asc&rows=10&wt=json",
     "result_count": 8918,
     "qtime_ms": {
-     "median": 0.0,
-     "min": 0.0,
-     "max": 0.0,
+     "median": 1.0,
+     "min": 1.0,
+     "max": 2.0,
      "runs": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
+      1.0,
+      2.0,
+      1.0,
+      1.0,
+      1.0
      ]
     },
     "client_ms": {
-     "median": 3.091,
-     "min": 2.857,
-     "max": 3.173,
+     "median": 5.77,
+     "min": 5.146,
+     "max": 6.854,
      "runs": [
-      2.861,
-      2.857,
-      3.108,
-      3.173,
-      3.091
+      6.663,
+      6.854,
+      5.77,
+      5.146,
+      5.576
      ]
     },
-    "timestamp": "2026-11-21T19:16:19"
+    "timestamp": "2026-11-23T17:29:33"
    },
    "solr_nocache": {
     "engine": "solr",
@@ -403,30 +403,30 @@
     "query": "http://localhost:8983/solr/papers_100/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3Agalaxy+AND+%28text_all%3Acluster+OR+text_all%3Amerger%29+AND+NOT+text_all%3Asimulation&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&sort=score+desc%2C+id+asc&rows=10&wt=json",
     "result_count": 8918,
     "qtime_ms": {
-     "median": 4.0,
-     "min": 4.0,
-     "max": 5.0,
+     "median": 12.0,
+     "min": 9.0,
+     "max": 12.0,
      "runs": [
-      4.0,
-      4.0,
-      4.0,
-      4.0,
-      5.0
+      12.0,
+      12.0,
+      12.0,
+      10.0,
+      9.0
      ]
     },
     "client_ms": {
-     "median": 7.223,
-     "min": 6.988,
-     "max": 7.512,
+     "median": 17.362,
+     "min": 14.185,
+     "max": 17.815,
      "runs": [
-      7.223,
-      7.335,
-      7.139,
-      6.988,
-      7.512
+      17.362,
+      17.815,
+      17.486,
+      14.948,
+      14.185
      ]
     },
-    "timestamp": "2026-11-21T19:16:19"
+    "timestamp": "2026-11-23T17:29:33"
    }
   },
   {
@@ -439,30 +439,30 @@
     "query": "SELECT count(*) FROM papers_100 WHERE (title || ' ' || abstract) ILIKE '%simulate%' AND archive = 'astro-ph' AND year BETWEEN 2010 AND 2020",
     "result_count": 2138,
     "exec_ms": {
-     "median": 400.616,
-     "min": 392.997,
-     "max": 422.468,
+     "median": 370.941,
+     "min": 357.419,
+     "max": 410.083,
      "runs": [
-      422.468,
-      408.16,
-      399.009,
-      392.997,
-      400.616
+      369.43,
+      370.941,
+      393.153,
+      357.419,
+      410.083
      ]
     },
     "client_ms": {
-     "median": 412.142,
-     "min": 400.667,
-     "max": 434.226,
+     "median": 394.283,
+     "min": 369.24,
+     "max": 454.894,
      "runs": [
-      434.226,
-      400.667,
-      412.142,
-      409.459,
-      415.896
+      454.894,
+      369.24,
+      413.247,
+      394.283,
+      383.184
      ]
     },
-    "timestamp": "2026-11-21T19:16:29",
+    "timestamp": "2026-11-23T17:29:43",
     "plan_flags": {
      "parallel_seq_scan": false,
      "seq_scan": false,
@@ -476,30 +476,30 @@
     "query": "SELECT count(*) FROM papers_100 WHERE tsv @@ plainto_tsquery('english', 'simulate') AND archive = 'astro-ph' AND year BETWEEN 2010 AND 2020",
     "result_count": 9447,
     "exec_ms": {
-     "median": 98.726,
-     "min": 94.757,
-     "max": 118.406,
+     "median": 83.301,
+     "min": 81.558,
+     "max": 88.16,
      "runs": [
-      94.786,
-      118.406,
-      94.757,
-      98.726,
-      102.234
+      83.301,
+      81.558,
+      86.075,
+      88.16,
+      81.942
      ]
     },
     "client_ms": {
-     "median": 98.189,
-     "min": 90.776,
-     "max": 101.296,
+     "median": 85.348,
+     "min": 82.932,
+     "max": 91.138,
      "runs": [
-      98.975,
-      90.776,
-      92.576,
-      98.189,
-      101.296
+      84.477,
+      82.932,
+      85.989,
+      91.138,
+      85.348
      ]
     },
-    "timestamp": "2026-11-21T19:16:30",
+    "timestamp": "2026-11-23T17:29:44",
     "plan_flags": {
      "parallel_seq_scan": false,
      "seq_scan": false,
@@ -513,30 +513,30 @@
     "query": "http://localhost:8983/solr/papers_100/select?q=text_all%3Asimulate&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&sort=score+desc%2C+id+asc&rows=10&fq=archive%3Aastro-ph&fq=year%3A%5B2010+TO+2020%5D&wt=json",
     "result_count": 9449,
     "qtime_ms": {
-     "median": 0.0,
-     "min": 0.0,
+     "median": 1.0,
+     "min": 1.0,
      "max": 1.0,
      "runs": [
-      0.0,
-      0.0,
       1.0,
-      0.0,
+      1.0,
+      1.0,
+      1.0,
       1.0
      ]
     },
     "client_ms": {
-     "median": 4.093,
-     "min": 3.663,
-     "max": 5.069,
+     "median": 4.965,
+     "min": 4.736,
+     "max": 5.375,
      "runs": [
-      3.663,
-      3.894,
-      5.069,
-      4.093,
-      4.568
+      4.746,
+      5.076,
+      5.375,
+      4.736,
+      4.965
      ]
     },
-    "timestamp": "2026-11-21T19:16:30"
+    "timestamp": "2026-11-23T17:29:44"
    },
    "solr_nocache": {
     "engine": "solr",
@@ -545,30 +545,30 @@
     "query": "http://localhost:8983/solr/papers_100/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3Asimulate&fl=id%2Ctitle%2Cprimary_category%2Carchive%2Cyear%2Cscore&sort=score+desc%2C+id+asc&rows=10&fq=archive%3Aastro-ph&fq=year%3A%5B2010+TO+2020%5D&wt=json",
     "result_count": 9449,
     "qtime_ms": {
-     "median": 2.0,
-     "min": 2.0,
-     "max": 3.0,
+     "median": 5.0,
+     "min": 3.0,
+     "max": 5.0,
      "runs": [
+      5.0,
+      5.0,
+      5.0,
       3.0,
-      2.0,
-      2.0,
-      2.0,
-      2.0
+      4.0
      ]
     },
     "client_ms": {
-     "median": 6.043,
-     "min": 5.603,
-     "max": 7.051,
+     "median": 9.292,
+     "min": 7.047,
+     "max": 9.547,
      "runs": [
-      7.051,
-      6.282,
-      6.043,
-      5.705,
-      5.603
+      9.547,
+      9.292,
+      9.352,
+      7.047,
+      8.218
      ]
     },
-    "timestamp": "2026-11-21T19:16:30"
+    "timestamp": "2026-11-23T17:29:44"
    }
   }
  ]

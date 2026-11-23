@@ -1,21 +1,21 @@
 -- Q2 LIKE (100%)
 SELECT count(*) FROM papers_100 WHERE (title || ' ' || abstract) ILIKE '%dark matter%'
 
-Finalize Aggregate  (cost=197627.99..197628.00 rows=1 width=8) (actual time=4538.594..4571.377 rows=1 loops=1)
-  Buffers: shared hit=129409 read=86971
-  ->  Gather  (cost=197627.77..197627.98 rows=2 width=8) (actual time=4538.421..4571.361 rows=3 loops=1)
+Finalize Aggregate  (cost=197627.99..197628.00 rows=1 width=8) (actual time=4401.519..4422.643 rows=1 loops=1)
+  Buffers: shared hit=118899 read=97481
+  ->  Gather  (cost=197627.77..197627.98 rows=2 width=8) (actual time=4401.285..4422.624 rows=3 loops=1)
         Workers Planned: 2
         Workers Launched: 2
-        Buffers: shared hit=129409 read=86971
-        ->  Partial Aggregate  (cost=196627.77..196627.78 rows=1 width=8) (actual time=4522.862..4522.863 rows=1 loops=3)
-              Buffers: shared hit=129409 read=86971
-              ->  Parallel Seq Scan on papers_100  (cost=0.00..196627.67 rows=42 width=0) (actual time=4.231..4521.471 rows=4885 loops=3)
+        Buffers: shared hit=118899 read=97481
+        ->  Partial Aggregate  (cost=196627.77..196627.78 rows=1 width=8) (actual time=4385.733..4385.734 rows=1 loops=3)
+              Buffers: shared hit=118899 read=97481
+              ->  Parallel Seq Scan on papers_100  (cost=0.00..196627.67 rows=42 width=0) (actual time=3.968..4384.340 rows=4885 loops=3)
                     Filter: (((title || ' '::text) || abstract) ~~* '%dark matter%'::text)
                     Rows Removed by Filter: 328448
-                    Buffers: shared hit=129409 read=86971
+                    Buffers: shared hit=118899 read=97481
 Planning Time: 0.064 ms
 JIT:
   Functions: 14
   Options: Inlining false, Optimization false, Expressions true, Deforming true
-  Timing: Generation 1.036 ms (Deform 0.203 ms), Inlining 0.000 ms, Optimization 0.587 ms, Emission 9.172 ms, Total 10.795 ms
-Execution Time: 4571.713 ms
+  Timing: Generation 0.905 ms (Deform 0.233 ms), Inlining 0.000 ms, Optimization 0.524 ms, Emission 8.753 ms, Total 10.183 ms
+Execution Time: 4422.977 ms

@@ -1,22 +1,22 @@
 -- Q1+fq LIKE (100%)
 SELECT count(*) FROM papers_100 WHERE (title || ' ' || abstract) ILIKE '%simulate%' AND archive = 'astro-ph' AND year BETWEEN 2010 AND 2020
 
-Finalize Aggregate  (cost=161566.31..161566.32 rows=1 width=8) (actual time=398.713..425.493 rows=1 loops=1)
-  Buffers: shared hit=94518
-  ->  Gather  (cost=161566.09..161566.30 rows=2 width=8) (actual time=397.277..425.474 rows=3 loops=1)
+Finalize Aggregate  (cost=161566.31..161566.32 rows=1 width=8) (actual time=352.977..376.530 rows=1 loops=1)
+  Buffers: shared hit=94527
+  ->  Gather  (cost=161566.09..161566.30 rows=2 width=8) (actual time=352.960..376.515 rows=3 loops=1)
         Workers Planned: 2
         Workers Launched: 2
-        Buffers: shared hit=94518
-        ->  Partial Aggregate  (cost=160566.09..160566.10 rows=1 width=8) (actual time=379.030..379.031 rows=1 loops=3)
-              Buffers: shared hit=94518
-              ->  Parallel Index Scan using papers_100_year_idx on papers_100  (cost=0.42..160566.09 rows=2 width=0) (actual time=6.819..378.810 rows=713 loops=3)
+        Buffers: shared hit=94527
+        ->  Partial Aggregate  (cost=160566.09..160566.10 rows=1 width=8) (actual time=336.176..336.177 rows=1 loops=3)
+              Buffers: shared hit=94527
+              ->  Parallel Index Scan using papers_100_year_idx on papers_100  (cost=0.42..160566.09 rows=2 width=0) (actual time=6.084..335.969 rows=713 loops=3)
                     Index Cond: ((year >= 2010) AND (year <= 2020))
                     Filter: ((archive = 'astro-ph'::text) AND (((title || ' '::text) || abstract) ~~* '%simulate%'::text))
                     Rows Removed by Filter: 126690
-                    Buffers: shared hit=94518
+                    Buffers: shared hit=94527
 Planning Time: 0.092 ms
 JIT:
   Functions: 20
   Options: Inlining false, Optimization false, Expressions true, Deforming true
-  Timing: Generation 2.194 ms (Deform 0.636 ms), Inlining 0.000 ms, Optimization 1.010 ms, Emission 17.720 ms, Total 20.924 ms
-Execution Time: 425.978 ms
+  Timing: Generation 2.053 ms (Deform 0.613 ms), Inlining 0.000 ms, Optimization 0.892 ms, Emission 15.751 ms, Total 18.696 ms
+Execution Time: 376.989 ms

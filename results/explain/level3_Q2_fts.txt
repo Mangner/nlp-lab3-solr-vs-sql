@@ -1,17 +1,17 @@
 -- Q2 FTS (100%)
 SELECT count(*) FROM papers_100 WHERE tsv @@ phraseto_tsquery('english', 'dark matter')
 
-Aggregate  (cost=3741.08..3741.09 rows=1 width=8) (actual time=66.582..66.583 rows=1 loops=1)
-  Buffers: shared hit=62260
-  ->  Bitmap Heap Scan on papers_100  (cost=43.71..3738.64 rows=975 width=0) (actual time=5.750..65.787 rows=14955 loops=1)
+Aggregate  (cost=3813.33..3813.34 rows=1 width=8) (actual time=63.523..63.524 rows=1 loops=1)
+  Buffers: shared hit=62277
+  ->  Bitmap Heap Scan on papers_100  (cost=115.96..3810.89 rows=975 width=0) (actual time=6.046..62.690 rows=14955 loops=1)
         Recheck Cond: (tsv @@ '''dark'' <-> ''matter'''::tsquery)
         Rows Removed by Index Recheck: 1265
         Heap Blocks: exact=15081
-        Buffers: shared hit=62260
-        ->  Bitmap Index Scan on papers_100_tsv_gin  (cost=0.00..43.46 rows=975 width=0) (actual time=3.863..3.863 rows=16220 loops=1)
+        Buffers: shared hit=62277
+        ->  Bitmap Index Scan on papers_100_tsv_gin  (cost=0.00..115.71 rows=975 width=0) (actual time=4.151..4.152 rows=16220 loops=1)
               Index Cond: (tsv @@ '''dark'' <-> ''matter'''::tsquery)
-              Buffers: shared hit=38
+              Buffers: shared hit=55
 Planning:
   Buffers: shared hit=1
-Planning Time: 0.120 ms
-Execution Time: 66.603 ms
+Planning Time: 0.173 ms
+Execution Time: 63.548 ms

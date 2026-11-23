@@ -1,19 +1,19 @@
 -- Q3 LIKE (100%)
 SELECT count(*) FROM papers_100 WHERE ((title || ' ' || abstract) ILIKE '%galaxy%' AND ((title || ' ' || abstract) ILIKE '%cluster%' OR (title || ' ' || abstract) ILIKE '%merger%') AND NOT (title || ' ' || abstract) ILIKE '%simulation%')
 
-Aggregate  (cost=207002.77..207002.78 rows=1 width=8) (actual time=4934.216..4965.199 rows=1 loops=1)
-  Buffers: shared hit=133805 read=85723
-  ->  Gather  (cost=1000.00..207002.77 rows=1 width=0) (actual time=5.487..4964.071 rows=7259 loops=1)
+Aggregate  (cost=207002.77..207002.78 rows=1 width=8) (actual time=4919.663..4943.589 rows=1 loops=1)
+  Buffers: shared hit=130268 read=89260
+  ->  Gather  (cost=1000.00..207002.77 rows=1 width=0) (actual time=7.411..4942.313 rows=7259 loops=1)
         Workers Planned: 2
         Workers Launched: 2
-        Buffers: shared hit=133805 read=85723
-        ->  Parallel Seq Scan on papers_100  (cost=0.00..206002.67 rows=1 width=0) (actual time=24.252..4912.151 rows=2420 loops=3)
+        Buffers: shared hit=130268 read=89260
+        ->  Parallel Seq Scan on papers_100  (cost=0.00..206002.67 rows=1 width=0) (actual time=8.375..4900.047 rows=2420 loops=3)
               Filter: ((((title || ' '::text) || abstract) ~~* '%galaxy%'::text) AND (((title || ' '::text) || abstract) !~~* '%simulation%'::text) AND ((((title || ' '::text) || abstract) ~~* '%cluster%'::text) OR (((title || ' '::text) || abstract) ~~* '%merger%'::text)))
               Rows Removed by Filter: 330914
-              Buffers: shared hit=133805 read=85723
-Planning Time: 0.070 ms
+              Buffers: shared hit=130268 read=89260
+Planning Time: 0.108 ms
 JIT:
   Functions: 11
   Options: Inlining false, Optimization false, Expressions true, Deforming true
-  Timing: Generation 1.738 ms (Deform 0.266 ms), Inlining 0.000 ms, Optimization 1.116 ms, Emission 19.803 ms, Total 22.657 ms
-Execution Time: 4965.608 ms
+  Timing: Generation 1.491 ms (Deform 0.320 ms), Inlining 0.000 ms, Optimization 0.645 ms, Emission 11.118 ms, Total 13.253 ms
+Execution Time: 4944.227 ms

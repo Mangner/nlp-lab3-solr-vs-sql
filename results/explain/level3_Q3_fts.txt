@@ -1,16 +1,16 @@
 -- Q3 FTS (100%)
 SELECT count(*) FROM papers_100 WHERE tsv @@ to_tsquery('english', 'galaxy & (cluster | merger) & !simulation')
 
-Aggregate  (cost=5409.36..5409.37 rows=1 width=8) (actual time=15.723..15.725 rows=1 loops=1)
-  Buffers: shared hit=8087
-  ->  Bitmap Heap Scan on papers_100  (cost=80.53..5405.80 rows=1424 width=0) (actual time=7.860..15.280 rows=8887 loops=1)
+Aggregate  (cost=5481.61..5481.62 rows=1 width=8) (actual time=16.036..16.038 rows=1 loops=1)
+  Buffers: shared hit=8104
+  ->  Bitmap Heap Scan on papers_100  (cost=152.78..5478.05 rows=1424 width=0) (actual time=8.533..15.567 rows=8887 loops=1)
         Recheck Cond: (tsv @@ '''galaxi'' & ( ''cluster'' | ''merger'' ) & !''simul'''::tsquery)
         Heap Blocks: exact=7982
-        Buffers: shared hit=8087
-        ->  Bitmap Index Scan on papers_100_tsv_gin  (cost=0.00..80.18 rows=1424 width=0) (actual time=6.893..6.894 rows=8887 loops=1)
+        Buffers: shared hit=8104
+        ->  Bitmap Index Scan on papers_100_tsv_gin  (cost=0.00..152.43 rows=1424 width=0) (actual time=7.554..7.554 rows=8887 loops=1)
               Index Cond: (tsv @@ '''galaxi'' & ( ''cluster'' | ''merger'' ) & !''simul'''::tsquery)
-              Buffers: shared hit=105
+              Buffers: shared hit=122
 Planning:
   Buffers: shared hit=1
-Planning Time: 0.119 ms
-Execution Time: 15.745 ms
+Planning Time: 0.125 ms
+Execution Time: 16.064 ms

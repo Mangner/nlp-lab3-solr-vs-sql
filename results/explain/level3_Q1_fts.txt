@@ -1,20 +1,20 @@
 -- Q1 FTS (100%)
 SELECT count(*) FROM papers_100 WHERE tsv @@ plainto_tsquery('english', 'simulate')
 
-Aggregate  (cost=175854.53..175854.54 rows=1 width=8) (actual time=121.010..121.011 rows=1 loops=1)
-  Buffers: shared hit=89985
-  ->  Bitmap Heap Scan on papers_100  (cost=808.86..175562.03 rows=117000 width=0) (actual time=29.605..115.679 rows=119222 loops=1)
+Aggregate  (cost=175926.78..175926.79 rows=1 width=8) (actual time=139.905..139.907 rows=1 loops=1)
+  Buffers: shared hit=90004
+  ->  Bitmap Heap Scan on papers_100  (cost=881.11..175634.28 rows=117000 width=0) (actual time=50.888..133.020 rows=119222 loops=1)
         Recheck Cond: (tsv @@ '''simul'''::tsquery)
-        Heap Blocks: exact=89952
-        Buffers: shared hit=89985
-        ->  Bitmap Index Scan on papers_100_tsv_gin  (cost=0.00..779.61 rows=117000 width=0) (actual time=13.501..13.501 rows=119222 loops=1)
+        Heap Blocks: exact=89954
+        Buffers: shared hit=90004
+        ->  Bitmap Index Scan on papers_100_tsv_gin  (cost=0.00..851.86 rows=117000 width=0) (actual time=24.785..24.785 rows=119228 loops=1)
               Index Cond: (tsv @@ '''simul'''::tsquery)
-              Buffers: shared hit=33
+              Buffers: shared hit=50
 Planning:
   Buffers: shared hit=1
-Planning Time: 0.118 ms
+Planning Time: 0.294 ms
 JIT:
   Functions: 5
   Options: Inlining false, Optimization false, Expressions true, Deforming true
-  Timing: Generation 0.226 ms (Deform 0.099 ms), Inlining 0.000 ms, Optimization 0.241 ms, Emission 2.333 ms, Total 2.799 ms
-Execution Time: 121.319 ms
+  Timing: Generation 0.426 ms (Deform 0.193 ms), Inlining 0.000 ms, Optimization 0.350 ms, Emission 4.564 ms, Total 5.341 ms
+Execution Time: 140.444 ms
