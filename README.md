@@ -1,8 +1,12 @@
 # Lab 3 (PJN) — wyszukiwanie pełnotekstowe: PostgreSQL kontra Solr
 
 Porównanie trzech sposobów przeszukiwania tekstu — `LIKE '%…%'`, indeksu pełnotekstowego PostgreSQL (`tsvector` + GIN)
-i Apache Solr 10 — funkcjonalnie i wydajnościowo, na metadanych publikacji arXiv. **Poziom realizacji: 5.0**
-(wymagania 3.0 + 4.0 + 5.0; rozszerzenia: boost rokiem, głębokie stronicowanie `cursorMark`, aktualizacja danych z synchronizacją do Solra).
+i Apache Solr 10 — funkcjonalnie i wydajnościowo, na metadanych publikacji arXiv. **Oddawany poziom: 4.0**
+(wymagania 3.0 + 4.0; rozszerzenie: boost trafności rokiem). Autorzy: Michał Langner, Jakub Nawrocki.
+
+> **Zakres oddawanej pracy.** Sprawozdanie, ściąga ustna i niniejszy README dotyczą **poziomu 4.0**. Skrypty poziomu 5.0 (`lab3/facets.py`, `lab3/paging.py`,
+> `lab3/sync.py`, `sql/03_sync.sql` — skalowanie 10/50/100%, facety z `facet.range` vs `GROUP BY`, `cursorMark`, synchronizacja zmian) są w repozytorium jako
+> **materiał dodatkowy i nie są częścią oddawanej pracy**; nie ma ich w archiwum `.zip`. Uruchamiają się tylko jawnie (`python -m lab3.run_all --extra`).
 
 - Przedmiot: Przetwarzanie języka naturalnego, Politechnika Krakowska, prowadzący: dr inż. Wojciech Książek. Treść zadania: `docs/Lab3.pdf`.
 - **Sprawozdanie:** `docs/sprawozdanie.pdf` (źródło: `docs/sprawozdanie.md`, generowane z `results/`). Ściąga do odpowiedzi ustnej: `docs/odpowiedz_ustna.md`.
@@ -13,7 +17,7 @@ i Apache Solr 10 — funkcjonalnie i wydajnościowo, na metadanych publikacji ar
 - Źródło: metadane arXiv (Cornell University), **licencja CC0**; używamy kopii na Hugging Face:
   [`librarian-bots/arxiv-metadata-snapshot`](https://huggingface.co/datasets/librarian-bots/arxiv-metadata-snapshot) (pliki parquet, pobierane skryptem — **zbioru nie ma w repozytorium ani w archiwum**).
 - Brak danych osobowych: pomijamy `authors`, `authors_parsed`, `submitter`.
-- 1 000 000 rekordów (zbiór 100%) wybranych deterministycznie (stały seed) + podzbiory 10% i 50% (10% ⊂ 50% ⊂ 100%). Dane nie są powielane.
+- 1 000 000 rekordów (zbiór 100%) wybranych deterministycznie (stały seed; wymagane minimum poziomu 4.0 to 500 000). Skrypt przygotowania tworzy też podzbiory 10% i 50% — używa ich tylko materiał dodatkowy poziomu 5.0. Dane nie są powielane.
 - Pola: `id`, `title`, `abstract`, `primary_category`, `archive`, `categories`, `year`, `license`.
 
 ## Wymagania
@@ -44,12 +48,12 @@ Wszystkie polecenia z katalogu głównego projektu. Skrypty są wieloplatformowe
    pip install -r requirements.txt
    python -m lab3.healthcheck    # wersje, tryb SolrCloud, dostępność pg_trgm
    ```
-4. **Wszystko jednym poleceniem** (pełny zbiór: pobranie i przygotowanie danych, ładowanie, pomiary, wykresy, sprawozdanie, PDF; kilkadziesiąt minut do ok. 2 godzin)
+4. **Wszystko jednym poleceniem** (pełny zbiór: pobranie i przygotowanie danych, ładowanie, pomiary, wykresy, sprawozdanie, PDF — poziom 4.0; kilkadziesiąt minut do ok. 2 godzin)
    ```
    python -m lab3.run_all
    ```
    Opcje: `--limit 20000` (szybki test na małej próbce — uwaga: nadpisuje tabele/kolekcje i pliki w `results/`), `--skip prepare load_pg load_solr` (pomiń kroki),
-   `--only figures report pdf` (tylko wybrane), `--with-cold` (pomiar zimnego startu — restartuje kontenery). Każdy krok jest idempotentny.
+   `--only figures report pdf` (tylko wybrane), `--with-cold` (pomiar zimnego startu — restartuje kontenery), `--extra` (dodatkowe kroki poziomu 5.0 — poza oddawaną pracą). Każdy krok jest idempotentny.
 
 Kroki można też uruchamiać osobno:
 
@@ -59,16 +63,17 @@ Kroki można też uruchamiać osobno:
 | PostgreSQL | `python -m lab3.load_pg` | schemat (`sql/01_schema.sql`), `COPY`, GIN + B-tree (`sql/02_indexes.sql`), `ANALYZE`, pomiary | `results/load_pg.json` |
 | Solr | `python -m lab3.load_solr` | kolekcje `papers_10/50/100`, schemat (`solr/schema.json`), paczki po 5000 dok., jeden commit | `results/load_solr.json` |
 | poziom 3.0 | `python -m lab3.level3` | Q1–Q3 w LIKE / FTS / Solr, tabela, różnice w trafieniach | `results/level3*.json`, `docs/zapytania_solr.md` |
-| benchmark | `python -m lab3.bench` | Q1–Q3 × (LIKE, FTS, Solr) × (10%, 50%, 100%), mediana z 5 | `results/benchmark.json` |
-| poziom 4.0 | `python -m lab3.level4` | top-10 (`ts_rank_cd` vs eDisMax), GROUP BY vs facety, highlighting, boost rokiem | `results/level4*.json` |
-| facety | `python -m lab3.facets` | 2×`facet.field` + `facet.range` vs `GROUP BY` / `GROUPING SETS` | `results/facets_vs_groupby.json` |
-| stronicowanie | `python -m lab3.paging` | `start/rows` vs `cursorMark` vs SQL `OFFSET` | `results/paging.json` |
-| synchronizacja | `python -m lab3.sync demo` | zmiana/usunięcie w PG → sync do Solra → weryfikacja → przywrócenie | `results/sync_log.json` |
+| benchmark | `python -m lab3.bench` | Q1–Q3 × (LIKE, FTS, Solr), mediana z 5; w sprawozdaniu używamy zbioru 100% | `results/benchmark.json` |
+| poziom 4.0 | `python -m lab3.level4` | top-10 (`ts_rank_cd` vs eDisMax), GROUP BY vs facety (2 pola), highlighting, boost rokiem | `results/level4*.json` |
 | zimny start | `python -m lab3.cold --drop-vm-cache` | pierwsze wykonanie po restarcie kontenerów | `results/cold.json` |
 | środowisko | `python -m lab3.environment` | CPU, RAM, dysk, wersje, ustawienia | `results/environment.json` |
 | wykresy | `python -m lab3.figures` | wykresy PNG (matplotlib) | `results/figures/` |
 | sprawozdanie | `python -m lab3.report` → `python scripts/build_pdf.py` | `docs/sprawozdanie.md` z `results/`, potem PDF | `docs/sprawozdanie.pdf` |
-| archiwum | `python scripts/pack_zip.py --authors Nazwisko1 Imie1 Nazwisko2 Imie2` | pakuje pliki do oddania (bez danych, `.env`, venv) | `dist/LAB3_….zip` |
+| archiwum | `python scripts/pack_zip.py` | pakuje pliki do oddania (bez danych, `.env`, venv i bez skryptów poziomu 5.0) | `dist/LAB3_Langner_Michal_Nawrocki_Jakub.zip` |
+
+**Materiał dodatkowy (poziom 5.0, nie oddajemy; tylko w repozytorium, nie w archiwum):** `python -m lab3.facets` (2×`facet.field` + `facet.range` vs `GROUP BY`/`GROUPING SETS`),
+`python -m lab3.paging` (`start/rows` vs `cursorMark` vs `OFFSET`), `python -m lab3.sync demo` (synchronizacja zmian PG → Solr), `python -m lab3.figures --extra` (wykresy skalowania, facetów, stronicowania).
+Te skrypty zapisują wyniki do `results/` (`facets_vs_groupby.json`, `paging.json`, `sync_log.json`); `sync demo` zakłada triggery na `papers_100` (po demo dane są przywracane).
 
 Narzędzia: Solr Admin UI — <http://localhost:8983/solr> (zakładka *Query*; URL-e z `docs/zapytania_solr.md` wklejamy w przeglądarkę).
 Zatrzymanie: `docker compose down` (dane zostają w wolumenach); pełny reset: `docker compose down -v`.
@@ -80,8 +85,9 @@ docker-compose.yml     PostgreSQL 17 + Solr 10
 requirements.txt       zależności Pythona
 .env.example           konfiguracja (kopiujemy do .env)
 lab3/                  pakiet Pythona: config, db, solr, healthcheck, prepare_data, load_pg, load_solr, queries, measure,
-                       level3, level4, bench, facets, paging, sync, cold, environment, figures, report, run_all
-sql/                   01_schema.sql, 02_indexes.sql, 03_sync.sql (szablony z {t} = nazwa tabeli; podstawia lab3)
+                       level3, level4, bench, cold, environment, figures, report, oral, run_all
+                       (dodatkowo, poza oddawaną pracą — poziom 5.0: facets, paging, sync)
+sql/                   01_schema.sql, 02_indexes.sql (szablony z {t} = nazwa tabeli; podstawia lab3); 03_sync.sql — tylko poziom 5.0 (dodatkowy)
 solr/                  schema.json (Schema API), collection_config.json (Config API)
 scripts/               build_pdf.py (sprawozdanie.md → PDF), pack_zip.py (archiwum do oddania)
 data/                  dane (nie w repozytorium)

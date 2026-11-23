@@ -21,3 +21,10 @@ results/*.tmp
 Thumbs.db
 dist/
 docs/sprawozdanie.html
+
+# archiwa do oddania i pliki tymczasowe
+*.zip
+*.tmp
+*.log
+*.bak
+~$*

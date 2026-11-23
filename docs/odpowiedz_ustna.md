@@ -1,4 +1,4 @@
-# Ściąga do odpowiedzi ustnej — Lab 3 PJN (poziom 5.0)
+# Ściąga do odpowiedzi ustnej — Lab 3 PJN (poziom 4.0)
 
 Odpowiedzi odwołują się do naszego projektu i liczb z `results/` (plik generowany: `python -m lab3.oral`). Zbiór: 1 000 000 rekordów arXiv (abstrakt średnio 1 048 znaków), PostgreSQL 17 vs Solr 10.
 
@@ -14,9 +14,9 @@ Przekształcenie tekstu w tokeny przy indeksowaniu i zapytaniu (tym samym łańc
 
 Ta sama idea, inne komponenty: PostgreSQL ma parser rozpoznający typy tokenów (URL, plik, host, słowo z myślnikiem), Snowball (Porter2) i swoją stoplistę; Solr — tokenizer UAX#29, klasyczny Porter, stoplistę Lucene. Skutek: różnice rzędu dziesiątek dokumentów (Q1: 2 tylko w SQL, 35 tylko w Solrze), np. `simulation/data`, URL-e, `local_qasm_simulator`.
 
-## 4. Dlaczego `LIKE '%słowo%'` nie skaluje się?
+## 4. Dlaczego `LIKE '%słowo%'` jest wolny?
 
-Wiodący `%` uniemożliwia użycie indeksu B-tree — zawsze skan całej tabeli (u nas *Parallel Seq Scan*; nie zakładaliśmy `gin_trgm_ops`). Czas ~liniowy w rozmiarze: Q1 1 199 ms (100 tys.), 2 276 ms (500 tys.), 4 632 ms (1 mln) — niezależnie od liczby trafień; dodatkowo tabela (2 438 MiB) nie mieści się w `shared_buffers`.
+Wiodący `%` uniemożliwia użycie indeksu B-tree — zawsze skan całej tabeli (u nas *Parallel Seq Scan*; nie zakładaliśmy `gin_trgm_ops`). Przy 1 mln rekordów: Q1 4 632 ms, Q2 4 579 ms, Q3 4 817 ms — niezależnie od liczby trafień; dodatkowo tabela (2 438 MiB) nie mieści się w `shared_buffers`.
 
 ## 5. Co znajduje `LIKE`, a czego nie — i odwrotnie dla FTS?
 
@@ -36,7 +36,7 @@ BM25 (Solr): IDF + nasycenie częstości + normalizacja długości pola. `ts_ran
 
 ## 9. Co oznaczają flagi pola w Solrze: indexed, stored, docValues, multiValued?
 
-`indexed` — pole przeszukiwalne (indeks odwrócony); `stored` — oryginalna wartość do zwrócenia/podświetlenia; `docValues` — kolumnowa struktura do sortowania, facetów, funkcji (nie dla pól analizowanych); `multiValued` — wiele wartości (u nas `categories`, `text_all`). Przykład: `text_all` ma `stored=false` (nie wyświetlamy), a `year` ma docValues (facet.range, boost, sort).
+`indexed` — pole przeszukiwalne (indeks odwrócony); `stored` — oryginalna wartość do zwrócenia/podświetlenia; `docValues` — kolumnowa struktura do sortowania, facetów, funkcji (nie dla pól analizowanych); `multiValued` — wiele wartości (u nas `categories`, `text_all`). Przykład: `text_all` ma `stored=false` (nie wyświetlamy), a `year` ma docValues (boost, sort).
 
 ## 10. Do czego `copyField` i `text_all`?
 
@@ -52,68 +52,44 @@ Parser zapytań dla użytkowników: wiele pól z wagami (`qf=title^3 abstract`),
 
 ## 13. Facety kontra `GROUP BY` — co jest podobne, co inne?
 
-Facet = liczności wartości pola dla zbioru trafień, liczone na docValues w jednym żądaniu razem z wyszukiwaniem; `GROUP BY` to osobne zapytanie. Dla zbioru całego (1 000 000 dok.): Solr 29 ms vs SQL 481 ms (3×GROUP BY) / 781 ms (GROUPING SETS). Liczności identyczne dla filtru strukturalnego; dla zapytań tekstowych różnią się o kilkadziesiąt przez tokenizację.
+Facet = liczności wartości pola dla zbioru trafień, liczone na docValues w tym samym żądaniu co wyszukiwanie; `GROUP BY` to osobne zapytanie agregujące po wyniku `@@`. U nas: `GROUP BY primary_category` / `archive` w PostgreSQL oraz `facet.field=primary_category&facet.field=archive` w Solrze. Liczności są zbliżone, ale nie identyczne, bo zbiory trafień różnią się o kilkadziesiąt dokumentów przez tokenizację (Q1: 2 tylko w SQL, 35 tylko w Solrze).
 
-## 14. Co to `facet.range` i jak go użyliśmy?
-
-Facet zakresowy po polu liczbowym: `facet.range=year&facet.range.start=1990&facet.range.end=2030&facet.range.gap=5` — przedziały 5-letnie; odpowiednik w SQL: wyrażenie `start + ((year-start)/gap)*gap` w `GROUP BY`.
-
-## 15. Czym jest commit w Solrze i dlaczego jeden na końcu?
+## 14. Czym jest commit w Solrze i dlaczego jeden na końcu?
 
 Commit czyni zmiany widocznymi (otwiera nowy searcher) i utrwala segmenty. Częste commity (np. `autoSoftCommit` co 3 s w `_default`) spowalniają ładowanie, więc wyłączyliśmy auto-commity i robimy jeden na końcu: 100%: wysyłanie 213 s + commit 1,2 s.
 
-## 16. Ile trwało ładowanie i indeksowanie w obu systemach?
+## 15. Ile trwało ładowanie i indeksowanie w obu systemach?
 
 100%: PostgreSQL COPY 242 s (z liczeniem `tsv`) + GIN 65 s; Solr 220 s razem. Rozmiar: PG tabela 2 438 MiB + indeksy 355 MiB; Solr 1 241 MiB po scaleniu segmentów.
 
-## 17. Dlaczego w pomiarach Solra mierzycie z `cache=false`?
+## 16. Dlaczego w pomiarach Solra mierzycie z `cache=false`?
 
 Powtórzone zapytanie wraca z `queryResultCache` (QTime ≈ 0 ms) — to nie mierzy dopasowania ani rankingu. Q1 top-10 przy 100%: z cache 0 ms, bez cache 7 ms (QTime), PostgreSQL 952 ms.
 
-## 18. Jak mierzyliście czas i co to jest rozgrzany/zimny cache?
+## 17. Jak mierzyliście czas i co to jest rozgrzany/zimny cache?
 
 1 rozgrzewka + 5 pomiarów, mediana; SQL: `EXPLAIN (ANALYZE, BUFFERS)` i czas klienta, Solr: QTime i czas klienta. Zimny start: restart kontenerów + `drop_caches` w VM Dockera. Q1 count po restarcie: PG 21,0 s (rozgrzany 113 ms), Solr 100 ms.
 
-## 19. Co pokazało skalowanie 10% → 100%?
+## 18. Kiedy indeks w bazie wystarcza, a kiedy sięgnąć po Solra?
 
-LIKE rośnie (1 199 → 4 632 ms), FTS skaluje się z liczbą trafień (13 → 113 ms; Q3: 1,2 → 15 ms), Solr w count prawie stały (2,1 → 2,1 ms klienta). Top-10 z rankingiem w PG: Q1 53 → 952 ms; Solr 2 → 7 ms.
+Baza: zbiór rzędu 10^6 rekordów (nasz pomiar), zapytania selektywne, jedno źródło prawdy, brak potrzeby facetów/podświetlania/zaawansowanego rankingu. Solr: ranking dużych zbiorów trafień, facety, hl, boosty, wyższe obciążenie. Koszt Solra: drugi system, spójność ewentualna, osobny schemat. Liczby: Q1 top-10 PG 952 ms vs Solr 7 ms; nie badaliśmy skalowania z rozmiarem zbioru, więc nie podajemy progu rekordów.
 
-## 20. Kiedy indeks w bazie wystarcza, a kiedy sięgnąć po Solra?
-
-Baza: do ~10^6 rekordów, zapytania selektywne, jedno źródło prawdy, bez potrzeby facetów/podświetlania/zaawansowanego rankingu. Solr: ranking dużych zbiorów trafień, facety, hl, boosty, stronicowanie, wyższe obciążenie. Koszt Solra: drugi system, spójność ewentualna (sync), osobny schemat. Liczby: Q1 top-10 PG 952 ms vs Solr 7 ms.
-
-## 21. Co to głębokie stronicowanie i czemu `start/rows` jest wolne?
-
-Dla `start=D` serwer musi utrzymać kolejkę priorytetową `D+rows` dokumentów i odrzucić pierwsze D, więc koszt rośnie z D. Przy D=500 000: start/rows 1 284 ms, cursorMark 34 ms, SQL OFFSET 5 493 ms.
-
-## 22. Jak działa `cursorMark` i jakie ma ograniczenia?
-
-Kursor to zakodowana wartość sortowania ostatniego dokumentu; kolejne żądanie zaczyna od niej (`sort` musi zawierać `uniqueKey`, u nas `score desc, id asc`). Stały koszt strony, bezstanowy, stabilny przy zmianach. Ograniczenia: tylko do przodu, brak skoku do dowolnej strony, `start` nie może być użyty razem z kursorem.
-
-## 23. Jak zsynchronizowaliście zmiany z PostgreSQL do Solra?
-
-Trigger BEFORE UPDATE ustawia `updated_at`, trigger AFTER DELETE zapisuje id w tabeli usunięć; skrypt wysyła zmienione wiersze na `/update` (nadpisanie po id) i usunięcia jako delete by id, commit, zapamiętuje czas. Demo: 5 zmian abstraktu, 3 tytułu, 5 usunięć; po synchronizacji zgodność = True.
-
-## 24. Jakie są wady takiej synchronizacji?
-
-Pull (okresowa), nie transakcyjna — okno niespójności między zmianą w bazie a sync; usunięcia wymagają osobnego śledzenia; dla bardzo dużej liczby zmian lepsze CDC (np. Debezium) lub kolejka.
-
-## 25. Jak działa boost rokiem i co zmienił w top-10?
+## 19. Jak działa boost rokiem i co zmienił w top-10?
 
 Mnożnik `exp(0,08·(year−2025))` w Solrze (`boost=`) i w SQL (`ts_rank_cd * exp(…)`). Średni rok top-10 (PG przed→po): Q1 2 021,2→2 025,2, Solr: 2 014,0→2 025,8.
 
-## 26. Czy dane były powielane? Jak wpływa to na wyniki?
+## 20. Czy dane były powielane? Jak wpływa to na wyniki?
 
 Nie — wzięliśmy 1 000 000 rzeczywistych rekordów z arXiv (ponad 3 mln dostępnych), więc nie ma duplikatów w top-10 ani zawyżonych liczności facetów. (Duplikaty `id` w źródle — 83 — usunęliśmy przy przygotowaniu danych.)
 
-## 27. Dlaczego Solr działa w trybie SolrCloud i co to zmieniło w projekcie?
+## 21. Dlaczego Solr działa w trybie SolrCloud i co to zmieniło w projekcie?
 
-Obraz `solr:10` startuje domyślnie w SolrCloud z wbudowanym ZooKeeperem. Konsekwencja: schemat i konfiguracja leżą w configsecie w ZK współdzielonym przez kolekcje, więc każda kolekcja (`papers_10/50/100`) ma własny configset (kopia `_default`); kolekcje tworzymy Collections API, schemat Schema API, config Config API.
+Obraz `solr:10` startuje domyślnie w SolrCloud z wbudowanym ZooKeeperem. Konsekwencja: schemat i konfiguracja leżą w configsecie w ZK współdzielonym przez kolekcje, więc kolekcja (`papers_100`) ma własny configset (kopia `_default`); kolekcje tworzymy Collections API, schemat Schema API, config Config API.
 
-## 28. Dlaczego `update.autoCreateFields=false`?
+## 22. Dlaczego `update.autoCreateFields=false`?
 
 Wyłącza schemaless: nieznane pole w dokumencie powoduje błąd zamiast cichego utworzenia pola o domyślnym typie. Sprawdziliśmy: wysłanie dokumentu z nieistniejącym polem zwraca `unknown field`.
 
-## 29. Jakie są ograniczenia Waszych pomiarów?
+## 23. Jakie są ograniczenia Waszych pomiarów?
 
 Jedna maszyna (Docker Desktop, 12 wątków, 2 GB sterty Solra), jeden węzeł; QTime ma rozdzielczość 1 ms; czas klienta Solra zawiera HTTP; porównanie rankingów tylko ilościowe (wspólne dokumenty), bez oceny trafności przez człowieka; „zimny” start to restart + drop_caches w VM, nie zimny dysk fizyczny.

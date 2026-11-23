@@ -45,16 +45,13 @@ def md_escape(t):
 
 def build(authors: list[str]) -> str:
     ds = J("dataset_stats.json")
-    d100, d50, d10 = (ds["datasets"][f"papers_{s}"] for s in ("100", "50", "10"))
+    d100 = ds["datasets"]["papers_100"]
     env = J("environment.json")
     lpg, lsr = J("load_pg.json"), J("load_solr.json")
     l3, l3d = J("level3.json"), J("level3_diffs.json")["diffs"]
     l4, bo = J("level4.json")["queries"], J("level4_boost.json")["queries"]
     bm = J("benchmark.json")
     cold = J("cold.json")
-    fv = J("facets_vs_groupby.json")
-    pg = J("paging.json")
-    sy = J("sync_log.json")
     pgt = {t["table"]: t for t in lpg["tables"]}
     srt = {c["collection"]: c for c in lsr["collections"]}
 
@@ -73,7 +70,7 @@ def build(authors: list[str]) -> str:
     A(f"""<div class="title-page">
 <p class="uni">Politechnika Krakowska</p>
 <h1>Wyszukiwanie pełnotekstowe: SQL kontra Solr</h1>
-<p class="sub">Laboratorium nr 3 — poziom 5.0</p>
+<p class="sub">Laboratorium nr 3 — poziom 4.0</p>
 <p class="sub">Przedmiot: Przetwarzanie języka naturalnego</p>
 <p class="sub">Prowadzący: dr inż. Wojciech Książek</p>
 <p class="authors">Autorzy: {", ".join(a.replace("<", "&lt;").replace(">", "&gt;") for a in authors)}</p>
@@ -90,9 +87,9 @@ def build(authors: list[str]) -> str:
     A(f"""## 1. Cel i zakres
 
 Porównujemy trzy sposoby przeszukiwania tekstu: `LIKE '%…%'`, indeks pełnotekstowy PostgreSQL (kolumna `tsvector` + indeks GIN)
-i Apache Solr 10 — funkcjonalnie i wydajnościowo, na metadanych publikacji arXiv. Zrealizowano poziom 5.0, czyli wymagania
-poziomów 3.0 i 4.0 oraz skalowanie (10% / 50% / 100% danych), porównanie facetów z `GROUP BY` i dwa rozszerzenia z listy poziomu 5.0
-(głębokie stronicowanie `cursorMark` i aktualizacja danych z synchronizacją do Solra) oraz rozszerzenie z listy 4.0 (boost trafności rokiem).
+i Apache Solr 10 — funkcjonalnie i wydajnościowo, na metadanych publikacji arXiv. Zrealizowano poziom 4.0, czyli wymagania
+poziomu 3.0 (trzy zapytania w `LIKE`, indeksie pełnotekstowym SQL i Solrze) oraz ranking top-10, agregację `GROUP BY` i facety, podświetlanie,
+porównanie top-10 obu systemów, pomiary ładowania i czasów zapytań na zbiorze 1 mln rekordów oraz jedno rozszerzenie: boost trafności rokiem.
 Każda liczba w tym sprawozdaniu pochodzi z plików w katalogu `results/` wygenerowanych przez skrypty projektu.
 """)
     # ------------------------------------------------------------------ 2. zbiór
@@ -105,8 +102,8 @@ Każda liczba w tym sprawozdaniu pochodzi z plików w katalogu `results/` wygene
   `authors_parsed` i `submitter`.
 - **Liczba rekordów:** źródło zawiera {n(ds['source_records'])} rekordów; po usunięciu {n(ds['duplicate_ids_dropped'])} powtórzonych `id`
   oraz filtrach (abstrakt ≥ {ds['min_abstract_chars']} znaków, znany rok) zostaje {n(ds['records_after_filters'])}.
-  Zbiór 100% to **{n(d100['records'])}** rekordów wybranych deterministycznie (skrót blake2b z `seed:id`, seed = {ds['seed']});
-  zbiory 50% ({n(d50['records'])}) i 10% ({n(d10['records'])}) to podzbiory (10% ⊂ 50% ⊂ 100%).
+  Zbiór to **{n(d100['records'])}** rekordów wybranych deterministycznie (skrót blake2b z `seed:id`, seed = {ds['seed']});
+  Wymagane minimum to 500 000 rekordów.
 - **Dane nie były powielane** (nie ma pola `copy_no`; arXiv ma ponad 3 mln rekordów, więc nie było takiej potrzeby).
 - **Pola:** `id` (klucz, identyfikator arXiv), `title`, `abstract` (tekst), `primary_category` (pierwsza z `categories`), `archive`
   (część `primary_category` przed kropką), `categories` (lista), `year` (rok pierwszej wersji), `license`.
@@ -156,6 +153,7 @@ z filtrem po `year`/`archive` planista wybiera inny plan).
 """)
     # ------------------------------------------------------------------ 4. schematy
     schema_sql = (ROOT / "sql" / "01_schema.sql").read_text(encoding="utf-8").replace("{t}", "papers_100")
+    schema_sql = "\n".join(l for l in schema_sql.splitlines() if not l.startswith(("-- Plik jest SZABLONEM", "-- Ręcznie w psql")))
     idx_sql = "\n".join(l for l in (ROOT / "sql" / "02_indexes.sql").read_text(encoding="utf-8").replace("{t}", "papers_100").splitlines()
                         if not l.startswith("-- @"))
     schema_json = (ROOT / "solr" / "schema.json").read_text(encoding="utf-8")
@@ -164,7 +162,7 @@ z filtrem po `year`/`archive` planista wybiera inny plan).
 
 ### 4.1. PostgreSQL: tabela i indeks pełnotekstowy
 
-Trzy osobne tabele `papers_10`, `papers_50`, `papers_100` (poniżej `papers_100`):
+Tabela `papers_100` (1 000 000 rekordów):
 
 ```sql
 {schema_sql.strip()}
@@ -182,7 +180,7 @@ lista wierszy, w których występuje. Zapytania używają operatora `@@` (np. `t
 
 ### 4.2. Solr: schemat (Schema API) i uzasadnienie flag
 
-Każda kolekcja (`papers_10/50/100`) ma własny configset (kopia `_default`), wyłączone tworzenie pól „w locie”
+Kolekcja `papers_100` ma własny configset (kopia `_default`), wyłączone tworzenie pól „w locie”
 (`update.autoCreateFields=false` — dokument z nieznanym polem jest odrzucany, sprawdziliśmy to) i wyłączone `autoCommit`/`autoSoftCommit`
 (jeden commit na końcu ładowania). Plik `solr/schema.json`:
 
@@ -198,7 +196,7 @@ Konfiguracja kolekcji (`solr/collection_config.json`):
 
 | pole | typ | indexed | stored | docValues | multiValued | uzasadnienie |
 |---|---|:-:|:-:|:-:|:-:|---|
-| `id` | string (uniqueKey) | tak | tak | tak | nie | klucz; wyszukiwanie/usuwanie po id, sortowanie pomocnicze (`id asc`) w `cursorMark` |
+| `id` | string (uniqueKey) | tak | tak | tak | nie | klucz; wyszukiwanie/usuwanie po id, sortowanie pomocnicze (`id asc`) przy remisach trafności |
 | `title` | text_en | tak | tak | — | nie | przeszukiwanie z wagą (`qf=title^3`), `stored` do wyświetlania i podświetlania; docValues nie dotyczy pól analizowanych |
 | `abstract` | text_en | tak | tak | — | nie | j.w.; `stored` konieczne dla `hl` (unified highlighter odczytuje tekst z pola stored) |
 | `text_all` | text_en | tak | **nie** | — | tak | pole zbiorcze (`copyField` z `title` i `abstract`) dla zapytań poziomu 3.0; nie wyświetlamy go, więc `stored=false` oszczędza miejsce |
@@ -206,7 +204,7 @@ Konfiguracja kolekcji (`solr/collection_config.json`):
 | `archive` | string | tak | tak | tak | nie | j.w. |
 | `license` | string | tak | tak | tak | nie | j.w. |
 | `categories` | string | tak | tak | tak | **tak** | rekord ma listę kategorii; facet po wszystkich kategoriach, filtr po dowolnej |
-| `year` | pint | tak | tak | tak | nie | zakresy `fq=year:[a TO b]` (indexed, struktura punktowa), `facet.range`, sortowanie i funkcja `boost` (docValues) |
+| `year` | pint | tak | tak | tak | nie | zakresy `fq=year:[a TO b]` (indexed, struktura punktowa), sortowanie i funkcja `boost` (docValues) |
 
 ### 4.3. Łańcuch analizy `text_en`
 
@@ -329,7 +327,7 @@ Solr: `defType=edismax`, `qf=title^3 abstract`, dla frazy dodatkowo `pf=title^3 
         A(table(["#", "SQL primary_category", "n", "Solr primary_category", "n", "SQL archive", "n", "Solr archive", "n"], rr,
                 ["---:", "---", "---:", "---", "---:", "---", "---:", "---", "---:"]))
         A("")
-    A("Liczności są zbliżone, lecz niezupełnie równe, bo zbiory trafień różnią się o kilkadziesiąt dokumentów (p. 5.2). Dla zbiorów wyznaczonych filtrem strukturalnym są identyczne (p. 8).\n")
+    A("Liczności są zbliżone, lecz niezupełnie równe, bo zbiory trafień różnią się o kilkadziesiąt dokumentów (p. 5.2).\n")
     h = l4["Q2"]["highlighting"]
     first_solr = next(iter(h["solr"].items()))
     first_pg = h["pg_ts_headline"][0]
@@ -353,11 +351,11 @@ Solr zwraca fragmenty razem z wynikiem w jednym żądaniu (unified highlighter, 
             [[f"{s}% ({n(pgt['papers_'+s]['rows'])})", n(pgt['papers_'+s]['copy_seconds'], 1), n(pgt['papers_'+s]['gin_seconds'], 1),
               n(pgt['papers_'+s]['btree_year_seconds'] + pgt['papers_'+s]['btree_category_seconds'], 1), n(pgt['papers_'+s]['analyze_seconds'], 1),
               n(sum(pgt['papers_'+s][k] for k in ('copy_seconds', 'gin_seconds', 'btree_year_seconds', 'btree_category_seconds', 'analyze_seconds')), 1),
-              n(srt['papers_'+s]['send_seconds'], 1), n(srt['papers_'+s]['commit_seconds'], 1), n(srt['papers_'+s]['total_seconds'], 1)] for s in ("10", "50", "100")],
+              n(srt['papers_'+s]['send_seconds'], 1), n(srt['papers_'+s]['commit_seconds'], 1), n(srt['papers_'+s]['total_seconds'], 1)] for s in ("100",)],
             ["---", "---:", "---:", "---:", "---:", "---:", "---:", "---:", "---:"]))
     A(f"""
 `COPY` w PostgreSQL zawiera obliczanie kolumny `tsv` (to ona jest kosztowna), indeks GIN budujemy osobno po załadowaniu. Solr: paczki po {srt['papers_100']['batch_size']} dokumentów JSON
-na `/update`, jeden commit na końcu; po załadowaniu `numFound` = liczba wierszy w tabeli ({", ".join(f"{s}%: {n(srt['papers_'+s]['num_found'])}" for s in ("10", "50", "100"))}; zgodność: {'tak' if all(c['counts_match'] for c in lsr['collections']) else 'NIE'}).
+na `/update`, jeden commit na końcu; po załadowaniu `numFound` = liczba wierszy w tabeli ({n(srt['papers_100']['num_found'])}; zgodność z liczbą wierszy w tabeli: {'tak' if srt['papers_100']['counts_match'] else 'NIE'}).
 
 ![Czas ładowania i rozmiar na dysku](../results/figures/ladowanie.png)
 
@@ -367,6 +365,7 @@ indeks GIN {mib(pgt['papers_100']['gin_bytes'])} MiB, wszystkie indeksy {mib(pgt
 """)
     # 6.2 tabele zapytań 100%
     A("### 6.2. Czasy zapytań (zbiór 100%, mediana z 5)\n")
+    A("![Czasy zapytań na zbiorze 100%](../results/figures/czasy_100.png)\n")
     A("Tryb **count** — liczba trafień (SQL `SELECT count(*)`, Solr `rows=0`); tryb **top-10** — 10 najlepszych wg trafności (SQL `ts_rank_cd … LIMIT 10`, Solr eDisMax; `LIKE` nie ma rankingu).\n")
     rr = []
     for q in ("Q1", "Q2", "Q3"):
@@ -397,8 +396,7 @@ albo komunikacji z bazą (SQL). Dokładne zapytania i wszystkie pomiary: `result
     A("\n![Zimny start a rozgrzany cache](../results/figures/zimny_start.png)\n")
 
     # ------------------------------------------------------------------ 7. rozszerzenia
-    A("## 7. Rozszerzenia\n")
-    A("### 7.1. Boost trafności rokiem (poziom 4.0)\n")
+    A("## 7. Rozszerzenie: boost trafności rokiem\n")
     A(f"""Cel: nowsze publikacje wyżej. Funkcja `f(year) = exp(0,08·(year − 2025))` — każdy rok wstecz zmniejsza wynik o ok. 8%.
 Solr: parametr eDisMax `boost=exp(mul(0.08,sub(year,2025)))` (mnożnik wyniku BM25, pole `year` z docValues);
 SQL: `ts_rank_cd(tsv, q) * exp(0.08 * (year - 2025))`. Zapytania i URL-e: `results/level4_boost.json`.
@@ -426,144 +424,26 @@ Wniosek: boost działa w obu systemach i przesuwa top-10 ku nowszym publikacjom 
 {bo['Q1']['overlap_top10_after']}/{bo['Q2']['overlap_top10_after']}/{bo['Q3']['overlap_top10_after']} (Q1/Q2/Q3). Boost jest zapisywany jako jedna deklaratywna funkcja w parametrach zapytania
 (Solr), natomiast w SQL musi być wpisany w `ORDER BY` — przez to ranking trzeba policzyć dla wszystkich trafień, bez możliwości zatrzymania się wcześniej.
 """)
-    # 7.2 cursor
-    A("### 7.2. Głębokie stronicowanie: `start/rows` a `cursorMark`\n")
-    A(f"""Zapytanie szerokie `{pg['solr_q']}` ({n(pg['numFound'])} trafień, zbiór {pg['size']}%), sortowanie `score desc, id asc` (porządek całkowity — wymagany dla `cursorMark`),
-strona = {pg['rows']} dokumentów. `cursorMark` jest bezstanowy: kursor uzyskany po przejściu do pozycji D można użyć wielokrotnie, więc mierzymy to samo żądanie powtórzone {pg['repeats']}×
-(mediana); osobno podajemy koszt *dojścia* do głębokości D (suma kolejnych stron). SQL: `ORDER BY ts_rank_cd DESC, id LIMIT {pg['rows']} OFFSET D`.
-Strony pobrane `start/rows` i `cursorMark` były identyczne we wszystkich pomiarach: {all(r['same_page_start_vs_cursor'] for r in pg['results'])}.
-""")
-    A(table(["głębokość D", "Solr start/rows [ms]", "Solr cursorMark [ms]", "dojście kursorem do D [s]", "SQL OFFSET [ms]"],
-            [[n(r["depth"]), n(r["solr_start_rows"]["client_ms"]["median"], 1), n(r["solr_cursor"]["client_ms"]["median"], 1),
-              n(r["solr_cursor"]["cumulative_walk_seconds_to_reach"], 2), n(r["sql_offset"]["client_ms"]["median"], 0)] for r in pg["results"]],
-            ["---:", "---:", "---:", "---:", "---:"]))
-    last = pg["results"][-1]
-    A(f"""
-![Głębokie stronicowanie](../results/figures/stronicowanie.png)
-
-Czas `start/rows` rośnie z głębokością (Solr utrzymuje kolejkę priorytetową o rozmiarze `start+rows`): od {n(pg['results'][0]['solr_start_rows']['client_ms']['median'],0)} ms na początku do
-{n(last['solr_start_rows']['client_ms']['median'],0)} ms przy D = {n(last['depth'])}; `cursorMark` pozostaje stały (~{n(last['solr_cursor']['client_ms']['median'],0)} ms), bo kursor niesie wartość sortowania ostatniego dokumentu
-i serwer zaczyna od tego miejsca. W SQL `OFFSET` musi policzyć i posortować wszystkie trafienia (ranking) — {n(last['sql_offset']['client_ms']['median'],0)} ms przy D = {n(last['depth'])}
-(i już ok. {n(pg['results'][0]['sql_offset']['client_ms']['median'],0)} ms dla pierwszej strony). Cena `cursorMark`: tylko do przodu, sekwencyjnie (nie ma skoku na dowolną stronę), a przejście całej listy kursorem kosztuje
-{n(last['solr_cursor']['cumulative_walk_seconds_to_reach'],1)} s do D = {n(last['depth'])}.
-""")
-    # 7.3 sync
-    A("### 7.3. Aktualizacja danych: zmiana i usunięcie w PostgreSQL, synchronizacja do Solra\n")
-    A(f"""Mechanizm (`sql/03_sync.sql`, `lab3/sync.py`): trigger `BEFORE UPDATE` ustawia `updated_at`, trigger `AFTER DELETE` zapisuje id w tabeli `papers_100_deleted`;
-tabela `sync_state` pamięta czas ostatniej synchronizacji. Skrypt synchronizujący wybiera wiersze z `updated_at` późniejszym niż ostatnia synchronizacja i wysyła je na `/update`
-(dokument nadpisuje stary o tym samym `id`), usunięcia wysyła jako `delete by id`, robi jeden commit i zapisuje nowy czas synchronizacji.
-
-Scenariusz (`python -m lab3.sync demo`, zbiór 100%): zmiana abstraktu w {len(sy['abstract_updated'])} rekordach (dopisane unikalne słowo-znacznik `xqzmarkerupdate`),
-zmiana tytułu w {len(sy['title_updated'])} rekordach (`xqztitlemarker`) i usunięcie {len(sy['deleted'])} rekordów. Weryfikacja: (1) liczba dokumentów, (2) zapytania po znaczniku zwracają te same id,
-(3) usunięte id nie występują w żadnym systemie, (4) zmienione dokumenty mają identyczny tytuł i abstrakt. Wynik:
-
-| etap | liczba dokumentów PG = Solr | zapytania po znaczniku identyczne | usunięte nieobecne | zmienione dokumenty identyczne |
-|---|:-:|:-:|:-:|:-:|
-""" + "\n".join(
-        f"| {lab} | {'tak' if e['detail']['total_count']['equal'] else '**nie**'} ({n(e['detail']['total_count']['pg'])} / {n(e['detail']['total_count']['solr'])}) | "
-        f"{'tak' if e['detail']['marker_abstract']['equal'] and e['detail']['marker_title']['equal'] else '**nie**'} | "
-        f"{('tak' if e['detail']['deleted_absent']['ok'] else '**nie**') if 'deleted_absent' in e['detail'] else '—'} | "
-        f"{'tak' if e['detail']['changed_docs_identical']['ok'] else '**nie**'} |"
-        for lab, e in (("po zmianach w PG, przed synchronizacją", next(x for x in sy['log'] if x['event'] == 'verify:before_sync')),
-                       ("po synchronizacji", next(x for x in sy['log'] if x['event'] == 'verify:after_sync')),
-                       ("po przywróceniu danych i ponownej synchronizacji", next(x for x in sy['log'] if x['event'] == 'verify:after_revert')))) + f"""
-
-Przed synchronizacją systemy się rozjeżdżają (oczekiwane), po synchronizacji są zgodne: **{sy['consistent_after_sync']}**; po przywróceniu danych demo: **{sy['restored_after_revert']}**
-(stan końcowy bazy i Solra = stan wyjściowy). Zsynchronizowano: {len(next(x for x in sy['log'] if x['event']=='sync' and x.get('deleted',0)>0)['deleted_ids'])} usunięć i
-{next(x for x in sy['log'] if x['event']=='sync' and x.get('deleted',0)>0)['upserted']} aktualizacji. Pełny log z czasami: `results/sync_log.json`.
-Ograniczenie: mechanizm jest *pull* (okresowy skrypt), nie transakcyjny — między zmianą w bazie a synchronizacją Solr widzi stare dane (eventual consistency).
-""")
-    # ------------------------------------------------------------------ 8. poziom 5.0
-    A("## 8. Poziom 5.0: skalowanie i facety kontra GROUP BY\n")
-    A("### 8.1. Skalowanie 10% → 50% → 100%\n")
-    A("Osobne tabele i kolekcje (100 000, 500 000, 1 000 000 rekordów). Tryb count; mediana z 5; SQL — czas serwera (`EXPLAIN ANALYZE`), Solr — czas klienta (HTTP, wariant `cache=false`).\n")
-    A("![Skalowanie: count](../results/figures/skalowanie_count.png)\n")
-    rr = []
-    for q in ("Q1", "Q2", "Q3"):
-        for s in ("10", "50", "100"):
-            rr.append([q, f"{s}%", n(m(s, q, "count", "LIKE")["result_count"]), n(sv(m(s, q, "count", "LIKE")), 0), n(sv(m(s, q, "count", "FTS")), 1),
-                       n(sv(m(s, q, "count", "Solr")), 0), n(cl(m(s, q, "count", "Solr")), 1), n(cl(m(s, q, "count", "Solr+cache")), 1)])
-    A(table(["zapytanie", "zbiór", "wyniki LIKE", "LIKE [ms]", "FTS [ms]", "Solr QTime [ms]", "Solr klient [ms]", "Solr klient, z cache [ms]"], rr,
-            ["---", "---", "---:", "---:", "---:", "---:", "---:", "---:"]))
-    A("\n![Skalowanie: top-10](../results/figures/skalowanie_top10.png)\n")
-    rr = []
-    for q in ("Q1", "Q2", "Q3"):
-        for s in ("10", "50", "100"):
-            rr.append([q, f"{s}%", n(sv(m(s, q, "top10", "FTS")), 1), n(sv(m(s, q, "top10", "Solr")), 0), n(cl(m(s, q, "top10", "Solr")), 1)])
-    A(table(["zapytanie", "zbiór", "PG ts_rank_cd top-10 [ms]", "Solr QTime [ms]", "Solr klient [ms]"], rr, ["---", "---", "---:", "---:", "---:"]))
-    like_g = sv(m("100", "Q1", "count", "LIKE")) / sv(m("10", "Q1", "count", "LIKE"))
-    fts_g1 = sv(m("100", "Q1", "count", "FTS")) / sv(m("10", "Q1", "count", "FTS"))
-    fts_g3 = sv(m("100", "Q3", "count", "FTS")) / sv(m("10", "Q3", "count", "FTS"))
-    top1 = sv(m("100", "Q1", "top10", "FTS")) / sv(m("10", "Q1", "top10", "FTS"))
-    A(f"""
-**Wnioski ze skalowania.**
-
-- `LIKE` rośnie z rozmiarem zbioru (10× więcej danych → {n(like_g,1)}× dłuższy czas dla Q1; mniej niż 10× — prawdopodobnie przez stały narzut i równoległy skan; nie badaliśmy tego osobno),
-  ale już przy 100 tys. rekordów kosztuje ok. {n(sv(m('10','Q1','count','LIKE'))/1000,1)} s, a przy 1 mln ok. {n(sv(m('100','Q1','count','LIKE'))/1000,1)} s — niezależnie od zapytania, bo za każdym razem skanuje całą tabelę.
-  Jako narzędzie interaktywne przestaje wystarczać już w okolicach 10^5 rekordów (>1 s), a przy 10^6 jest dziesiątki–setki razy wolniejszy od FTS.
-- Koszt FTS z indeksem GIN zależy od **liczby trafień** (a ta rośnie z rozmiarem zbioru), a nie od skanowania całej tabeli: Q1 (dużo trafień, {n(m('100','Q1','count','FTS')['result_count'])}) — {n(fts_g1,1)}× więcej czasu przy 10× danych
-  ({n(sv(m('10','Q1','count','FTS')),1)} → {n(sv(m('100','Q1','count','FTS')),1)} ms), Q3 (mało trafień) — {n(fts_g3,1)}× (wartości bezwzględne pozostają małe: {n(sv(m('100','Q3','count','FTS')),0)} ms przy 1 mln). Top-10 z rankingiem jest znacznie droższy niż samo zliczanie
-  (Q1: {n(sv(m('100','Q1','top10','FTS')),0)} ms przy 100%, {n(top1,1)}× więcej niż przy 10%), bo `ts_rank_cd` musi policzyć wynik dla **wszystkich** trafień (odczyt i dekompresja `tsv` z TOAST) przed sortowaniem.
-- Solr w trybie count utrzymuje czas niemal stały ({n(cl(m('10','Q1','count','Solr')),1)} ms przy 10% i {n(cl(m('100','Q1','count','Solr')),1)} ms przy 100% w czasie klienta dla Q1; dominuje narzut HTTP), a w trybie top-10 z rankingiem
-  {n(sv(m('100','Q1','top10','Solr')),0)}–{n(sv(m('100','Q3','top10','Solr')),0)} ms serwera przy 100% — rzędy wielkości mniej niż PostgreSQL dla trafień masowych (Q1: {n(sv(m('100','Q1','top10','FTS')),0)} ms).
-- **Punkt przecięcia:** dla zapytania o małej liczbie trafień (Q3) PostgreSQL FTS jest szybszy lub równy Solrowi w trybie count na zbiorach 10–50% (serwer {n(sv(m('10','Q3','count','FTS')),1)} ms, {n(sv(m('50','Q3','count','FTS')),1)} ms
-  wobec klienta Solra {n(cl(m('10','Q3','count','Solr')),1)} / {n(cl(m('50','Q3','count','Solr')),1)} ms), więc dla małych zbiorów i rzadkich słów indeks w bazie w pełni wystarcza. Przewaga Solra rośnie z liczbą trafień i rozmiarem zbioru,
-  a największa jest w rankingu (top-10).
-- Reguła praktyczna z naszych liczb: `LIKE '%…%'` — tylko do ~10^4–10^5 rekordów lub jednorazowo; FTS w PostgreSQL — do ~10^6 rekordów, gdy zapytania są selektywne lub wystarczy liczba/filtry, a ranking obejmuje
-  niewiele trafień; Solr — gdy potrzebny jest szybki ranking dużych zbiorów trafień, facety, podświetlanie i stronicowanie.
-""")
-    # 8.2 facets
-    A("### 8.2. Facety Solra a GROUP BY / GROUPING SETS\n")
-    r0 = next(x for x in fv["results"] if x["size"] == "100" and x["case"] == "Q1")
-    A(f"""Jedno zapytanie Solra: `facet=true&facet.field=primary_category&facet.field=archive&facet.range=year&facet.range.start={fv['range']['start']}&facet.range.end={fv['range']['end']}&facet.range.gap={fv['range']['gap']}&facet.mincount=1&facet.limit=-1&rows=0`
-(przykładowy pełny URL: `results/facets_vs_groupby.json`, np. dla Q1: `{r0['solr_url'][:160]}…`). Odpowiedniki SQL: trzy osobne `GROUP BY` (kategoria, archiwum, przedział lat
-`{fv['range']['start']} + ((year - {fv['range']['start']}) / {fv['range']['gap']}) * {fv['range']['gap']}`) oraz jedno zapytanie `GROUP BY GROUPING SETS ((primary_category),(archive),(bucket))`.
-Przypadki: `ALL` (cały zbiór), `STRUCT` (filtr `archive=cs AND year>=2015` — identyczny zbiór w obu systemach), `Q1`–`Q3` (zbiory z zapytań tekstowych). Zbiór 100%, mediana z 5:
-""")
-    rr = []
-    for r in fv["results"]:
-        if r["size"] != "100":
-            continue
-        c = r["comparison"]
-        same = all(v["identical"] for v in c.values())
-        diff = max(v["max_abs_diff"] for v in c.values())
-        rr.append([r["case"], n(r["solr_numFound"]), n(r["solr_qtime_ms"]["median"], 0), n(r["solr_client_ms"]["median"], 1),
-                   n(r["sql_separate_sum_exec_ms"], 1), n(r["sql_grouping_sets"]["exec_ms"]["median"], 1),
-                   "tak" if same else f"nie (maks. różnica {diff})", "tak" if r["grouping_sets_equals_separate"] else "nie"])
-    A(table(["przypadek", "dopasowanych dok.", "Solr QTime [ms]", "Solr klient [ms]", "SQL 3×GROUP BY [ms]", "SQL GROUPING SETS [ms]", "liczności identyczne (Solr = SQL)", "GROUPING SETS = 3×GROUP BY"], rr,
-            ["---", "---:", "---:", "---:", "---:", "---:", "---", "---"]))
-    allr = next(x for x in fv["results"] if x["size"] == "100" and x["case"] == "ALL")
-    A(f"""
-![Facety kontra GROUP BY](../results/figures/facety_vs_groupby.png)
-
-- **Poprawność.** Dla zbiorów wyznaczonych warunkami strukturalnymi (`ALL`, `STRUCT`) liczności z Solra i z SQL są **identyczne** we wszystkich trzech agregacjach; w `ALL` suma przedziałów lat to
-  {n(allr['comparison']['year']['sum_solr'])} z {n(allr['solr_numFound'])}, bo {n(allr['solr_numFound'] - allr['comparison']['year']['sum_solr'])} rekordów jest sprzed {fv['range']['start']} roku. Dla zapytań tekstowych liczności różnią się o kilka–kilkadziesiąt,
-  dokładnie z powodu różnic w zbiorze trafień (p. 5.2) — nie z powodu samych facetów. Wariant `GROUPING SETS` daje wyniki identyczne z trzema osobnymi `GROUP BY`.
-- **Czas.** Facety Solra liczą się na strukturach `docValues` w jednym żądaniu: {n(allr['solr_client_ms']['median'],0)} ms (klient) dla całego zbioru ({n(allr['solr_numFound'])} dok.)
-  wobec {n(allr['sql_separate_sum_exec_ms'],0)} ms (suma trzech `GROUP BY`) i {n(allr['sql_grouping_sets']['exec_ms']['median'],0)} ms (`GROUPING SETS`) w PostgreSQL. Stosunek najlepszego czasu SQL do czasu klienta Solra:
-  {", ".join(f"{r['case']} — {n(min(r['sql_separate_sum_exec_ms'], r['sql_grouping_sets']['exec_ms']['median'])/r['solr_client_ms']['median'],1)}×" for r in fv['results'] if r['size']=='100')}.
-  Solr jest szybszy we wszystkich przypadkach, a przewaga maleje, gdy zbiór trafień jest mały (Q3 — indeks GIN ogranicza SQL do kilku tysięcy wierszy). Wariant `GROUPING SETS` względem trzech osobnych `GROUP BY`:
-  {", ".join(f"{r['case']}: {'szybszy' if r['sql_grouping_sets']['exec_ms']['median'] < r['sql_separate_sum_exec_ms'] else 'wolniejszy'} ({n(r['sql_grouping_sets']['exec_ms']['median'],0)} vs {n(r['sql_separate_sum_exec_ms'],0)} ms)" for r in fv['results'] if r['size']=='100')}
-  — zależy od selektywności i planu. Zaleta Solra poza czasem: facety są częścią zwykłego zapytania (`fq`, ranking i podświetlanie w tym samym żądaniu), w SQL to osobne zapytania agregujące.
-""")
     # ------------------------------------------------------------------ 9. wnioski
-    A(f"""## 9. Wnioski: kiedy indeks w bazie wystarcza, a kiedy sięgnąć po Solra
+    A(f"""## 8. Wnioski: kiedy indeks w bazie wystarcza, a kiedy sięgnąć po Solra
 
-Wnioski opieramy na liczbach z pomiarów (zbiór do 1 mln rekordów, abstrakty ≈ {n(d100['abstract_len_mean'])} znaków, jeden węzeł, 12 wątków, 2 GB sterty Solra):
+Wnioski opieramy wyłącznie na naszych pomiarach (zbiór 100% = {n(d100['records'])} rekordów, abstrakty ≈ {n(d100['abstract_len_mean'])} znaków, jeden węzeł, 12 wątków, 2 GB sterty Solra):
 
-1. **LIKE '%…%' nie skaluje się.** Zawsze skanuje całą tabelę: {n(sv(m('10','Q1','count','LIKE'))/1000,1)} s (100 tys.) → {n(sv(m('100','Q1','count','LIKE'))/1000,1)} s (1 mln), przy 1 mln {n(min(sv(m('100',q,'count','LIKE'))/sv(m('100',q,'count','FTS')) for q in ('Q1','Q2','Q3')),0)}–{n(max(sv(m('100',q,'count','LIKE'))/sv(m('100',q,'count','FTS')) for q in ('Q1','Q2','Q3')),0)}× wolniej od FTS
-   i nie rozumie fleksji (Q1: {n(rows[0]['like']['result_count'])} wyników zamiast {n(rows[0]['fts']['result_count'])}), granic wyrazów ani frazy.
-2. **Indeks pełnotekstowy w PostgreSQL wystarcza,** gdy zbiór ma do ok. 10^6 dokumentów, zapytania są selektywne (Q3: {n(sv(m('100','Q3','count','FTS')),0)} ms przy 1 mln) albo potrzebne są tylko liczby/filtry,
-   gdy zależy nam na jednym systemie (transakcje, `JOIN`, jedno źródło prawdy, brak synchronizacji) i gdy wystarczy prosty ranking. Koszt dodatkowy to rozmiar (tabela z `tsv`: {mib(pgt['papers_100']['table_bytes_with_toast'])} MiB, GIN {mib(pgt['papers_100']['gin_bytes'])} MiB).
-3. **Warto sięgnąć po Solra,** gdy: (a) zapytania mają **wiele trafień i potrzebny jest ranking** — top-10 dla Q1 przy 1 mln: PostgreSQL {n(sv(m('100','Q1','top10','FTS')),0)} ms,
-   Solr {n(sv(m('100','Q1','top10','Solr')),0)} ms (a przy cache wyników ułamek ms); (b) potrzebne są **facety, podświetlanie, boosty, `cursorMark`** — w Solrze to parametry zapytania,
-   w SQL osobne, kosztowne konstrukcje (np. głębokie strony: {n(last['sql_offset']['client_ms']['median'],0)} ms `OFFSET` kontra {n(last['solr_cursor']['client_ms']['median'],0)} ms `cursorMark`);
-   (c) liczba dokumentów lub zapytań rośnie (czas Solra w trybie count prawie nie zależy od rozmiaru zbioru); (d) zimny start jest dla użytkownika odczuwalny —
+1. **`LIKE '%…%'` jest zbyt wolny już przy 1 mln rekordów.** Zawsze skanuje całą tabelę: {n(min(sv(m('100',q,'count','LIKE')) for q in ('Q1','Q2','Q3'))/1000,1)}–{n(max(sv(m('100',q,'count','LIKE')) for q in ('Q1','Q2','Q3'))/1000,1)} s na zapytanie,
+   czyli {n(min(sv(m('100',q,'count','LIKE'))/sv(m('100',q,'count','FTS')) for q in ('Q1','Q2','Q3')),0)}–{n(max(sv(m('100',q,'count','LIKE'))/sv(m('100',q,'count','FTS')) for q in ('Q1','Q2','Q3')),0)}× wolniej od indeksu pełnotekstowego, a do tego nie rozumie fleksji
+   (Q1: {n(rows[0]['like']['result_count'])} wyników zamiast {n(rows[0]['fts']['result_count'])}), granic wyrazów ani frazy.
+2. **Indeks pełnotekstowy w PostgreSQL wystarcza** (przy 1 mln rekordów), gdy zapytania są selektywne lub potrzebne są liczby i filtry (Q3: {n(sv(m('100','Q3','count','FTS')),0)} ms, Q2: {n(sv(m('100','Q2','count','FTS')),0)} ms,
+   Q1: {n(sv(m('100','Q1','count','FTS')),0)} ms), gdy zależy nam na jednym systemie (transakcje, `JOIN`, jedno źródło prawdy, brak synchronizacji) i gdy wystarczy prosty ranking lub ranking małych zbiorów trafień.
+   Koszt dodatkowy to rozmiar (tabela z `tsv`: {mib(pgt['papers_100']['table_bytes_with_toast'])} MiB, indeks GIN {mib(pgt['papers_100']['gin_bytes'])} MiB).
+3. **Warto sięgnąć po Solra,** gdy: (a) zapytania mają **wiele trafień i potrzebny jest ranking** — top-10 dla Q1: PostgreSQL {n(sv(m('100','Q1','top10','FTS')),0)} ms (`ts_rank_cd` liczy wynik dla wszystkich {n(m('100','Q1','count','FTS')['result_count'])} trafień),
+   Solr {n(sv(m('100','Q1','top10','Solr')),0)} ms (QTime, `cache=false`); (b) potrzebne są **facety, podświetlanie i boosty** — w Solrze to parametry zwykłego zapytania zwracane w jednej odpowiedzi,
+   w SQL osobne zapytania i wyrażenia (`GROUP BY`, `ts_headline`, mnożnik w `ORDER BY`); (c) zimny start jest dla użytkownika odczuwalny —
    pierwsze FTS Q1 po restarcie trwało {n(next(x for x in cold['results'] if x['query_key']=='Q1' and x['method']=='FTS count')['first_run_client_ms']/1000,1)} s (Solr {n(next(x for x in cold['results'] if x['query_key']=='Q1' and x['method']=='Solr count')['first_run_client_ms'],0)} ms).
-4. **Cena Solra:** drugi system do utrzymania, **spójność ewentualna** (synchronizacja z bazą — p. 7.3), osobny schemat i analiza tekstu (różnice w tokenizacji dają inne wyniki w skrajnych przypadkach, p. 5.2),
-   mniejsze ale niezerowe zużycie dysku i pamięci (indeks {mib(srt['papers_100']['index_bytes_settled'])} MiB, sterta 2 GB), czas ładowania i indeksowania zbioru 100%: Solr {n(srt['papers_100']['total_seconds'],0)} s wobec {n(sum(pgt['papers_100'][k] for k in ('copy_seconds','gin_seconds')),0)} s w PostgreSQL (COPY z liczeniem `tsv` + GIN).
+4. **Cena Solra:** drugi system do utrzymania, **spójność ewentualna** (dane trzeba przenosić z bazy), osobny schemat i analiza tekstu (różnice w tokenizacji dają inne wyniki w skrajnych przypadkach, p. 5.2),
+   zużycie dysku i pamięci (indeks {mib(srt['papers_100']['index_bytes_settled'])} MiB, sterta 2 GB), czas ładowania i indeksowania zbioru 100%: Solr {n(srt['papers_100']['total_seconds'],0)} s wobec {n(sum(pgt['papers_100'][k] for k in ('copy_seconds','gin_seconds')),0)} s w PostgreSQL (COPY z liczeniem `tsv` + GIN).
 5. **Rankingi się różnią:** wspólnych dokumentów w top-10 `ts_rank_cd` i BM25 jest w naszych zapytaniach {l4['Q1']['common_top10_count']}/{l4['Q2']['common_top10_count']}/{l4['Q3']['common_top10_count']} (Q1/Q2/Q3) — wybór metody rankingu jest decyzją produktową; nie oceniano trafności przez człowieka, więc nie rozstrzygamy, który ranking jest „lepszy”;
-   oba systemy pozwalają wprowadzić wagi pól i boost.
+   oba systemy pozwalają wprowadzić wagi pól i boost (p. 7).
+6. **Granice wniosków:** mierzyliśmy jedną wielkość zbioru (1 mln), więc nie wskazujemy progu rekordów, od którego dany sposób przestaje wystarczać — wnioski dotyczą tego zbioru, sprzętu i trzech zapytań.
 
 ### Ograniczenia
 
@@ -578,7 +458,7 @@ Wnioski opieramy na liczbach z pomiarów (zbiór do 1 mln rekordów, abstrakty �
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--authors", nargs="+", default=["<Imię Nazwisko>", "<Imię Nazwisko>"])
+    ap.add_argument("--authors", nargs="+", default=["Michał Langner", "Jakub Nawrocki"])
     args = ap.parse_args()
     md = build(args.authors)
     (ROOT / "docs").mkdir(exist_ok=True)

@@ -6,9 +6,11 @@ Uruchomienie (z katalogu głównego, po `docker compose up -d`):
     python -m lab3.run_all --skip prepare load_pg load_solr   # pomiń kroki (np. dane już załadowane)
     python -m lab3.run_all --only figures report pdf          # tylko wybrane kroki
     python -m lab3.run_all --with-cold           # dodatkowo pomiar zimnego startu (restartuje kontenery!)
+    python -m lab3.run_all --extra               # dodatkowo kroki poziomu 5.0 (facets, paging, sync) — NIE są częścią oddawanej pracy (poziom 4.0);
+                                                 # wymagają plików lab3/{facets,paging,sync}.py (dostępnych w repozytorium, nie w archiwum)
 
 Kroki (kolejność ma znaczenie — `sync` zmienia i przywraca dane, więc działa po pomiarach):
-    healthcheck, prepare, load_pg, load_solr, level3, bench, level4, facets, paging, sync, [cold], environment, figures, report, pdf
+    healthcheck, prepare, load_pg, load_solr, level3, bench, level4, [facets, paging, sync — tylko --extra], [cold], environment, figures, report, pdf
 Każdy krok jest idempotentny (tabele i kolekcje są tworzone od nowa). Przy błędzie kroku przerywamy z kodem != 0.
 """
 import argparse
@@ -35,7 +37,8 @@ STEPS = {
     "report": ["-m", "lab3.report"],
     "pdf": ["scripts/build_pdf.py"],
 }
-DEFAULT = [s for s in STEPS if s != "cold"]
+EXTRA = ("facets", "paging", "sync")  # poziom 5.0 — tylko z --extra
+DEFAULT = [s for s in STEPS if s != "cold" and s not in EXTRA]
 
 
 def main() -> int:
@@ -43,9 +46,10 @@ def main() -> int:
     ap.add_argument("--skip", nargs="*", default=[], choices=list(STEPS))
     ap.add_argument("--only", nargs="*", default=None, choices=list(STEPS))
     ap.add_argument("--with-cold", action="store_true")
+    ap.add_argument("--extra", action="store_true", help="dodatkowe kroki poziomu 5.0 (nie są częścią oddawanej pracy)")
     ap.add_argument("--limit", type=int, default=None, help="liczba rekordów zbioru 100%% (test na próbce)")
     args = ap.parse_args()
-    steps = args.only if args.only else [s for s in STEPS if s in DEFAULT or (s == "cold" and args.with_cold)]
+    steps = args.only if args.only else [s for s in STEPS if s in DEFAULT or (s == "cold" and args.with_cold) or (s in EXTRA and args.extra)]
     steps = [s for s in steps if s not in args.skip]
     t_all = time.time()
     for s in steps:

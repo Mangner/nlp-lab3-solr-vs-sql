@@ -1,10 +1,10 @@
 <div class="title-page">
 <p class="uni">Politechnika Krakowska</p>
 <h1>Wyszukiwanie pełnotekstowe: SQL kontra Solr</h1>
-<p class="sub">Laboratorium nr 3 — poziom 5.0</p>
+<p class="sub">Laboratorium nr 3 — poziom 4.0</p>
 <p class="sub">Przedmiot: Przetwarzanie języka naturalnego</p>
 <p class="sub">Prowadzący: dr inż. Wojciech Książek</p>
-<p class="authors">Autorzy: &lt;Imię Nazwisko&gt;, &lt;Imię Nazwisko&gt;</p>
+<p class="authors">Autorzy: Michał Langner, Jakub Nawrocki</p>
 <p class="date">Dane i pomiary z: 2026-11-21</p>
 </div>
 
@@ -17,9 +17,9 @@
 ## 1. Cel i zakres
 
 Porównujemy trzy sposoby przeszukiwania tekstu: `LIKE '%…%'`, indeks pełnotekstowy PostgreSQL (kolumna `tsvector` + indeks GIN)
-i Apache Solr 10 — funkcjonalnie i wydajnościowo, na metadanych publikacji arXiv. Zrealizowano poziom 5.0, czyli wymagania
-poziomów 3.0 i 4.0 oraz skalowanie (10% / 50% / 100% danych), porównanie facetów z `GROUP BY` i dwa rozszerzenia z listy poziomu 5.0
-(głębokie stronicowanie `cursorMark` i aktualizacja danych z synchronizacją do Solra) oraz rozszerzenie z listy 4.0 (boost trafności rokiem).
+i Apache Solr 10 — funkcjonalnie i wydajnościowo, na metadanych publikacji arXiv. Zrealizowano poziom 4.0, czyli wymagania
+poziomu 3.0 (trzy zapytania w `LIKE`, indeksie pełnotekstowym SQL i Solrze) oraz ranking top-10, agregację `GROUP BY` i facety, podświetlanie,
+porównanie top-10 obu systemów, pomiary ładowania i czasów zapytań na zbiorze 1 mln rekordów oraz jedno rozszerzenie: boost trafności rokiem.
 Każda liczba w tym sprawozdaniu pochodzi z plików w katalogu `results/` wygenerowanych przez skrypty projektu.
 
 ## 2. Zbiór danych
@@ -30,8 +30,8 @@ Każda liczba w tym sprawozdaniu pochodzi z plików w katalogu `results/` wygene
   `authors_parsed` i `submitter`.
 - **Liczba rekordów:** źródło zawiera 3 224 635 rekordów; po usunięciu 83 powtórzonych `id`
   oraz filtrach (abstrakt ≥ 300 znaków, znany rok) zostaje 3 093 551.
-  Zbiór 100% to **1 000 000** rekordów wybranych deterministycznie (skrót blake2b z `seed:id`, seed = 42);
-  zbiory 50% (500 000) i 10% (100 000) to podzbiory (10% ⊂ 50% ⊂ 100%).
+  Zbiór to **1 000 000** rekordów wybranych deterministycznie (skrót blake2b z `seed:id`, seed = 42);
+  Wymagane minimum to 500 000 rekordów.
 - **Dane nie były powielane** (nie ma pola `copy_no`; arXiv ma ponad 3 mln rekordów, więc nie było takiej potrzeby).
 - **Pola:** `id` (klucz, identyfikator arXiv), `title`, `abstract` (tekst), `primary_category` (pierwsza z `categories`), `archive`
   (część `primary_category` przed kropką), `categories` (lista), `year` (rok pierwszej wersji), `license`.
@@ -93,12 +93,10 @@ z filtrem po `year`/`archive` planista wybiera inny plan).
 
 ### 4.1. PostgreSQL: tabela i indeks pełnotekstowy
 
-Trzy osobne tabele `papers_10`, `papers_50`, `papers_100` (poniżej `papers_100`):
+Tabela `papers_100` (1 000 000 rekordów):
 
 ```sql
 -- Schemat tabeli zbioru arXiv w PostgreSQL.
--- Plik jest SZABLONEM: papers_100 = papers_10 | papers_50 | papers_100 (podstawia lab3.load_pg).
--- Ręcznie w psql: sed 's/papers_100/papers_100/g' sql/01_schema.sql | psql ...
 -- Kolumna tsv jest GENERATED ... STORED: tsvector (konfiguracja 'english', tytuł z wagą A, abstrakt z wagą B)
 -- liczy się automatycznie przy INSERT/COPY/UPDATE, więc nie da się go "zapomnieć" zsynchronizować.
 -- Indeksów (GIN, B-tree) NIE tworzymy tutaj — powstają po załadowaniu danych (sql/02_indexes.sql).
@@ -138,7 +136,7 @@ lista wierszy, w których występuje. Zapytania używają operatora `@@` (np. `t
 
 ### 4.2. Solr: schemat (Schema API) i uzasadnienie flag
 
-Każda kolekcja (`papers_10/50/100`) ma własny configset (kopia `_default`), wyłączone tworzenie pól „w locie”
+Kolekcja `papers_100` ma własny configset (kopia `_default`), wyłączone tworzenie pól „w locie”
 (`update.autoCreateFields=false` — dokument z nieznanym polem jest odrzucany, sprawdziliśmy to) i wyłączone `autoCommit`/`autoSoftCommit`
 (jeden commit na końcu ładowania). Plik `solr/schema.json`:
 
@@ -175,7 +173,7 @@ Konfiguracja kolekcji (`solr/collection_config.json`):
 
 | pole | typ | indexed | stored | docValues | multiValued | uzasadnienie |
 |---|---|:-:|:-:|:-:|:-:|---|
-| `id` | string (uniqueKey) | tak | tak | tak | nie | klucz; wyszukiwanie/usuwanie po id, sortowanie pomocnicze (`id asc`) w `cursorMark` |
+| `id` | string (uniqueKey) | tak | tak | tak | nie | klucz; wyszukiwanie/usuwanie po id, sortowanie pomocnicze (`id asc`) przy remisach trafności |
 | `title` | text_en | tak | tak | — | nie | przeszukiwanie z wagą (`qf=title^3`), `stored` do wyświetlania i podświetlania; docValues nie dotyczy pól analizowanych |
 | `abstract` | text_en | tak | tak | — | nie | j.w.; `stored` konieczne dla `hl` (unified highlighter odczytuje tekst z pola stored) |
 | `text_all` | text_en | tak | **nie** | — | tak | pole zbiorcze (`copyField` z `title` i `abstract`) dla zapytań poziomu 3.0; nie wyświetlamy go, więc `stored=false` oszczędza miejsce |
@@ -183,7 +181,7 @@ Konfiguracja kolekcji (`solr/collection_config.json`):
 | `archive` | string | tak | tak | tak | nie | j.w. |
 | `license` | string | tak | tak | tak | nie | j.w. |
 | `categories` | string | tak | tak | tak | **tak** | rekord ma listę kategorii; facet po wszystkich kategoriach, filtr po dowolnej |
-| `year` | pint | tak | tak | tak | nie | zakresy `fq=year:[a TO b]` (indexed, struktura punktowa), `facet.range`, sortowanie i funkcja `boost` (docValues) |
+| `year` | pint | tak | tak | tak | nie | zakresy `fq=year:[a TO b]` (indexed, struktura punktowa), sortowanie i funkcja `boost` (docValues) |
 
 ### 4.3. Łańcuch analizy `text_en`
 
@@ -351,7 +349,7 @@ Dla każdego zapytania: agregacja `GROUP BY primary_category` / `archive` w Post
 | 4 | astro-ph.HE | 504 | astro-ph.HE | 508 | physics | 25 | physics | 25 |
 | 5 | astro-ph.SR | 184 | astro-ph.SR | 184 | hep-th | 7 | hep-th | 7 |
 
-Liczności są zbliżone, lecz niezupełnie równe, bo zbiory trafień różnią się o kilkadziesiąt dokumentów (p. 5.2). Dla zbiorów wyznaczonych filtrem strukturalnym są identyczne (p. 8).
+Liczności są zbliżone, lecz niezupełnie równe, bo zbiory trafień różnią się o kilkadziesiąt dokumentów (p. 5.2).
 
 **Podświetlanie (Q2).** Solr: `hl=true&hl.fl=abstract,title&hl.method=unified&hl.snippets=2&hl.fragsize=220` (tag `<em>`), dokument `1110.5718`:
 
@@ -371,12 +369,10 @@ Solr zwraca fragmenty razem z wynikiem w jednym żądaniu (unified highlighter, 
 
 | zbiór | PG: COPY [s] | PG: GIN [s] | PG: B-tree×2 [s] | PG: ANALYZE [s] | PG: razem [s] | Solr: wysyłanie [s] | Solr: commit [s] | Solr: razem [s] |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| 10% (100 000) | 24,8 | 8,5 | 0,2 | 0,7 | 34,1 | 21,7 | 0,3 | 22,6 |
-| 50% (500 000) | 124,6 | 32,1 | 0,7 | 0,8 | 158,2 | 106,6 | 2,7 | 114,8 |
 | 100% (1 000 000) | 241,7 | 65,3 | 1,7 | 1,0 | 309,7 | 213,0 | 1,2 | 220,1 |
 
 `COPY` w PostgreSQL zawiera obliczanie kolumny `tsv` (to ona jest kosztowna), indeks GIN budujemy osobno po załadowaniu. Solr: paczki po 5000 dokumentów JSON
-na `/update`, jeden commit na końcu; po załadowaniu `numFound` = liczba wierszy w tabeli (10%: 100 000, 50%: 500 000, 100%: 1 000 000; zgodność: tak).
+na `/update`, jeden commit na końcu; po załadowaniu `numFound` = liczba wierszy w tabeli (1 000 000; zgodność z liczbą wierszy w tabeli: tak).
 
 ![Czas ładowania i rozmiar na dysku](../results/figures/ladowanie.png)
 
@@ -385,6 +381,8 @@ indeks GIN 301 MiB, wszystkie indeksy 355 MiB; Solr — indeks 1 241 MiB po scal
 (zaraz po commicie 2 101 MiB — w tle trwał jeszcze merge, stare segmenty zostają na dysku do kolejnego commitu; plus dziennik transakcji `tlog`, bo `autoCommit` jest wyłączony).
 
 ### 6.2. Czasy zapytań (zbiór 100%, mediana z 5)
+
+![Czasy zapytań na zbiorze 100%](../results/figures/czasy_100.png)
 
 Tryb **count** — liczba trafień (SQL `SELECT count(*)`, Solr `rows=0`); tryb **top-10** — 10 najlepszych wg trafności (SQL `ts_rank_cd … LIMIT 10`, Solr eDisMax; `LIKE` nie ma rankingu).
 
@@ -426,9 +424,7 @@ albo komunikacji z bazą (SQL). Dokładne zapytania i wszystkie pomiary: `result
 
 ![Zimny start a rozgrzany cache](../results/figures/zimny_start.png)
 
-## 7. Rozszerzenia
-
-### 7.1. Boost trafności rokiem (poziom 4.0)
+## 7. Rozszerzenie: boost trafności rokiem
 
 Cel: nowsze publikacje wyżej. Funkcja `f(year) = exp(0,08·(year − 2025))` — każdy rok wstecz zmniejsza wynik o ok. 8%.
 Solr: parametr eDisMax `boost=exp(mul(0.08,sub(year,2025)))` (mnożnik wyniku BM25, pole `year` z docValues);
@@ -479,145 +475,25 @@ Wniosek: boost działa w obu systemach i przesuwa top-10 ku nowszym publikacjom 
 1/1/3 (Q1/Q2/Q3). Boost jest zapisywany jako jedna deklaratywna funkcja w parametrach zapytania
 (Solr), natomiast w SQL musi być wpisany w `ORDER BY` — przez to ranking trzeba policzyć dla wszystkich trafień, bez możliwości zatrzymania się wcześniej.
 
-### 7.2. Głębokie stronicowanie: `start/rows` a `cursorMark`
+## 8. Wnioski: kiedy indeks w bazie wystarcza, a kiedy sięgnąć po Solra
 
-Zapytanie szerokie `text_all:(model OR method)` (523 591 trafień, zbiór 100%), sortowanie `score desc, id asc` (porządek całkowity — wymagany dla `cursorMark`),
-strona = 1000 dokumentów. `cursorMark` jest bezstanowy: kursor uzyskany po przejściu do pozycji D można użyć wielokrotnie, więc mierzymy to samo żądanie powtórzone 3×
-(mediana); osobno podajemy koszt *dojścia* do głębokości D (suma kolejnych stron). SQL: `ORDER BY ts_rank_cd DESC, id LIMIT 1000 OFFSET D`.
-Strony pobrane `start/rows` i `cursorMark` były identyczne we wszystkich pomiarach: True.
+Wnioski opieramy wyłącznie na naszych pomiarach (zbiór 100% = 1 000 000 rekordów, abstrakty ≈ 1 048 znaków, jeden węzeł, 12 wątków, 2 GB sterty Solra):
 
-| głębokość D | Solr start/rows [ms] | Solr cursorMark [ms] | dojście kursorem do D [s] | SQL OFFSET [ms] |
-|---:|---:|---:|---:|---:|
-| 0 | 26,0 | 26,4 | 0,00 | 1 781 |
-| 1 000 | 35,8 | 26,6 | 0,03 | 1 704 |
-| 10 000 | 81,8 | 28,5 | 0,33 | 1 814 |
-| 100 000 | 457,1 | 30,0 | 3,16 | 2 248 |
-| 250 000 | 999,1 | 32,9 | 7,83 | 2 264 |
-| 500 000 | 1 283,7 | 33,7 | 15,75 | 5 493 |
-
-![Głębokie stronicowanie](../results/figures/stronicowanie.png)
-
-Czas `start/rows` rośnie z głębokością (Solr utrzymuje kolejkę priorytetową o rozmiarze `start+rows`): od 26 ms na początku do
-1 284 ms przy D = 500 000; `cursorMark` pozostaje stały (~34 ms), bo kursor niesie wartość sortowania ostatniego dokumentu
-i serwer zaczyna od tego miejsca. W SQL `OFFSET` musi policzyć i posortować wszystkie trafienia (ranking) — 5 493 ms przy D = 500 000
-(i już ok. 1 781 ms dla pierwszej strony). Cena `cursorMark`: tylko do przodu, sekwencyjnie (nie ma skoku na dowolną stronę), a przejście całej listy kursorem kosztuje
-15,8 s do D = 500 000.
-
-### 7.3. Aktualizacja danych: zmiana i usunięcie w PostgreSQL, synchronizacja do Solra
-
-Mechanizm (`sql/03_sync.sql`, `lab3/sync.py`): trigger `BEFORE UPDATE` ustawia `updated_at`, trigger `AFTER DELETE` zapisuje id w tabeli `papers_100_deleted`;
-tabela `sync_state` pamięta czas ostatniej synchronizacji. Skrypt synchronizujący wybiera wiersze z `updated_at` późniejszym niż ostatnia synchronizacja i wysyła je na `/update`
-(dokument nadpisuje stary o tym samym `id`), usunięcia wysyła jako `delete by id`, robi jeden commit i zapisuje nowy czas synchronizacji.
-
-Scenariusz (`python -m lab3.sync demo`, zbiór 100%): zmiana abstraktu w 5 rekordach (dopisane unikalne słowo-znacznik `xqzmarkerupdate`),
-zmiana tytułu w 3 rekordach (`xqztitlemarker`) i usunięcie 5 rekordów. Weryfikacja: (1) liczba dokumentów, (2) zapytania po znaczniku zwracają te same id,
-(3) usunięte id nie występują w żadnym systemie, (4) zmienione dokumenty mają identyczny tytuł i abstrakt. Wynik:
-
-| etap | liczba dokumentów PG = Solr | zapytania po znaczniku identyczne | usunięte nieobecne | zmienione dokumenty identyczne |
-|---|:-:|:-:|:-:|:-:|
-| po zmianach w PG, przed synchronizacją | **nie** (999 995 / 1 000 000) | **nie** | **nie** | **nie** |
-| po synchronizacji | tak (999 995 / 999 995) | tak | tak | tak |
-| po przywróceniu danych i ponownej synchronizacji | tak (1 000 000 / 1 000 000) | tak | — | tak |
-
-Przed synchronizacją systemy się rozjeżdżają (oczekiwane), po synchronizacji są zgodne: **True**; po przywróceniu danych demo: **True**
-(stan końcowy bazy i Solra = stan wyjściowy). Zsynchronizowano: 5 usunięć i
-8 aktualizacji. Pełny log z czasami: `results/sync_log.json`.
-Ograniczenie: mechanizm jest *pull* (okresowy skrypt), nie transakcyjny — między zmianą w bazie a synchronizacją Solr widzi stare dane (eventual consistency).
-
-## 8. Poziom 5.0: skalowanie i facety kontra GROUP BY
-
-### 8.1. Skalowanie 10% → 50% → 100%
-
-Osobne tabele i kolekcje (100 000, 500 000, 1 000 000 rekordów). Tryb count; mediana z 5; SQL — czas serwera (`EXPLAIN ANALYZE`), Solr — czas klienta (HTTP, wariant `cache=false`).
-
-![Skalowanie: count](../results/figures/skalowanie_count.png)
-
-| zapytanie | zbiór | wyniki LIKE | LIKE [ms] | FTS [ms] | Solr QTime [ms] | Solr klient [ms] | Solr klient, z cache [ms] |
-|---|---|---:|---:|---:|---:|---:|---:|
-| Q1 | 10% | 2 473 | 1 199 | 13,2 | 0 | 2,1 | 2,2 |
-| Q1 | 50% | 12 285 | 2 276 | 64,1 | 0 | 2,5 | 2,2 |
-| Q1 | 100% | 24 333 | 4 632 | 113,3 | 0 | 2,1 | 2,0 |
-| Q2 | 10% | 1 513 | 1 157 | 7,3 | 0 | 2,7 | 2,4 |
-| Q2 | 50% | 7 327 | 2 251 | 34,1 | 1 | 4,0 | 2,5 |
-| Q2 | 100% | 14 655 | 4 579 | 70,3 | 2 | 4,5 | 2,2 |
-| Q3 | 10% | 747 | 475 | 1,2 | 4 | 7,5 | 2,7 |
-| Q3 | 50% | 3 615 | 2 449 | 6,8 | 4 | 6,3 | 2,6 |
-| Q3 | 100% | 7 259 | 4 817 | 15,2 | 3 | 5,7 | 3,0 |
-
-![Skalowanie: top-10](../results/figures/skalowanie_top10.png)
-
-| zapytanie | zbiór | PG ts_rank_cd top-10 [ms] | Solr QTime [ms] | Solr klient [ms] |
-|---|---|---:|---:|---:|
-| Q1 | 10% | 53,3 | 2 | 5,2 |
-| Q1 | 50% | 272,0 | 4 | 7,2 |
-| Q1 | 100% | 952,5 | 7 | 10,1 |
-| Q2 | 10% | 12,5 | 2 | 4,8 |
-| Q2 | 50% | 63,8 | 4 | 7,2 |
-| Q2 | 100% | 131,7 | 6 | 8,4 |
-| Q3 | 10% | 8,9 | 2 | 5,1 |
-| Q3 | 50% | 42,8 | 5 | 7,5 |
-| Q3 | 100% | 90,1 | 9 | 12,4 |
-
-**Wnioski ze skalowania.**
-
-- `LIKE` rośnie z rozmiarem zbioru (10× więcej danych → 3,9× dłuższy czas dla Q1; mniej niż 10× — prawdopodobnie przez stały narzut i równoległy skan; nie badaliśmy tego osobno),
-  ale już przy 100 tys. rekordów kosztuje ok. 1,2 s, a przy 1 mln ok. 4,6 s — niezależnie od zapytania, bo za każdym razem skanuje całą tabelę.
-  Jako narzędzie interaktywne przestaje wystarczać już w okolicach 10^5 rekordów (>1 s), a przy 10^6 jest dziesiątki–setki razy wolniejszy od FTS.
-- Koszt FTS z indeksem GIN zależy od **liczby trafień** (a ta rośnie z rozmiarem zbioru), a nie od skanowania całej tabeli: Q1 (dużo trafień, 119 222) — 8,6× więcej czasu przy 10× danych
-  (13,2 → 113,3 ms), Q3 (mało trafień) — 12,9× (wartości bezwzględne pozostają małe: 15 ms przy 1 mln). Top-10 z rankingiem jest znacznie droższy niż samo zliczanie
-  (Q1: 952 ms przy 100%, 17,9× więcej niż przy 10%), bo `ts_rank_cd` musi policzyć wynik dla **wszystkich** trafień (odczyt i dekompresja `tsv` z TOAST) przed sortowaniem.
-- Solr w trybie count utrzymuje czas niemal stały (2,1 ms przy 10% i 2,1 ms przy 100% w czasie klienta dla Q1; dominuje narzut HTTP), a w trybie top-10 z rankingiem
-  7–9 ms serwera przy 100% — rzędy wielkości mniej niż PostgreSQL dla trafień masowych (Q1: 952 ms).
-- **Punkt przecięcia:** dla zapytania o małej liczbie trafień (Q3) PostgreSQL FTS jest szybszy lub równy Solrowi w trybie count na zbiorach 10–50% (serwer 1,2 ms, 6,8 ms
-  wobec klienta Solra 7,5 / 6,3 ms), więc dla małych zbiorów i rzadkich słów indeks w bazie w pełni wystarcza. Przewaga Solra rośnie z liczbą trafień i rozmiarem zbioru,
-  a największa jest w rankingu (top-10).
-- Reguła praktyczna z naszych liczb: `LIKE '%…%'` — tylko do ~10^4–10^5 rekordów lub jednorazowo; FTS w PostgreSQL — do ~10^6 rekordów, gdy zapytania są selektywne lub wystarczy liczba/filtry, a ranking obejmuje
-  niewiele trafień; Solr — gdy potrzebny jest szybki ranking dużych zbiorów trafień, facety, podświetlanie i stronicowanie.
-
-### 8.2. Facety Solra a GROUP BY / GROUPING SETS
-
-Jedno zapytanie Solra: `facet=true&facet.field=primary_category&facet.field=archive&facet.range=year&facet.range.start=1990&facet.range.end=2030&facet.range.gap=5&facet.mincount=1&facet.limit=-1&rows=0`
-(przykładowy pełny URL: `results/facets_vs_groupby.json`, np. dla Q1: `http://localhost:8983/solr/papers_100/select?q=%7B%21lucene+cache%3Dfalse%7Dtext_all%3Asimulate&rows=0&facet=true&facet.field=primary_category&facet.field=archi…`). Odpowiedniki SQL: trzy osobne `GROUP BY` (kategoria, archiwum, przedział lat
-`1990 + ((year - 1990) / 5) * 5`) oraz jedno zapytanie `GROUP BY GROUPING SETS ((primary_category),(archive),(bucket))`.
-Przypadki: `ALL` (cały zbiór), `STRUCT` (filtr `archive=cs AND year>=2015` — identyczny zbiór w obu systemach), `Q1`–`Q3` (zbiory z zapytań tekstowych). Zbiór 100%, mediana z 5:
-
-| przypadek | dopasowanych dok. | Solr QTime [ms] | Solr klient [ms] | SQL 3×GROUP BY [ms] | SQL GROUPING SETS [ms] | liczności identyczne (Solr = SQL) | GROUPING SETS = 3×GROUP BY |
-|---|---:|---:|---:|---:|---:|---|---|
-| ALL | 1 000 000 | 25 | 28,7 | 480,7 | 780,7 | tak | tak |
-| STRUCT | 250 385 | 7 | 10,4 | 612,0 | 474,1 | tak | tak |
-| Q1 | 119 255 | 4 | 7,5 | 523,6 | 182,7 | nie (maks. różnica 15) | tak |
-| Q2 | 15 025 | 2 | 5,2 | 201,1 | 74,1 | nie (maks. różnica 51) | tak |
-| Q3 | 8 918 | 4 | 7,1 | 53,9 | 20,0 | nie (maks. różnica 31) | tak |
-
-![Facety kontra GROUP BY](../results/figures/facety_vs_groupby.png)
-
-- **Poprawność.** Dla zbiorów wyznaczonych warunkami strukturalnymi (`ALL`, `STRUCT`) liczności z Solra i z SQL są **identyczne** we wszystkich trzech agregacjach; w `ALL` suma przedziałów lat to
-  999 997 z 1 000 000, bo 3 rekordów jest sprzed 1990 roku. Dla zapytań tekstowych liczności różnią się o kilka–kilkadziesiąt,
-  dokładnie z powodu różnic w zbiorze trafień (p. 5.2) — nie z powodu samych facetów. Wariant `GROUPING SETS` daje wyniki identyczne z trzema osobnymi `GROUP BY`.
-- **Czas.** Facety Solra liczą się na strukturach `docValues` w jednym żądaniu: 29 ms (klient) dla całego zbioru (1 000 000 dok.)
-  wobec 481 ms (suma trzech `GROUP BY`) i 781 ms (`GROUPING SETS`) w PostgreSQL. Stosunek najlepszego czasu SQL do czasu klienta Solra:
-  ALL — 16,8×, STRUCT — 45,7×, Q1 — 24,3×, Q2 — 14,3×, Q3 — 2,8×.
-  Solr jest szybszy we wszystkich przypadkach, a przewaga maleje, gdy zbiór trafień jest mały (Q3 — indeks GIN ogranicza SQL do kilku tysięcy wierszy). Wariant `GROUPING SETS` względem trzech osobnych `GROUP BY`:
-  ALL: wolniejszy (781 vs 481 ms), STRUCT: szybszy (474 vs 612 ms), Q1: szybszy (183 vs 524 ms), Q2: szybszy (74 vs 201 ms), Q3: szybszy (20 vs 54 ms)
-  — zależy od selektywności i planu. Zaleta Solra poza czasem: facety są częścią zwykłego zapytania (`fq`, ranking i podświetlanie w tym samym żądaniu), w SQL to osobne zapytania agregujące.
-
-## 9. Wnioski: kiedy indeks w bazie wystarcza, a kiedy sięgnąć po Solra
-
-Wnioski opieramy na liczbach z pomiarów (zbiór do 1 mln rekordów, abstrakty ≈ 1 048 znaków, jeden węzeł, 12 wątków, 2 GB sterty Solra):
-
-1. **LIKE '%…%' nie skaluje się.** Zawsze skanuje całą tabelę: 1,2 s (100 tys.) → 4,6 s (1 mln), przy 1 mln 41–317× wolniej od FTS
-   i nie rozumie fleksji (Q1: 24 333 wyników zamiast 119 222), granic wyrazów ani frazy.
-2. **Indeks pełnotekstowy w PostgreSQL wystarcza,** gdy zbiór ma do ok. 10^6 dokumentów, zapytania są selektywne (Q3: 15 ms przy 1 mln) albo potrzebne są tylko liczby/filtry,
-   gdy zależy nam na jednym systemie (transakcje, `JOIN`, jedno źródło prawdy, brak synchronizacji) i gdy wystarczy prosty ranking. Koszt dodatkowy to rozmiar (tabela z `tsv`: 2 438 MiB, GIN 301 MiB).
-3. **Warto sięgnąć po Solra,** gdy: (a) zapytania mają **wiele trafień i potrzebny jest ranking** — top-10 dla Q1 przy 1 mln: PostgreSQL 952 ms,
-   Solr 7 ms (a przy cache wyników ułamek ms); (b) potrzebne są **facety, podświetlanie, boosty, `cursorMark`** — w Solrze to parametry zapytania,
-   w SQL osobne, kosztowne konstrukcje (np. głębokie strony: 5 493 ms `OFFSET` kontra 34 ms `cursorMark`);
-   (c) liczba dokumentów lub zapytań rośnie (czas Solra w trybie count prawie nie zależy od rozmiaru zbioru); (d) zimny start jest dla użytkownika odczuwalny —
+1. **`LIKE '%…%'` jest zbyt wolny już przy 1 mln rekordów.** Zawsze skanuje całą tabelę: 4,6–4,8 s na zapytanie,
+   czyli 41–317× wolniej od indeksu pełnotekstowego, a do tego nie rozumie fleksji
+   (Q1: 24 333 wyników zamiast 119 222), granic wyrazów ani frazy.
+2. **Indeks pełnotekstowy w PostgreSQL wystarcza** (przy 1 mln rekordów), gdy zapytania są selektywne lub potrzebne są liczby i filtry (Q3: 15 ms, Q2: 70 ms,
+   Q1: 113 ms), gdy zależy nam na jednym systemie (transakcje, `JOIN`, jedno źródło prawdy, brak synchronizacji) i gdy wystarczy prosty ranking lub ranking małych zbiorów trafień.
+   Koszt dodatkowy to rozmiar (tabela z `tsv`: 2 438 MiB, indeks GIN 301 MiB).
+3. **Warto sięgnąć po Solra,** gdy: (a) zapytania mają **wiele trafień i potrzebny jest ranking** — top-10 dla Q1: PostgreSQL 952 ms (`ts_rank_cd` liczy wynik dla wszystkich 119 222 trafień),
+   Solr 7 ms (QTime, `cache=false`); (b) potrzebne są **facety, podświetlanie i boosty** — w Solrze to parametry zwykłego zapytania zwracane w jednej odpowiedzi,
+   w SQL osobne zapytania i wyrażenia (`GROUP BY`, `ts_headline`, mnożnik w `ORDER BY`); (c) zimny start jest dla użytkownika odczuwalny —
    pierwsze FTS Q1 po restarcie trwało 21,0 s (Solr 100 ms).
-4. **Cena Solra:** drugi system do utrzymania, **spójność ewentualna** (synchronizacja z bazą — p. 7.3), osobny schemat i analiza tekstu (różnice w tokenizacji dają inne wyniki w skrajnych przypadkach, p. 5.2),
-   mniejsze ale niezerowe zużycie dysku i pamięci (indeks 1 241 MiB, sterta 2 GB), czas ładowania i indeksowania zbioru 100%: Solr 220 s wobec 307 s w PostgreSQL (COPY z liczeniem `tsv` + GIN).
+4. **Cena Solra:** drugi system do utrzymania, **spójność ewentualna** (dane trzeba przenosić z bazy), osobny schemat i analiza tekstu (różnice w tokenizacji dają inne wyniki w skrajnych przypadkach, p. 5.2),
+   zużycie dysku i pamięci (indeks 1 241 MiB, sterta 2 GB), czas ładowania i indeksowania zbioru 100%: Solr 220 s wobec 307 s w PostgreSQL (COPY z liczeniem `tsv` + GIN).
 5. **Rankingi się różnią:** wspólnych dokumentów w top-10 `ts_rank_cd` i BM25 jest w naszych zapytaniach 0/0/0 (Q1/Q2/Q3) — wybór metody rankingu jest decyzją produktową; nie oceniano trafności przez człowieka, więc nie rozstrzygamy, który ranking jest „lepszy”;
-   oba systemy pozwalają wprowadzić wagi pól i boost.
+   oba systemy pozwalają wprowadzić wagi pól i boost (p. 7).
+6. **Granice wniosków:** mierzyliśmy jedną wielkość zbioru (1 mln), więc nie wskazujemy progu rekordów, od którego dany sposób przestaje wystarczać — wnioski dotyczą tego zbioru, sprzętu i trzech zapytań.
 
 ### Ograniczenia
 

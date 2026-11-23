@@ -1,7 +1,9 @@
 """Etap 8: wykresy (matplotlib, PNG 170 dpi) generowane wyłącznie z plików w results/.
 
-Uruchomienie:  python -m lab3.figures   ->  results/figures/*.png
+Uruchomienie:  python -m lab3.figures   ->  results/figures/*.png   (wykresy do sprawozdania poziomu 4.0)
+               python -m lab3.figures --extra   dodatkowo wykresy poziomu 5.0 (nie wchodzą do oddawanego sprawozdania)
 """
+import argparse
 import json
 import sys
 
@@ -66,11 +68,11 @@ def scaling(mode: str, methods: list[str], fname: str, title: str):
 
 
 def loading():
-    pg = load("load_pg.json")["tables"]
-    sr = load("load_solr.json")["collections"]
-    fig, axes = plt.subplots(1, 2, figsize=(10, 3.8))
-    lab = ["10%", "50%", "100%"]
-    x = range(3)
+    pg = [t for t in load("load_pg.json")["tables"] if t["table"] == "papers_100"]
+    sr = [c for c in load("load_solr.json")["collections"] if c["collection"] == "papers_100"]
+    fig, axes = plt.subplots(1, 2, figsize=(9, 3.8))
+    lab = ["zbiór 100% (1 mln rekordów)"]
+    x = range(1)
     ax = axes[0]
     ax.bar([i - 0.2 for i in x], [t["copy_seconds"] for t in pg], 0.4, color=C["FTS"], label="PG: COPY (z liczeniem tsvector)")
     ax.bar([i - 0.2 for i in x], [t["gin_seconds"] for t in pg], 0.4, bottom=[t["copy_seconds"] for t in pg], color="#7FB5D9", label="PG: budowa indeksu GIN")
@@ -92,6 +94,33 @@ def loading():
     ax.set_title("Rozmiar na dysku")
     ax.legend(fontsize=7.5)
     save(fig, "ladowanie.png")
+
+
+def times100():
+    bm = load("benchmark.json")["measurements"]
+
+    def get(q, mode, meth):
+        return next(x for x in bm if x["size"] == "100" and x["query_key"] == q and x["mode"] == mode and x["method"] == meth)
+
+    fig, axes = plt.subplots(1, 2, figsize=(10, 3.8))
+    for ax, mode, meths, ttl in ((axes[0], "count", ["LIKE", "FTS", "Solr"], "Zliczanie trafień"),
+                                 (axes[1], "top10", ["FTS", "Solr"], "Top-10 wg trafności")):
+        w = 0.8 / len(meths)
+        for j, meth in enumerate(meths):
+            vals = [val(get(q, mode, meth)) for q in ("Q1", "Q2", "Q3")]
+            # QTime ma rozdzielczość 1 ms; 0 rysujemy jako 0,5 (skala log)
+            bars = ax.bar([i + (j - (len(meths) - 1) / 2) * w for i in range(3)], [max(v, 0.5) for v in vals], w,
+                          color=C[meth], label=LABEL[meth])
+            for b, v in zip(bars, vals):
+                ax.text(b.get_x() + b.get_width() / 2, max(v, 0.5) * 1.1, f"{v:.0f}", ha="center", fontsize=7.5)
+        ax.set_yscale("log")
+        ax.set_xticks(range(3))
+        ax.set_xticklabels(["Q1", "Q2", "Q3"])
+        ax.set_ylabel("czas serwera [ms], skala log")
+        ax.set_title(ttl + " (1 mln rekordów, mediana z 5)")
+        ax.set_ylim(0.3, ax.get_ylim()[1] * 2)
+        ax.legend(fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=3, frameon=False)
+    save(fig, "czasy_100.png")
 
 
 def facets():
@@ -175,15 +204,20 @@ def cold():
 
 
 def main() -> int:
-    scaling("count", ["LIKE", "FTS", "Solr", "Solr+cache"], "skalowanie_count.png",
-            "Skalowanie: czas zliczania trafień (LIKE, FTS, Solr) — mediana z 5")
-    scaling("top10", ["FTS", "Solr", "Solr+cache"], "skalowanie_top10.png",
-            "Skalowanie: top-10 wg trafności (ts_rank_cd vs eDisMax) — mediana z 5")
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--extra", action="store_true", help="dodatkowe wykresy poziomu 5.0 (skalowanie, facety, stronicowanie)")
+    args = ap.parse_args()
+    times100()
     loading()
-    facets()
-    paging()
     boost()
     cold()
+    if args.extra:
+        scaling("count", ["LIKE", "FTS", "Solr", "Solr+cache"], "skalowanie_count.png",
+                "Skalowanie: czas zliczania trafień (LIKE, FTS, Solr) — mediana z 5")
+        scaling("top10", ["FTS", "Solr", "Solr+cache"], "skalowanie_top10.png",
+                "Skalowanie: top-10 wg trafności (ts_rank_cd vs eDisMax) — mediana z 5")
+        facets()
+        paging()
     return 0
 
 

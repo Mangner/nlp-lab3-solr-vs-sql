@@ -3,8 +3,10 @@
 ## Opis projektu
 Laboratorium z przetwarzania języka naturalnego (treść: `docs/Lab3.pdf`). Porównujemy LIKE, indeks pełnotekstowy
 PostgreSQL (tsvector + GIN) i Apache Solr 10 — funkcjonalnie i wydajnościowo — na metadanych arXiv.
-Realizujemy **poziom 5.0** (czyli 3.0 + 4.0 + 5.0). Oddajemy: kod, skrypty SQL, schemat Solra (JSON), README
-i sprawozdanie PDF (archiwum `LAB3_Nazwisko_Imie_Nazwisko_Imie.zip`, bez zbioru danych).
+**ZMIANA ZAKRESU (2026-11-23): oddajemy poziom 4.0, nie 5.0.** Autorzy: Michał Langner, Jakub Nawrocki. Oddajemy: kod, skrypty SQL, schemat Solra (JSON), README
+i sprawozdanie PDF (archiwum `LAB3_Langner_Michal_Nawrocki_Jakub.zip`, bez zbioru danych). Sprawozdanie, README i `docs/odpowiedz_ustna.md` obejmują tylko 4.0
+(zbiór 100% = 1 mln, bez skalowania, bez facet.range/GROUPING SETS, bez cursorMark i synchronizacji; rozszerzenie: boost rokiem). Kod etapu 7 (5.0: `lab3/facets.py`, `paging.py`, `sync.py`,
+`sql/03_sync.sql`) zostaje w repo jako materiał dodatkowy, wykluczony z archiwum (`EXTRA_EXCLUDE` w `scripts/pack_zip.py`); w `run_all` tylko z `--extra`, wykresy 5.0 z `figures --extra`.
 
 ## Ustalenia (nie zmieniać bez pytania użytkownika)
 - Język: Python 3.11+. Wszystko działa na Windows/macOS/Linux — żadnych skryptów bash/Makefile jako jedynej drogi;
@@ -19,9 +21,9 @@ i sprawozdanie PDF (archiwum `LAB3_Nazwisko_Imie_Nazwisko_Imie.zip`, bez zbioru 
 - Solr: własny schemat przez Schema API, `update.autoCreateFields=false`; title/abstract = text_en;
   primary_category/archive/license = string (docValues); categories = string multiValued; year = pint.
   Ładowanie przez /update paczkami JSON po 5 000 dok., jeden commit na końcu.
-- Skalowanie (5.0): 10% / 50% / 100% jako OSOBNE tabele (papers_10, papers_50, papers_100) w Postgresie i OSOBNE
+- Skalowanie (5.0, poza oddawaną pracą): 10% / 50% / 100% jako OSOBNE tabele (papers_10, papers_50, papers_100) w Postgresie i OSOBNE
   kolekcje (papers_10, papers_50, papers_100) w Solrze. Zbiory mniejsze są podzbiorami większych.
-- Rozszerzenia: 4.0 — boost trafności rokiem; 5.0 — głębokie stronicowanie start/rows vs cursorMark oraz aktualizacja
+- Rozszerzenia: 4.0 — boost trafności rokiem (oddajemy); 5.0 (dodatkowe) — głębokie stronicowanie start/rows vs cursorMark oraz aktualizacja
   danych (zmiana/usunięcie w Postgresie → skrypt synchronizujący → weryfikacja zgodności).
 - Konfiguracja w `.env` (python-dotenv); w repo tylko `.env.example`.
 - README, komentarze i komunikaty dla użytkownika po polsku; nazwy w kodzie po angielsku.
@@ -121,3 +123,8 @@ docs/                  Lab3.pdf, materiały do sprawozdania
 - Do uzupełnienia ręcznie: imiona i nazwiska autorów (`python -m lab3.report --authors "Imię Nazwisko" "Imię Nazwisko"`, potem `scripts/build_pdf.py`) oraz nazwa archiwum (`pack_zip.py --authors N1 I1 N2 I2`).
 - Błąd z historii: `setting`+`unit` z pg_settings sklejone w złym formacie — poprawiono na `current_setting()` (load_pg.json uzupełniony).
 - Stan końcowy danych: papers_* w PG i kolekcje Solra = stan wyjściowy (sync demo przywraca rekordy); na papers_100 zostają triggery z sql/03_sync.sql.
+
+## Zmiana zakresu na 4.0 (2026-11-23)
+- Sprawozdanie (`lab3/report.py`): rozdziały 1–8 (cel, zbiór, środowisko, schematy, porównanie funkcjonalne, pomiary 100%, boost, wnioski); usunięto skalowanie, facety vs GROUP BY (5.0), cursorMark, synchronizację.
+  Wnioski bez progów rekordów (mierzymy tylko 1 mln). Nowy wykres `czasy_100.png`; `ladowanie.png` tylko dla 100%. Autorzy domyślnie w `report.py`.
+- `scripts/pack_zip.py` domyślnie `LAB3_Langner_Michal_Nawrocki_Jakub.zip`, bez plików 5.0. Pomiary 5.0 w `results/` zostają w repo (nie w archiwum).
