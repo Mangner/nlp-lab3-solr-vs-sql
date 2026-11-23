@@ -128,3 +128,8 @@ docs/                  Lab3.pdf, materiały do sprawozdania
 - Sprawozdanie (`lab3/report.py`): rozdziały 1–8 (cel, zbiór, środowisko, schematy, porównanie funkcjonalne, pomiary 100%, boost, wnioski); usunięto skalowanie, facety vs GROUP BY (5.0), cursorMark, synchronizację.
   Wnioski bez progów rekordów (mierzymy tylko 1 mln). Nowy wykres `czasy_100.png`; `ladowanie.png` tylko dla 100%. Autorzy domyślnie w `report.py`.
 - `scripts/pack_zip.py` domyślnie `LAB3_Langner_Michal_Nawrocki_Jakub.zip`, bez plików 5.0. Pomiary 5.0 w `results/` zostają w repo (nie w archiwum).
+
+## Zmiana zakresu na 3.0 (2026-11-23)
+- Oddajemy **poziom 3.0**: README (instrukcja + tabela wyników) to główny dokument; sprawozdanie, ściąga ustna i skrypty 4.0/5.0 = materiał dodatkowy w repo.
+- Ścieżka 3.0: `prepare_data → load_pg → load_solr → level3`. Windows: przy blokadzie pyarrow (Application Control) dane przygotowujemy w kontenerze `python:3.13`.
+- `scripts/pack_zip.py`: archiwum = lab3/ + scripts/ (bez plików 5.0), sql/, solr/, README.md, docs/zapytania_solr.md, docker-compose.yml, .env.example, requirements.txt; bez results/ i PDF.

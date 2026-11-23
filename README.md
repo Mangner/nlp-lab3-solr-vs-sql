@@ -1,15 +1,16 @@
 # Lab 3 (PJN) — wyszukiwanie pełnotekstowe: PostgreSQL kontra Solr
 
 Porównanie trzech sposobów przeszukiwania tekstu — `LIKE '%…%'`, indeksu pełnotekstowego PostgreSQL (`tsvector` + GIN)
-i Apache Solr 10 — funkcjonalnie i wydajnościowo, na metadanych publikacji arXiv. **Oddawany poziom: 4.0**
-(wymagania 3.0 + 4.0; rozszerzenie: boost trafności rokiem). Autorzy: Michał Langner, Jakub Nawrocki.
+i Apache Solr 10 — funkcjonalnie i wydajnościowo, na metadanych publikacji arXiv. **Oddawany poziom: 3.0**.
+Autorzy: Michał Langner, Jakub Nawrocki.
 
-> **Zakres oddawanej pracy.** Sprawozdanie, ściąga ustna i niniejszy README dotyczą **poziomu 4.0**. Skrypty poziomu 5.0 (`lab3/facets.py`, `lab3/paging.py`,
-> `lab3/sync.py`, `sql/03_sync.sql` — skalowanie 10/50/100%, facety z `facet.range` vs `GROUP BY`, `cursorMark`, synchronizacja zmian) są w repozytorium jako
-> **materiał dodatkowy i nie są częścią oddawanej pracy**; nie ma ich w archiwum `.zip`. Uruchamiają się tylko jawnie (`python -m lab3.run_all --extra`).
+> **Zakres oddawanej pracy.** Oddajemy **poziom 3.0**: kod, skrypty SQL, schemat Solra oraz niniejszy README z instrukcją uruchomienia
+> i tabelą wyników (sekcja *Wyniki poziomu 3.0*). Sprawozdanie (`docs/sprawozdanie.{md,pdf}`), ściąga ustna (`docs/odpowiedz_ustna.md`) oraz skrypty
+> poziomów 4.0 (`lab3/level4.py`, `lab3/bench.py`, `lab3/cold.py`, boost rokiem) i 5.0 (`lab3/facets.py`, `lab3/paging.py`, `lab3/sync.py`, `sql/03_sync.sql`)
+> są w repozytorium jako **materiał dodatkowy i nie są częścią oddawanej pracy**.
 
 - Przedmiot: Przetwarzanie języka naturalnego, Politechnika Krakowska, prowadzący: dr inż. Wojciech Książek. Treść zadania: `docs/Lab3.pdf`.
-- **Sprawozdanie:** `docs/sprawozdanie.pdf` (źródło: `docs/sprawozdanie.md`, generowane z `results/`). Ściąga do odpowiedzi ustnej: `docs/odpowiedz_ustna.md`.
+- Materiał dodatkowy (poza oddawaną pracą): sprawozdanie `docs/sprawozdanie.pdf` (źródło: `docs/sprawozdanie.md`), ściąga do odpowiedzi ustnej `docs/odpowiedz_ustna.md`.
 - Zapytania Solra jako klikalne URL-e: `docs/zapytania_solr.md`.
 
 ## Dane
@@ -17,7 +18,7 @@ i Apache Solr 10 — funkcjonalnie i wydajnościowo, na metadanych publikacji ar
 - Źródło: metadane arXiv (Cornell University), **licencja CC0**; używamy kopii na Hugging Face:
   [`librarian-bots/arxiv-metadata-snapshot`](https://huggingface.co/datasets/librarian-bots/arxiv-metadata-snapshot) (pliki parquet, pobierane skryptem — **zbioru nie ma w repozytorium ani w archiwum**).
 - Brak danych osobowych: pomijamy `authors`, `authors_parsed`, `submitter`.
-- 1 000 000 rekordów (zbiór 100%) wybranych deterministycznie (stały seed; wymagane minimum poziomu 4.0 to 500 000). Skrypt przygotowania tworzy też podzbiory 10% i 50% — używa ich tylko materiał dodatkowy poziomu 5.0. Dane nie są powielane.
+- 1 000 000 rekordów (zbiór 100%) wybranych deterministycznie (stały seed; wymagane minimum poziomu 3.0 to 100 000). Skrypt przygotowania tworzy też podzbiory 10% i 50% — używa ich tylko materiał dodatkowy poziomu 5.0. Dane nie są powielane.
 - Pola: `id`, `title`, `abstract`, `primary_category`, `archive`, `categories`, `year`, `license`.
 
 ## Wymagania
@@ -48,7 +49,19 @@ Wszystkie polecenia z katalogu głównego projektu. Skrypty są wieloplatformowe
    pip install -r requirements.txt
    python -m lab3.healthcheck    # wersje, tryb SolrCloud, dostępność pg_trgm
    ```
-4. **Wszystko jednym poleceniem** (pełny zbiór: pobranie i przygotowanie danych, ładowanie, pomiary, wykresy, sprawozdanie, PDF — poziom 4.0; kilkadziesiąt minut do ok. 2 godzin)
+4. **Poziom 3.0 (oddawany) — wystarczą cztery kroki, w tej kolejności:**
+   ```
+   python -m lab3.prepare_data   # pobranie i przygotowanie danych
+   python -m lab3.load_pg        # PostgreSQL: COPY, tsvector + GIN
+   python -m lab3.load_solr      # Solr: kolekcje, schemat, indeksowanie
+   python -m lab3.level3         # zapytania Q1–Q3: LIKE / FTS / Solr, tabela wyników
+   ```
+   **Windows:** jeśli `python -m lab3.prepare_data` zgłasza błąd pyarrow „Zasady kontroli aplikacji zablokowały ten plik”,
+   przygotuj dane w Dockerze (pliki trafią do `data/` na hoście), a potem kontynuuj od `load_pg`:
+   ```
+   docker run --rm -v "${PWD}:/app" -w /app python:3.13 sh -c "pip install -q -r requirements.txt && python -m lab3.prepare_data"
+   ```
+5. **Opcjonalnie — wszystko jednym poleceniem** (także materiał dodatkowy poziomu 4.0: pomiary, wykresy, sprawozdanie, PDF; kilkadziesiąt minut do ok. 2 godzin)
    ```
    python -m lab3.run_all
    ```
@@ -63,13 +76,13 @@ Kroki można też uruchamiać osobno:
 | PostgreSQL | `python -m lab3.load_pg` | schemat (`sql/01_schema.sql`), `COPY`, GIN + B-tree (`sql/02_indexes.sql`), `ANALYZE`, pomiary | `results/load_pg.json` |
 | Solr | `python -m lab3.load_solr` | kolekcje `papers_10/50/100`, schemat (`solr/schema.json`), paczki po 5000 dok., jeden commit | `results/load_solr.json` |
 | poziom 3.0 | `python -m lab3.level3` | Q1–Q3 w LIKE / FTS / Solr, tabela, różnice w trafieniach | `results/level3*.json`, `docs/zapytania_solr.md` |
-| benchmark | `python -m lab3.bench` | Q1–Q3 × (LIKE, FTS, Solr), mediana z 5; w sprawozdaniu używamy zbioru 100% | `results/benchmark.json` |
-| poziom 4.0 | `python -m lab3.level4` | top-10 (`ts_rank_cd` vs eDisMax), GROUP BY vs facety (2 pola), highlighting, boost rokiem | `results/level4*.json` |
+| benchmark (dodatkowy) | `python -m lab3.bench` | Q1–Q3 × (LIKE, FTS, Solr), mediana z 5; w sprawozdaniu używamy zbioru 100% | `results/benchmark.json` |
+| poziom 4.0 (dodatkowy) | `python -m lab3.level4` | top-10 (`ts_rank_cd` vs eDisMax), GROUP BY vs facety (2 pola), highlighting, boost rokiem | `results/level4*.json` |
 | zimny start | `python -m lab3.cold --drop-vm-cache` | pierwsze wykonanie po restarcie kontenerów | `results/cold.json` |
 | środowisko | `python -m lab3.environment` | CPU, RAM, dysk, wersje, ustawienia | `results/environment.json` |
 | wykresy | `python -m lab3.figures` | wykresy PNG (matplotlib) | `results/figures/` |
-| sprawozdanie | `python -m lab3.report` → `python scripts/build_pdf.py` | `docs/sprawozdanie.md` z `results/`, potem PDF | `docs/sprawozdanie.pdf` |
-| archiwum | `python scripts/pack_zip.py` | pakuje pliki do oddania (bez danych, `.env`, venv i bez skryptów poziomu 5.0) | `dist/LAB3_Langner_Michal_Nawrocki_Jakub.zip` |
+| sprawozdanie (dodatkowe) | `python -m lab3.report` → `python scripts/build_pdf.py` | `docs/sprawozdanie.md` z `results/`, potem PDF | `docs/sprawozdanie.pdf` |
+| archiwum | `python scripts/pack_zip.py` | pakuje pliki do oddania: kod, `sql/`, `solr/`, README, `docs/zapytania_solr.md` (bez danych, `.env`, venv, sprawozdania i skryptów poziomu 5.0) | `dist/LAB3_Langner_Michal_Nawrocki_Jakub.zip` |
 
 **Materiał dodatkowy (poziom 5.0, nie oddajemy; tylko w repozytorium, nie w archiwum):** `python -m lab3.facets` (2×`facet.field` + `facet.range` vs `GROUP BY`/`GROUPING SETS`),
 `python -m lab3.paging` (`start/rows` vs `cursorMark` vs `OFFSET`), `python -m lab3.sync demo` (synchronizacja zmian PG → Solr), `python -m lab3.figures --extra` (wykresy skalowania, facetów, stronicowania).
